@@ -64,8 +64,8 @@ module.exports = (grunt) ->
         separator: ';'
       dist:
         src: ['bower_components/jquery/dist/jquery.js'
-        , 'bower_components/firebase/firebase.js'
         , 'bower_components/angular/angular.js'
+        , 'bower_components/firebase/firebase.js'
         , 'bower_components/bootstrap/dist/js/bootstrap.js'
         , 'bower_components/lodash/dist/lodash.compat.js'
         , 'bower_components/angular-ui-router/release/angular-ui-router.js'

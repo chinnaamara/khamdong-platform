@@ -1,0 +1,41 @@
+//
+   Created by chinna on 5/8/14.
+
+div(id='loginModal', tabindex='-1', role='dialog', aria-hidden='true')
+    .modal-dialog
+        .modal-content
+            .modal-header.btn-default
+                h2(class='text-center') Sign In
+            .modal-body
+                form.white-row(ng-submit="signIn()")
+                    .row
+                        .form-group(ng-class="{'has-error':(error),'has-success':(passwordError)}")
+                            .col-md-12
+                                label Username or Email
+                                input#username.form-control(ng-model='user.username', name='username', type='text', value='', placeholder='Username or Email', autofocus, required)
+                    | &nbsp;
+                    .row
+                        .form-group(ng-class="{'has-error':(passwordError),'has-error':(error)}")
+                            .col-md-12
+                                label Password
+                                input#password.form-control(ng-model='user.password', name='password', type='password', value='', placeholder='Password', required)
+                    | &nbsp;
+                    .row
+                        .form-group
+                            .col-md-6
+                                input.btn.btn-primary.pull-left(type='submit', id='btn-signIn', value='Sign In')
+                    | &nbsp;
+                    .row
+                        .alert.alert-danger(ng-show="error")
+                            i.fa.fa-frown-o
+                            | Invalid&nbsp;
+                            strong Username/Email
+                            | &nbsp;or&nbsp;
+                            strong Password
+                            //| &nbsp;
+                        //.alert.alert-danger(ng-show="passwordError")
+                        //    i.fa.fa-frown-o
+                        //    | Invalid&nbsp;
+                        //    strong Password
+                        //    | &nbsp;
+            .modal-footer(id='footer')
