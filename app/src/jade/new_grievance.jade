@@ -1,0 +1,139 @@
+//
+   Created by chinna on 5/8/14.
+section.container
+    .row(uploader="uploader")
+        .col-lg-12
+            //h2(class='text-center') Add New Grievance
+            //br
+            .alert.alert-success(ng-show='error')
+                i.fa.fa-check-circle-o
+                | Grievance Submitted Successfully!
+            .panel.panel-primary
+                .panel-heading
+                    | New Grievance Details
+                .panel-body
+                    form#projectForm(name='grievanceForm',class='form-horizonal',type='form',novalidate)
+                        .col-lg-6
+                            .form-group.has-warning
+                                label.control-label(for='name')
+                                    | Name
+                                    span(style='color:red') *
+                                div(ng-class="{ 'has-error' : grievanceForm.name.$invalid }")
+                                    input#name.form-control(type='text',name='name',ng-model='grievance.name',placeholder='Name', required, autofocus)
+                                    small(class="label label-danger",ng-show="grievanceForm.name.$invalid && grievanceForm.name.$dirty") Required Name
+                            .form-group.has-warning
+                                label.control-label(for='fatherName')
+                                    | Father Name
+                                    span(style='color:red') *
+                                div(ng-class="{ 'has-error' : grievanceForm.fatherName.$invalid }")
+                                    input#fatherName.form-control(type='text',name='fatherName',ng-model='grievance.fatherName',placeholder='Father Name',required)
+                                    small(class="label label-danger",ng-show="grievanceForm.fatherName.$invalid && grievanceForm.fatherName.$dirty") Required Father Name
+                            .form-group.has-warning
+                                label.control-label(for='dob')
+                                    | Birth Date
+                                    span(style='color:red') *
+                                div(ng-class="{ 'has-error' : grievanceForm.dob.$invalid }")
+                                    input#dob.form-control(type='date',name='dob', ng-change='calculateAgeOnDOB()', ng-model='grievance.dob',placeholder='Date of birth',required)
+                                    small(class="label label-danger",ng-show="grievanceForm.dob.$invalid && grievanceForm.dob.$dirty") Required Birth Date
+                            .form-group.has-warning
+                                label.control-label(for='age')
+                                    | Age
+                                div
+                                    input#age.form-control(type='text',name='age',ng-model='grievance.age',placeholder='Select  your date of birth', readonly)
+                            .form-group.has-warning
+                                label.control-label(for='phoneNumber')
+                                    | Phone Number
+                                    span(style='color:red') *
+                                div(ng-class="{ 'has-error' : grievanceForm.phoneNumber.$invalid }")
+                                    input#phoneNumber.form-control(type='number',name='phoneNumber',ng-model='grievance.phoneNumber',placeholder='Phone Number',required)
+                                    small(class="label label-danger",ng-show="grievanceForm.phoneNumber.$invalid && grievanceForm.phoneNumber.$dirty") Required Phone Number
+                            .form-group.has-warning
+                                label.control-label(for='education')
+                                    | Education
+                                    span(style='color:red') *
+                                select#education.form-control(
+                                name='education',
+                                ng-selected="Select",
+                                ng-options='e.name as e.name for e in education',
+                                ng-model='grievance.education',
+                                required)
+                                    option(value='',selected) -- Select Education --
+                            .form-group.has-warning
+                                label.control-label(for='address')
+                                    | Address
+                                div
+                                    textarea#address.form-control(name='address',ng-model='grievance.address',placeholder='Address')
+
+                        .col-lg-6
+                            .form-group.has-warning
+                                label.control-label(for='constituency')
+                                    | Constituency
+                                    span(style='color:red') *
+                                select#constituency.form-control(
+                                name='constituency',
+                                ng-options='c.name as c.name for c in constituencies',
+                                ng-model='grievance.constituency',
+                                required)
+                                    option(value='',selected) -- Select Constituency --
+                            .form-group.has-warning
+                                label.control-label(for='gpu')
+                                    | GPU
+                                    span(style='color:red') *
+                                select#gpu.form-control(
+                                name='gpu',
+                                ng-options='g.name as g.name for g in gpus',
+                                ng-model='grievance.gpu',
+                                required)
+                                    option(value='',selected) -- Select GPU --
+                            .form-group.has-warning
+                                label.control-label(for='ward')
+                                    | Ward
+                                    span(style='color:red') *
+                                select#ward.form-control(
+                                name='ward',
+                                ng-options='w.name as w.name for w in wards',
+                                ng-model='grievance.ward',
+                                required)
+                                    option(value='',selected) -- Select Ward --
+                            .form-group.has-warning
+                                label.control-label(for='grievanceType')
+                                    | Grievance Type
+                                    span(style='color:red') *
+                                select#grievanceType.form-control(
+                                name='grievanceType',
+                                ng-options='gt.name as gt.name for gt in grievanceTypes',
+                                ng-model='grievance.grievanceType',
+                                required)
+                                    option(value='',selected) -- Select Grievance Type --
+                            .form-group.has-warning
+                                label.control-label(for='department')
+                                    | Department
+                                    span(style='color:red') *
+                                select#department.form-control(
+                                name='department',
+                                ng-options='d.name as d.name for d in departments'
+                                ng-model='grievance.department',
+                                required)
+                                    option(value='',selected) -- Select Department --
+                            .form-group.has-warning
+                                label.control-label(for='grievance-file')
+                                    | Upload File
+                                    span(style='color:red') *
+                                div(ng-class="{ 'has-error' : grievanceForm.grievanceFile.$invalid }")
+                                    input#grievanceFile.form-control(type='file',name='grievanceFile', ng-model='grievance.file', ng-file-select="onFileSelect($files)")
+                                    small(class="label label-danger",ng-show="grievanceForm.grievanceFile.$invalid && grievanceForm.grievanceFile.$dirty") Required Grievance File
+                                //div(ng-class="{ 'has-error' : grievanceForm.grievanceFile.$invalid }")
+                                //    input#grievanceFile.form-control(type='file',name='grievanceFile', ng-model='grievance.file', nv-file-select="", uploader="uploader")
+                                //    small(class="label label-danger",ng-show="grievanceForm.grievanceFile.$invalid && grievanceForm.grievanceFile.$dirty") Required Grievance File
+                            .form-group.has-warning
+                                label.control-label(for='note')
+                                    | Note
+                                div
+                                    textarea#note.form-control(name='note',ng-model='grievance.note',placeholder='Note')
+                        div
+                            button.btn.btn-info(id='btn-createGrievance', ng-click='createGrievance()', style="margin-right: 10px; margin-left: 20px" )
+                                | Submit
+                            button.btn.btn-info(id='btn-print', ng-click='printGrievance()', style="margin-right: 10px" )
+                                | Print
+                            input.btn.btn-warning(type='reset', id='btn-reset', value='Reset' style="margin-right: 10px")
+                            input.btn.btn-warning(type='button', id='btn-close', value='Close' style="margin-right: 10px" ui-sref="login")
