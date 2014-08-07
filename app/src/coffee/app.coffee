@@ -17,4 +17,11 @@ app.config(($stateProvider)->
         'viewB@': {templateUrl: 'html/new_grievance.html', controller: 'NewGrievanceController'}
       }
     })
+    .state('admin', {
+      url: 'admin'
+      views: {
+        'viewA@': {templateUrl: 'html/nav.html'}
+        'viewB@': {templateUrl: 'html/dashboard.html', controller: 'DashboardController'}
+      }
+    })
 )

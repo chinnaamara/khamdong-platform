@@ -53,7 +53,7 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
 #  id = uuid()
 #  console.log id
 
-
+  $scope.file = " "
   $scope.onFileSelect = ($files) ->
     file = $files[0]
     console.log file
@@ -61,7 +61,7 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
     reader.readAsArrayBuffer(file)
     reader.onload=(e)->
 #      $scope.file=btoa(String.fromCharCode.apply(null, new Uint8Array(file.target.result)))
-      $scope.grievance.file = arrayBufferToBase64 e.target.result
+      $scope.file = arrayBufferToBase64 e.target.result
       return
     return
 
@@ -74,7 +74,7 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
      window.btoa binary
 
   $scope.createGrievance = () ->
-    console.log $scope.grievance.file
+    console.log $scope.file
     newGrievance = {
       id: uuid()
       name: $scope.grievance.name
@@ -88,7 +88,7 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
       constituency: $scope.grievance.constituency
       department: $scope.grievance.department
       grievanceType: $scope.grievance.grievanceType
-      file: $scope.grievance.file
+      file: $scope.file
       note: $scope.grievance.note
     }
     console.log newGrievance
