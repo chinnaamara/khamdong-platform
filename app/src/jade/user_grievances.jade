@@ -1,0 +1,37 @@
+//
+   Created by chinna on 11/8/14.
+
+section.container
+    .row
+        .col-lg-12
+            .panel.panel-primary
+                .panel-heading Grievances
+                .panel-body
+                    .col-xs-4.pull-right
+                        input(type="search", class="form-control", ng-model="grievanceKey", placeholder="search by mobile number")
+                    table#userGrievancesTable(class="table table-striped table-bordered table-condensed")
+                        thead
+                            tr
+                                th Name
+                                th Grievance Type
+                                th Department
+                                th Scheme
+                                th Requirement
+                                th Status
+                                th Message
+                        tbody
+                            tr(ng-repeat='grievance in grievances | orderByPriority | filter: grievanceKey | orderBy : predicate')
+                                td
+                                    span {{ grievance.name }}
+                                td
+                                    span {{ grievance.grievanceType }}
+                                td
+                                    span {{ grievance.department }}
+                                td
+                                    span {{ grievance.scheme }}
+                                td
+                                    span {{ grievance.requirement }}
+                                td
+                                    span {{ grievance.status }}
+                                td
+                                    span {{ grievance.message }}

@@ -1,7 +1,29 @@
-.modal-content{
+.modal-content {
     margin-top: 100px !important;
 }
-.my-nav-btn{
+.my-nav-btn {
     margin-top: 10px;
     margin-left: 5px;
+}
+textarea {
+    resize: none;
+}
+tbody .buttons-td {
+    width:145px;
+}
+tbody a {
+    margin-left: 5px;
+}
+#document {
+    width:500px;
+    height: 400px;
+}
+#grievancesTable {
+    margin-top: 40px;
+}
+#userGrievancesTable {
+    margin-top: 40px;
+}
+.star-label {
+    color: red;
 }

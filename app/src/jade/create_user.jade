@@ -1,0 +1,32 @@
+//
+   Created by chinna on 11/8/14.
+section.container
+    .row
+        .col-lg-12
+            //h2(class='text-center') Add New Grievance
+            //br
+            .alert.alert-success(ng-show='error')
+                i.fa.fa-check-circle-o
+                | User Created Successfully!
+            .panel.panel-primary
+                .panel-heading
+                    | New User
+                .panel-body
+                    form(ng-submit='addUser()')
+                        .form-group.has-warning
+                            label user Name
+                            input.form-control(type='text', ng-model='userName')
+                        .form-group.has-warning
+                            label password
+                            input.form-control(type='password', ng-model='userPassword')
+                        .form-group.has-warning
+                            label Email
+                            input.form-control(type='email', ng-model='userEmail')
+                        .form-group.has-warning
+                            label Role
+                            select.form-control(ng-model='role')
+                                option(value='admin') Admin
+                                option(value='client') Client
+                        div.pull-right
+                            input.btn.btn-primary(type='submit', value='Add')
+                            input.btn.btn-primary(type='reset', value='Cancel')

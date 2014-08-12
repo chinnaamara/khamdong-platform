@@ -8,7 +8,7 @@ section.container
                 .panel-body
                     .col-xs-4.pull-right
                         input(type="search", class="form-control", ng-model="grievanceKey", placeholder="search by mobile number")
-                    table(class="table table-striped table-bordered table-condensed", style="margin-top: 40px")
+                    table#grievancesTable(class="table table-striped table-bordered table-condensed")
                         thead
                             tr
                                 th #
@@ -19,11 +19,11 @@ section.container
                                 th Constituency
                         tbody
                             tr(ng-repeat='grievance in grievances | orderByPriority | filter: grievanceKey | orderBy : predicate')
-                                td(style="width:145px;")
-                                    a.btn.btn-info(href="", style="margin-left: 5px", data-toggle="modal", data-target="#myModal", ng-click="showDetails(grievance)")
+                                td(class='buttons-td')
+                                    a.btn.btn-info(href="", ng-click="showDetails(grievance)")
                                         i.icon-trash.icon-white
                                         | Details
-                                    a.btn.btn-info(href="", style="margin-left: 5px", data-toggle="modal", data-target="#myDoc", ng-click="showDoc(grievance)")
+                                    a.btn.btn-info(href="", data-toggle="modal", data-target="#myDoc", ng-click="showDoc(grievance)")
                                         i.icon-trash.icon-white
                                         | Doc
                                 td
@@ -97,6 +97,6 @@ section.container
                                     h4#myModalLabel.modal-title Grievance Details
                                 .modal-body
                                     span Document
-                                    canvas(id='document' style='width:500px; height: 400px;')
+                                    canvas(id='document')
                                 .modal-footer
                                     button.btn.btn-warning(type='button', data-dismiss='modal') Close

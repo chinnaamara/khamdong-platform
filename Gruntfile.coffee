@@ -38,8 +38,8 @@ module.exports = (grunt) ->
             'bower_components/bootstrap/dist/css/bootstrap.min.css',
             'bower_components/bootstrap/dist/css/bootstrap-theme.min.css',
             'bower_components/bootstrapValidator/dist/css/bootstrapValidator.min.css'
-          ]
-    , 'build/css/all.min.css' : 'app/src/**/*.css'
+          ],
+          'build/css/all.min.css' : ['app/src/css/*.css']
 
     copy:
       main:

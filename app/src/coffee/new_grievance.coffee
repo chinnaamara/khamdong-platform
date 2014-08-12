@@ -8,6 +8,7 @@ app.factory 'NewGrievanceFactory', ['BASEURI', '$firebase', (BASEURI, $firebase)
 
   add = (data) ->
     addRef = new Firebase BASEURI + 'grievances/' + data.id
+    addRef.child('id').set data.id
     addRef.child('name').set data.name
     addRef.child('fatherName').set data.fatherName
     addRef.child('dob').set data.dob
@@ -18,9 +19,14 @@ app.factory 'NewGrievanceFactory', ['BASEURI', '$firebase', (BASEURI, $firebase)
     addRef.child('ward').set data.ward
     addRef.child('constituency').set data.constituency
     addRef.child('department').set data.department
+    addRef.child('scheme').set data.scheme
+    addRef.child('requirement').set data.requirement
     addRef.child('grievanceType').set data.grievanceType
     addRef.child('note').set data.note
     addRef.child('file').set data.file
+    addRef.child('applicationDate').set data.applicationDate
+    addRef.child('status').set data.status
+    addRef.child('message').set data.message
     return 'true'
 
   return {
@@ -74,7 +80,7 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
      window.btoa binary
 
   $scope.createGrievance = () ->
-    console.log $scope.file
+#    console.log $scope.file
     newGrievance = {
       id: uuid()
       name: $scope.grievance.name
@@ -88,10 +94,15 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
       constituency: $scope.grievance.constituency
       department: $scope.grievance.department
       grievanceType: $scope.grievance.grievanceType
+      scheme: $scope.grievance.scheme
+      requirement: $scope.grievance.requirement
       file: $scope.file
       note: $scope.grievance.note
+      applicationDate: new Date().toString()
+      status: "Open"
+      message: "Waiting"
     }
-    console.log newGrievance
+#    console.log newGrievance
     $scope.$watch(NewGrievanceFactory.addGrievance(newGrievance), (res) ->
       if res
         console.log 'added success'
@@ -145,5 +156,11 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
     {id: 2, name: 'Department 2'}
     {id: 3, name: 'Department 3'}
     {id: 4, name: 'Department 4'}
+  ]
+  $scope.schemes = [
+    {id: 1, name: 'Scheme 1'}
+    {id: 2, name: 'Scheme 2'}
+    {id: 3, name: 'Scheme 3'}
+    {id: 4, name: 'Scheme 4'}
   ]
 

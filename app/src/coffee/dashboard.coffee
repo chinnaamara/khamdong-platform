@@ -6,26 +6,30 @@ app.factory 'DashboardFactory', ($firebase, BASEURI) ->
     retrieveGrievances: grievances
   }
 
-app.controller 'DashboardController', ($scope, DashboardFactory) ->
+app.controller 'DashboardController', ($scope, DashboardFactory, $window, DetailsFactory) ->
   console.log 'DashboardController.....'
   $scope.grievances = DashboardFactory.retrieveGrievances
   console.log $scope.grievances
 
   $scope.showDetails = (details) ->
-    $scope.grievance = {
-      name: details.name
-      fatherName: details.fatherName
-      dob: details.dob
-      phoneNumber: details.phoneNumber
-      address: details.address
-      education: details.education
-      gpu: details.gpu
-      ward: details.ward
-      constituency: details.constituency
-      department: details.department
-      grievanceType: details.grievanceType
-      note: details.note
-    }
+    console.log 'details..........'
+    DetailsFactory.retrieveGrievance = details
+#    DetailsFactory.retrieveGrievance = {
+#      name: details.name
+#      fatherName: details.fatherName
+#      dob: details.dob
+#      phoneNumber: details.phoneNumber
+#      address: details.address
+#      education: details.education
+#      gpu: details.gpu
+#      ward: details.ward
+#      constituency: details.constituency
+#      department: details.department
+#      grievanceType: details.grievanceType
+#      note: details.note
+#    }
+    console.log DetailsFactory.grievanceByid
+    $window.location = '#/details'
 
   $scope.showDoc = (data) ->
     canvas = document.getElementById "document"
