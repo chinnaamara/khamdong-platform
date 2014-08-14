@@ -17,6 +17,7 @@ tbody a {
 #document {
     width:500px;
     height: 400px;
+    padding-left: 20px;
 }
 #grievancesTable {
     margin-top: 40px;

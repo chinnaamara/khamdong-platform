@@ -1,62 +1,66 @@
 app.factory 'DetailsFactory', ($firebase, BASEURI) ->
   grievanceByid = {}
-
-  acceptResponse = (data) ->
+  submitResponse = (data) ->
     messageRef = new Firebase BASEURI + 'grievances/' + data.id
+    messageRef.child('grievanceType').set data.grievanceType
+    messageRef.child('department').set data.department
+    messageRef.child('scheme').set data.scheme
+    messageRef.child('requirement').set data.requirement
+    messageRef.child('respondedDate').set data.respondedDate
     messageRef.child('status').set data.status
+    messageRef.child('message').set data.message
     return 'true'
 
-  rejectResponse = (data) ->
-    messageRef = new Firebase BASEURI + 'grievances/' + data.id
-    messageRef.child('status').set data.status
-    return 'true'
+#  rejectResponse = (data) ->
+#    messageRef = new Firebase BASEURI + 'grievances/' + data.id
+#    messageRef.child('status').set data.status
+#    return 'true'
 
   return {
     retrieveGrievance: grievanceByid
-    accept: acceptResponse
-    reject: rejectResponse
+    post: submitResponse
   }
 
 app.controller 'DetailsController', ($scope, DetailsFactory) ->
+  statusMessage = " "
   $scope.accept = true
   $scope.reject = true
-#  $scope.status = 'accept'
+  $scope.status = " "
+  $scope.message = " "
   $scope.newValue = (value) ->
     if value == 'Accept'
       $scope.accept = false
       $scope.reject = true
+      statusMessage = "Accepted"
+      $scope.message = "Approved"
     else if value == 'Reject'
       $scope.accept = true
       $scope.reject = false
+      statusMessage = "Rejected"
+      $scope.message = "Cancelled"
 
   $scope.grievance = {}
   console.log DetailsFactory.retrieveGrievance
   data = DetailsFactory.retrieveGrievance
-#  $scope.message = data.id
   $scope.grievance = data
-
-  $scope.acceptGrievance = (data) ->
+  currentYear = new Date().getFullYear()
+  yearofBirth = new Date($scope.grievance.dob).getFullYear()
+  $scope.age = currentYear - yearofBirth
+  $scope.submit = (data) ->
     console.log $scope.grievance.id
-    data = {
+    resMessage = {
       id: $scope.grievance.id
-      status: 'accepted'
+      grievanceType: $scope.grievance.grievanceType
+      department: $scope.grievance.department
+      scheme: $scope.grievance.scheme
+      requirement: $scope.grievance.requirement
+      respondedDate: new Date().toLocaleString()
+      status: statusMessage
+      message: $scope.message
     }
-    $scope.$watch(DetailsFactory.accept(data), (res) ->
+    $scope.$watch(DetailsFactory.post(resMessage), (res) ->
       if res
-        console.log 'accepted success'
-#        $scope.error = true;
-    )
-
-  $scope.rejectGrievance = (data) ->
-    console.log $scope.grievance.id
-    console.log 'rejecting....'
-    data = {
-      id: $scope.grievance.id
-      status: 'rejected'
-    }
-    $scope.$watch(DetailsFactory.reject(data), (res) ->
-      if res
-        console.log 'rejected success'
+        console.log 'accepted/rejected success'
 #        $scope.error = true;
     )
 

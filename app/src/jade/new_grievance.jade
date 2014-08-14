@@ -5,9 +5,6 @@ section.container
         .col-lg-12
             //h2(class='text-center') Add New Grievance
             //br
-            .alert.alert-success(ng-show='error')
-                i.fa.fa-check-circle-o
-                | Grievance Submitted Successfully!
             .panel.panel-primary
                 .panel-heading
                     | New Grievance Details
@@ -45,8 +42,8 @@ section.container
                                     | Phone Number
                                     span(class='star-label') *
                                 div(ng-class="{ 'has-error' : grievanceForm.phoneNumber.$invalid }")
-                                    input#phoneNumber.form-control(type='number',name='phoneNumber',ng-model='grievance.phoneNumber',placeholder='Phone Number',required)
-                                    small(class="label label-danger",ng-show="grievanceForm.phoneNumber.$invalid && grievanceForm.phoneNumber.$dirty") Required Phone Number
+                                    input#phoneNumber.form-control(type='number',name='phoneNumber',ng-model='grievance.phoneNumber',placeholder='Phone Number',ng-maxlength="10", ng-minlength="10",required)
+                                    small(class="label label-danger",ng-show="grievanceForm.phoneNumber.$invalid && grievanceForm.phoneNumber.$dirty") Required 10 digits mobile number
                             .form-group.has-warning
                                 label.control-label(for='education')
                                     | Education
@@ -62,7 +59,7 @@ section.container
                                 label.control-label(for='address')
                                     | Address
                                 div
-                                    textarea#address.form-control(name='address',ng-model='grievance.address',placeholder='Address')
+                                    textarea#address.form-control(name='address',ng-model='address',placeholder='Address')
                             .form-group.has-warning
                                 label.control-label(for='constituency')
                                     | Constituency
@@ -130,7 +127,8 @@ section.container
                                     | Requirement
                                     span(class='star-label') *
                                 div
-                                    textarea#requirement.form-control(name='note',ng-model='grievance.requirement',placeholder='Requirement')
+                                    textarea#requirement.form-control(name='requirement',ng-model='grievance.requirement',placeholder='Requirement', required)
+                                    small(class="label label-danger",ng-show="grievanceForm.requirement.$invalid && grievanceForm.requirement.$dirty") Required Requirement
                             .form-group.has-warning
                                 label.control-label(for='grievance-file')
                                     | Upload File
@@ -145,11 +143,16 @@ section.container
                                 label.control-label(for='note')
                                     | Note
                                 div
-                                    textarea#note.form-control(name='note',ng-model='grievance.note',placeholder='Note')
+                                    textarea#note.form-control(name='note',ng-model='note',placeholder='Note')
                     .col-lg-12
-                        button.btn.btn-info(id='btn-createGrievance', ng-click='createGrievance()' )
-                            | Submit
-                        button.btn.btn-info(id='btn-print', ng-click='printGrievance()')
-                            | Print
-                        input.btn.btn-warning(type='reset', id='btn-reset', value='Reset')
-                        input.btn.btn-warning(type='button', id='btn-close', value='Close' ui-sref="login")
+                        .col-lg-6
+                            button.btn.btn-success(id='btn-createGrievance', ng-click='createGrievance()', ng-disabled='grievanceForm.$invalid')
+                                | Submit
+                            button.btn.btn-info(id='btn-print', ng-disabled='reportButton', ng-click='printGrievance()')
+                                | Print
+                            //input.btn.btn-warning(type='reset', id='btn-reset', value='Reset')
+                            input.btn.btn-warning(type='button', id='btn-close', value='Back' ui-sref="userDashboard")
+                        .col-lg-6
+                            .alert.alert-success(ng-show='error')
+                                i.fa.fa-check-circle-o
+                                    | Grievance Submitted Successfully!

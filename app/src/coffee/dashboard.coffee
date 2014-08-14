@@ -10,7 +10,7 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
   console.log 'DashboardController.....'
   $scope.grievances = DashboardFactory.retrieveGrievances
   console.log $scope.grievances
-
+  $scope.predicate = '-applicationDate'
   $scope.showDetails = (details) ->
     console.log 'details..........'
     DetailsFactory.retrieveGrievance = details

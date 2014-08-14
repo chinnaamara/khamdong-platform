@@ -14,9 +14,16 @@ section.container
                                 th #
                                 th Grievance Type
                                 th Department
+                                th Scheme
+                                th Requirement
                                 th Name
                                 th Mobile Number
                                 th Constituency
+                                th
+                                    | Applied Date
+                                    br
+                                    | (mm/dd/yyyy Time)
+                                th Status
                         tbody
                             tr(ng-repeat='grievance in grievances | orderByPriority | filter: grievanceKey | orderBy : predicate')
                                 td(class='buttons-td')
@@ -27,65 +34,23 @@ section.container
                                         i.icon-trash.icon-white
                                         | Doc
                                 td
-                                    a(ng-click='') {{ grievance.grievanceType }}
+                                    span {{ grievance.grievanceType }}
                                 td
-                                    a(ng-click='') {{ grievance.department }}
+                                    span {{ grievance.department }}
                                 td
-                                    a(ng-click='') {{ grievance.name }}
+                                    span {{ grievance.scheme }}
                                 td
-                                    a(ng-click='') {{ grievance.phoneNumber }}
+                                    span {{ grievance.requirement }}
                                 td
-                                    a(ng-click='') {{ grievance.constituency }}
-
-                    #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-                        .modal-dialog
-                            .modal-content
-                                .modal-header
-                                    button.close(type='button', data-dismiss='modal')
-                                        span(aria-hidden='true') ×
-                                        span.sr-only Close
-                                    h4#myModalLabel.modal-title Grievance Details
-                                .modal-body
-                                    p
-                                        span.span3.offset2 Name:
-                                        span.span4.offset2 {{ grievance.name }}
-                                    p
-                                        span.span3.offset2 Father Name:
-                                        span.span4.offset2 {{ grievance.fatherName }}
-                                    p
-                                        span.span3.offset2 DOB:
-                                        span.span4.offset2 {{ grievance.dob }}
-                                    p
-                                        span.span3.offset2 Phone Number:
-                                        span.span4.offset2 {{ grievance.phoneNumber }}
-                                    p
-                                        span.span3.offset2 Education:
-                                        span.span4.offset2 {{ grievance.education }}
-                                    p
-                                        span.span3.offset2 Address:
-                                        span.span4.offset2 {{ grievance.address }}
-                                    p
-                                        span.span3.offset2 GPU:
-                                        span.span4.offset2 {{ grievance.gpu }}
-                                    p
-                                        span.span3.offset2 Ward:
-                                        span.span4.offset2 {{ grievance.ward }}
-                                    p
-                                        span.span3.offset2 Constituency:
-                                        span.span4.offset2 {{ grievance.constituency }}
-                                    p
-                                        span.span3.offset2 Department:
-                                        span.span4.offset2 {{ grievance.department }}
-                                    p
-                                        span.span3.offset2 Grievance Type:
-                                        span.span4.offset2 {{ grievance.grievanceType }}
-                                    p
-                                        span.span3.offset2 Note:
-                                        span.span4.offset2 {{ grievance.note }}
-                                .modal-footer
-                                    button.btn.btn-success(type='button') Accepet
-                                    button.btn.btn-danger(type='button') Reject
-                                    button.btn.btn-warning(type='button', data-dismiss='modal') Close
+                                    span {{ grievance.name }}
+                                td
+                                    span {{ grievance.phoneNumber }}
+                                td
+                                    span {{ grievance.constituency }}
+                                td
+                                    span {{ grievance.applicationDate }}
+                                td
+                                    span {{ grievance.status }}
 
                     #myDoc.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
                         .modal-dialog
@@ -94,9 +59,8 @@ section.container
                                     button.close(type='button', data-dismiss='modal')
                                         span(aria-hidden='true') ×
                                         span.sr-only Close
-                                    h4#myModalLabel.modal-title Grievance Details
+                                    h4#myModalLabel.modal-title Grievance Document
                                 .modal-body
-                                    span Document
                                     canvas(id='document')
                                 .modal-footer
                                     button.btn.btn-warning(type='button', data-dismiss='modal') Close

@@ -8,3 +8,6 @@ app.factory 'GrievancesFactory', ($firebase, BASEURI) ->
 
 app.controller 'GrievancesController', ($scope, GrievancesFactory) ->
   $scope.grievances = GrievancesFactory.retrieveGrievances
+  $scope.predicate = '-respondedDate'
+  $scope.showDetails = (data) ->
+    $scope.grievance = data

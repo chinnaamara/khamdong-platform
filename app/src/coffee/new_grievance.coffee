@@ -1,4 +1,4 @@
-app.factory 'NewGrievanceFactory', ['BASEURI', '$firebase', (BASEURI, $firebase) ->
+app.factory 'NewGrievanceFactory', ['BASEURI', '$firebase', '$http', (BASEURI, $firebase, $http) ->
   getRef = new Firebase BASEURI + 'grievances/'
   grievances = ->
     getRef = new Firebase BASEURI + 'grievances/'
@@ -25,13 +25,27 @@ app.factory 'NewGrievanceFactory', ['BASEURI', '$firebase', (BASEURI, $firebase)
     addRef.child('note').set data.note
     addRef.child('file').set data.file
     addRef.child('applicationDate').set data.applicationDate
+    addRef.child('respondedDate').set data.respondedDate
     addRef.child('status').set data.status
     addRef.child('message').set data.message
     return 'true'
+  sendSms = (data) ->
+    console.log 'sending'
+    $http
+    .post('https://api.mVaayoo.com/mvaayooapi/MessageCompose?user=technorrp@gmail.com:Design_20&senderID=TEST SMS&receipientno=' + data.mobile + '&msgtxt= ' + data.message + ' API&state=4')
+#    .post('http://api.mVaayoo.com/mvaayooapi/MessageCompose?user=technorrp@gmail.com:Design_20&senderID=TEST SMS&receipientno=9000991520&msgtxt= message at 11:18am from chinna by mVaayoo API&state=4')
+    .success((data, status, headers, config) ->
+      alert 'success'
+    )
+    .error((status) ->
+      alert status.responseText
+    )
+
 
   return {
     addGrievance: add
     retrieveGrievances: grievances
+    sendSms: sendSms
   }
 ]
 
@@ -58,7 +72,8 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
 
 #  id = uuid()
 #  console.log id
-
+  $scope.address = " "
+  $scope.note = " "
   $scope.file = " "
   $scope.onFileSelect = ($files) ->
     file = $files[0]
@@ -78,16 +93,38 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
        binary += String.fromCharCode bytes[e]
       )
      window.btoa binary
+#  $scope.sendSms = () ->
+#    console.log $scope.grievance.phoneNumber
+#    console.log $scope.grievance.note
+##    $.ajax({
+##      url: "http://api.mVaayoo.com/mvaayooapi/MessageCompose?user=technorrp@gmail.com:Design_20&senderID=TEST SMS&receipientno=9000991520&msgtxt= final message from chinna by mVaayoo API&state=4",
+##      type: 'GET',
+##      dataType: 'json',
+##      success: () ->
+##        alert 'successfully sent'
+##      , error: (status) ->
+##        alert status.responseText
+##    })
+#    data =
+#      mobile: $scope.grievance.phoneNumber
+#      message: $scope.grievance.note
+#
+#    $scope.$watch(NewGrievanceFactory.sendSms(data), (res) ->
+#      console.log 'return'
+#      if res
+#        console.log "sms success"
+#        console.log res
+#    )
 
+  $scope.reportButton = true
   $scope.createGrievance = () ->
-#    console.log $scope.file
     newGrievance = {
       id: uuid()
       name: $scope.grievance.name
       fatherName: $scope.grievance.fatherName
       dob: $scope.grievance.dob
       phoneNumber: $scope.grievance.phoneNumber
-      address: $scope.grievance.address
+      address: $scope.address
       education: $scope.grievance.education
       gpu: $scope.grievance.gpu
       ward: $scope.grievance.ward
@@ -97,17 +134,34 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
       scheme: $scope.grievance.scheme
       requirement: $scope.grievance.requirement
       file: $scope.file
-      note: $scope.grievance.note
-      applicationDate: new Date().toString()
+      note: $scope.note
+      applicationDate: new Date().toLocaleString()
+      respondedDate: "--/--/----"
       status: "Open"
       message: "Waiting"
     }
-#    console.log newGrievance
+
+    smsData = {
+      mobile: $scope.grievance.phoneNumber
+      message: "Dear " + $scope.grievance.name + " your req for " +  $scope.grievance.requirement + " is registered."
+    }
+
     $scope.$watch(NewGrievanceFactory.addGrievance(newGrievance), (res) ->
       if res
+        $scope.reportButton = false
         console.log 'added success'
         $scope.error = true;
+        $scope.$watch(NewGrievanceFactory.sendSms(smsData), (status) ->
+          console.log 'return'
+          if status
+            console.log "sms success"
+            console.log status
+        )
     )
+
+
+  $scope.printGrievance = ->
+    console.log 'printing....'
 
   $scope.calculateAgeOnDOB = ->
     dob = $scope.grievance.dob

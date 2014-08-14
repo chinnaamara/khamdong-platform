@@ -27,9 +27,9 @@ section.container
                                     input#dob.form-control(type='date', name='dob', ng-model='grievance.dob', readonly)
                             .form-group.has-warning
                                 label.control-label(for='age')
-                                    | Age
+                                    | Age(Years)
                                 div
-                                    input#age.form-control(type='text', name='age', ng-model='grievance.age', readonly)
+                                    input#age.form-control(type='text', name='age', ng-model='age', readonly)
                             .form-group.has-warning
                                 label.control-label(for='phoneNumber')
                                     | Phone Number
@@ -113,13 +113,13 @@ section.container
                                 br
                                 div
                                     label.control-label.input-group(for='message') Reject Message
-                                    textarea.form-control(name='rejectMessage',ng-model='rejectMessage', ng-disabled='reject', placeholder='Reject Message')
+                                    textarea.form-control(name='rejectMessage',ng-model='message', ng-disabled='reject', placeholder='Reject Message')
                                     //br
                                     //tt status = {{status | json}}
 
                     .col-lg-6.pull-right
-                                button.btn.btn-success(id='btn-createGrievance', ng-disabled='accept', ng-click='acceptGrievance()')
+                                button.btn.btn-success(id='btn-createGrievance', ng-disabled='accept', ng-click='submit()')
                                     | Accept
-                                button.btn.btn-danger(id='btn-print', ng-disabled='reject', ng-click='rejectGrievance()')
+                                button.btn.btn-danger(id='btn-print', ng-disabled='reject', ng-click='submit()')
                                     | Reject
                                 input.btn.btn-warning(type='button', id='btn-close', value='Back', ui-sref="admin")
