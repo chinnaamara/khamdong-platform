@@ -1,7 +1,20 @@
 app = angular.module 'PTS', ['ui.router', 'firebase', 'angularFileUpload']
 app.constant 'BASEURI', 'https://pts.firebaseio.com/'
-#app.config(($stateProvider, $uploadProvidor)->
-app.config(($stateProvider)->
+app.constant 'AUTH_EVENTS', {
+  loginSuccess: 'auth-login-success'
+  loginFailed: 'auth-login-failed'
+  logoutSuccess: 'auth-logout-success'
+  sessionTimeout: 'auth-session-timeout'
+  notAuthenticated: 'auth-not-authenticated'
+  notAutherized: 'auth-not-autherized'
+}
+app.constant 'USER_ROLES', {
+  all: '*'
+  admin: 'admin'
+  editor: 'editor'
+  guest: 'guest'
+}
+app.config(($stateProvider) ->
   $stateProvider
   .state('login', {
       url: ''

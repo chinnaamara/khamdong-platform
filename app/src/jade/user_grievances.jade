@@ -1,123 +1,128 @@
 //
    Created by chinna on 11/8/14.
 
-section.container
-    .row
-        .col-lg-12
-            //.col-lg-6
-            //    button.btn.btn-primary(ui-sref='newGrievance')
-            //        | New Gfrievance
-            .panel.panel-primary
-                .panel-heading Grievances
-                .panel-body
-                    .col-xs-4.pull-left
-                        button.btn.btn-info(ui-sref='newGrievance')
-                            | Create New Grievance
-                    .col-xs-4.pull-right
-                        input(type="search", class="form-control", ng-model="grievanceKey", placeholder="search by mobile number")
-                    table#userGrievancesTable(class="table table-striped table-bordered table-condensed")
-                        thead
-                            tr
-                                th #
-                                th Name
-                                th Phone Number
-                                th Grievance Type
-                                th Department
-                                th Scheme
-                                th Requirement
-                                th Status
-                                th Message
-                                th
-                                    | Responded Date
-                                    br
-                                    | (mm/dd/yyyy Time)
-                        tbody
-                            tr(ng-repeat='grievance in grievances | orderByPriority | filter: grievanceKey | orderBy : predicate')
-                                td
-                                    a.btn.btn-info(href="", data-toggle="modal", data-target="#myDetails", ng-click="showDetails(grievance)")
-                                        i.icon-trash.icon-white
-                                        | Details
-                                td
-                                    span {{ grievance.name }}
-                                td
-                                    span {{ grievance.phoneNumber }}
-                                td
-                                    span {{ grievance.grievanceType }}
-                                td
-                                    span {{ grievance.department }}
-                                td
-                                    span {{ grievance.scheme }}
-                                td
-                                    span {{ grievance.requirement }}
-                                td
-                                    span {{ grievance.status }}
-                                td
-                                    span {{ grievance.message }}
-                                td
-                                    span {{ grievance.respondedDate }}
-                    #myDetails.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-                        .modal-dialog
-                            .modal-content
-                                .modal-header
-                                    button.close(type='button', data-dismiss='modal')
-                                        span(aria-hidden='true') ×
-                                        span.sr-only Close
-                                    h4#myModalLabel.modal-title Grievance Details
-                                .modal-body
-                                    p
-                                        span.span3.offset2 Name:
-                                        span.span4.offset2 {{ grievance.name }}
-                                    p
-                                        span.span3.offset2 Father Name:
-                                        span.span4.offset2 {{ grievance.fatherName }}
-                                    p
-                                        span.span3.offset2 DOB:
-                                        span.span4.offset2 {{ grievance.dob }}
-                                    p
-                                        span.span3.offset2 Phone Number:
-                                        span.span4.offset2 {{ grievance.phoneNumber }}
-                                    p
-                                        span.span3.offset2 Education:
-                                        span.span4.offset2 {{ grievance.education }}
-                                    p
-                                        span.span3.offset2 Address:
-                                        span.span4.offset2 {{ grievance.address }}
-                                    p
-                                        span.span3.offset2 GPU:
-                                        span.span4.offset2 {{ grievance.gpu }}
-                                    p
-                                        span.span3.offset2 Ward:
-                                        span.span4.offset2 {{ grievance.ward }}
-                                    p
-                                        span.span3.offset2 Constituency:
-                                        span.span4.offset2 {{ grievance.constituency }}
-                                    p
-                                        span.span3.offset2 Department:
-                                        span.span4.offset2 {{ grievance.department }}
-                                    p
-                                        span.span3.offset2 Scheme:
-                                        span.span4.offset2 {{ grievance.scheme }}
-                                    p
-                                        span.span3.offset2 Grievance Type:
-                                        span.span4.offset2 {{ grievance.grievanceType }}
-                                    p
-                                        span.span3.offset2 Note:
-                                        span.span4.offset2 {{ grievance.note }}
-                                    p
-                                        span.span3.offset2 Requirement:
-                                        span.span4.offset2 {{ grievance.requirement }}
-                                    p
-                                        span.span3.offset2 Status:
-                                        span.span4.offset2 {{ grievance.status }}
-                                    p
-                                        span.span3.offset2 Responded Message:
-                                        span.span4.offset2 {{ grievance.message }}
-                                    p
-                                        span.span3.offset2 Applied Date:
-                                        span.span4.offset2 {{ grievance.applicationDate }}
-                                    p
-                                        span.span3.offset2 Responded Date:
-                                        span.span4.offset2 {{ grievance.respondedDate }}
-                                .modal-footer
-                                    button.btn.btn-info(type='button') Print
-                                    button.btn.btn-warning(type='button', data-dismiss='modal') Close
+div
+    section.container
+        .row
+            .col-lg-12
+                .panel.panel-primary
+                    .panel-heading Grievances
+                    .panel-body
+                        .col-xs-4.pull-left
+                            button.btn.btn-info(ui-sref='newGrievance')
+                                | Create New Grievance
+                        .col-xs-4.pull-right
+                            input(type="search", class="form-control", ng-model="grievanceKey", placeholder="search by mobile number")
+                        table#userGrievancesTable(class="table table-striped table-bordered table-condensed")
+                            thead
+                                tr
+                                    th #
+                                    th Name
+                                    th Phone Number
+                                    th Grievance Type
+                                    th Department
+                                    th Scheme
+                                    th Requirement
+                                    th Status
+                                    th Message
+                                    th
+                                        | Responded Date
+                                        br
+                                        | (mm/dd/yyyy Time)
+                            tbody
+                                tr(ng-repeat='grievance in grievances | orderByPriority | filter: grievanceKey | orderBy : predicate')
+                                    td
+                                        a.btn.btn-info(href="", data-toggle="modal", data-target="#myDetails", ng-click="showDetails(grievance)")
+                                            i.icon-trash.icon-white
+                                            | Details
+                                    td
+                                        span {{ grievance.name }}
+                                    td
+                                        span {{ grievance.phoneNumber }}
+                                    td
+                                        span {{ grievance.grievanceType }}
+                                    td
+                                        span {{ grievance.department }}
+                                    td
+                                        span {{ grievance.scheme }}
+                                    td
+                                        span {{ grievance.requirement }}
+                                    td
+                                        span {{ grievance.status }}
+                                    td
+                                        span {{ grievance.message }}
+                                    td
+                                        span {{ grievance.respondedDate }}
+
+div#printThissdf
+    #myDetails.modal.fade.bs-example-modal-lg(tabindex='-1', role='dialog', aria-labelledby='myLargeModalLabel', aria-hidden='true')
+        .modal-dialog.modal-lg
+            .modal-content
+                .modal-header
+                    button.close(type='button btn-primary', data-dismiss='modal' data-target='.bs-example-modal-lg')
+                        span(aria-hidden='true') ×
+                        span.sr-only Close
+                    h4#myModalLabel.modal-title Grievance Details
+                .modal-body
+                    div#printThis
+                        header
+                            div
+                                img(id='printLogo' src='../images/govt-of-sikkim_logo-small.png')
+                                |Party Application
+                        p
+                            span.span3.offset2 Name
+                            span.span4.offset2 {{ grievance.name }}
+                        p
+                            span.span3.offset2 Father Name
+                            span.span4.offset2 {{ grievance.fatherName }}
+                        p
+                            span.span3.offset2 DOB
+                            span.span4.offset2 {{ grievance.dob }}
+                        p
+                            span.span3.offset2 Phone Number
+                            span.span4.offset2 {{ grievance.phoneNumber }}
+                        p
+                            span.span3.offset2 Education
+                            span.span4.offset2 {{ grievance.education }}
+                        p
+                            span.span3.offset2 Address
+                            span.span4.offset2 {{ grievance.address }}
+                        p
+                            span.span3.offset2 GPU
+                            span.span4.offset2 {{ grievance.gpu }}
+                        p
+                            span.span3.offset2 Ward
+                            span.span4.offset2 {{ grievance.ward }}
+                        p
+                            span.span3.offset2 Constituency
+                            span.span4.offset2 {{ grievance.constituency }}
+                        p
+                            span.span3.offset2 Department
+                            span.span4.offset2 {{ grievance.department }}
+                        p
+                            span.span3.offset2 Scheme
+                            span.span4.offset2 {{ grievance.scheme }}
+                        p
+                            span.span3.offset2 Grievance Type
+                            span.span4.offset2 {{ grievance.grievanceType }}
+                        p
+                            span.span3.offset2 Note
+                            span.span4.offset2 {{ grievance.note }}
+                        p
+                            span.span3.offset2 Requirement
+                            span.span4.offset2 {{ grievance.requirement }}
+                        p
+                            span.span3.offset2 Status
+                            span.span4.offset2 {{ grievance.status }}
+                        p
+                            span.span3.offset2 Responded Message
+                            span.span4.offset2 {{ grievance.message }}
+                        p
+                            span.span3.offset2 Applied Date
+                            span.span4.offset2 {{ grievance.applicationDate }}
+                        p
+                            span.span3.offset2 Responded Date
+                            span.span4.offset2 {{ grievance.respondedDate }}
+                .modal-footer
+                    button.btn.btn-info(type='button', ng-click="viewPdf()") Print
+                    button.btn.btn-warning(type='button', data-dismiss='modal') Close

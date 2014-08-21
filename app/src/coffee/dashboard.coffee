@@ -7,12 +7,10 @@ app.factory 'DashboardFactory', ($firebase, BASEURI) ->
   }
 
 app.controller 'DashboardController', ($scope, DashboardFactory, $window, DetailsFactory) ->
-  console.log 'DashboardController.....'
   $scope.grievances = DashboardFactory.retrieveGrievances
-  console.log $scope.grievances
+#  console.log $scope.grievances
   $scope.predicate = '-applicationDate'
   $scope.showDetails = (details) ->
-    console.log 'details..........'
     DetailsFactory.retrieveGrievance = details
 #    DetailsFactory.retrieveGrievance = {
 #      name: details.name
@@ -28,7 +26,6 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
 #      grievanceType: details.grievanceType
 #      note: details.note
 #    }
-    console.log DetailsFactory.grievanceByid
     $window.location = '#/details'
 
   $scope.showDoc = (data) ->

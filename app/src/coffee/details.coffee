@@ -40,7 +40,7 @@ app.controller 'DetailsController', ($scope, DetailsFactory) ->
       $scope.message = "Cancelled"
 
   $scope.grievance = {}
-  console.log DetailsFactory.retrieveGrievance
+#  console.log DetailsFactory.retrieveGrievance
   data = DetailsFactory.retrieveGrievance
   $scope.grievance = data
   currentYear = new Date().getFullYear()

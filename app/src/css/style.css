@@ -1,3 +1,53 @@
+/*
+  nav bar styles
+*/
+
+.navbar.navbar-inverse.navbar-default {
+    background: linear-gradient(to bottom right,#72BDFD 0,#357ebd 100%);
+    border: none;
+    min-height: inherit;
+}
+.navbar.navbar-inverse.navbar-default  a{
+    color: #ffffff;
+}
+.open>.dropdown-menu{
+    background: #3492E4;
+}
+.navbar.navbar-inverse.navbar-default  a:hover{
+    color: brown;
+}
+.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:focus, .navbar-inverse .navbar-nav>.open>a:hover{
+    background: #D7DAEB !important;
+}
+/*ends */
+/*
+  grievance print page
+*/
+#printThis{
+    border: 2px dotted #3492E4;
+}
+#printThis p{
+    padding: 10px 10px;
+    margin: 12px 75px;
+
+    font: bold normal  normal 18px/1.2 "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+}
+#printThis p .span4{
+    float: right;
+    font-style: oblique;
+    font-weight: normal;
+}
+header img #printLogo{
+    margin: 10px;
+}
+header div {
+    text-align: center;
+    font-size: 26px;
+}
+/*
+    ends here
+*/
 .modal-content {
     margin-top: 100px !important;
 }
@@ -27,4 +77,26 @@ tbody a {
 }
 .star-label {
     color: red;
+}
+
+/*
+for model dialog print*/
+@media screen {
+    #printSection {
+        display: none;
+    }
+}
+
+@media print {
+    body * {
+        visibility:hidden;
+    }
+    #printSection, #printSection * {
+        visibility:visible;
+    }
+    #printSection {
+        position:absolute;
+        left:0;
+        top:0;
+    }
 }

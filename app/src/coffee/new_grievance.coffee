@@ -41,7 +41,6 @@ app.factory 'NewGrievanceFactory', ['BASEURI', '$firebase', '$http', (BASEURI, $
       alert status.responseText
     )
 
-
   return {
     addGrievance: add
     retrieveGrievances: grievances
@@ -77,7 +76,7 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
   $scope.file = " "
   $scope.onFileSelect = ($files) ->
     file = $files[0]
-    console.log file
+#    console.log file
     reader=new FileReader()
     reader.readAsArrayBuffer(file)
     reader.onload=(e)->
@@ -94,8 +93,6 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
       )
      window.btoa binary
 #  $scope.sendSms = () ->
-#    console.log $scope.grievance.phoneNumber
-#    console.log $scope.grievance.note
 ##    $.ajax({
 ##      url: "http://api.mVaayoo.com/mvaayooapi/MessageCompose?user=technorrp@gmail.com:Design_20&senderID=TEST SMS&receipientno=9000991520&msgtxt= final message from chinna by mVaayoo API&state=4",
 ##      type: 'GET',
@@ -110,10 +107,8 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
 #      message: $scope.grievance.note
 #
 #    $scope.$watch(NewGrievanceFactory.sendSms(data), (res) ->
-#      console.log 'return'
 #      if res
 #        console.log "sms success"
-#        console.log res
 #    )
 
   $scope.reportButton = true
@@ -140,7 +135,7 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
       status: "Open"
       message: "Waiting"
     }
-
+    $scope.new_grievance = newGrievance
     smsData = {
       mobile: $scope.grievance.phoneNumber
       message: "Dear " + $scope.grievance.name + " your req for " +  $scope.grievance.requirement + " is registered."
@@ -149,19 +144,20 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
     $scope.$watch(NewGrievanceFactory.addGrievance(newGrievance), (res) ->
       if res
         $scope.reportButton = false
-        console.log 'added success'
+#        console.log 'added success'
         $scope.error = true;
         $scope.$watch(NewGrievanceFactory.sendSms(smsData), (status) ->
-          console.log 'return'
+#          console.log 'return'
           if status
-            console.log "sms success"
-            console.log status
+            console.log "sms sent to " + smsData.mobile
+#            console.log status
         )
     )
 
 
-  $scope.printGrievance = ->
-    console.log 'printing....'
+#  $scope.printGrievance = () ->
+#    console.log 'printing....'
+#    console.log $scope.new_grievance
 
   $scope.calculateAgeOnDOB = ->
     dob = $scope.grievance.dob
@@ -174,6 +170,26 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
       return
     else
       console.log "Invalid Date"
+
+  $scope.printPdf = ->
+#    console.log 'From PdfFunction.........' +$scope.grievance
+    $scope.printElement(document.getElementById("printThis"));
+    modThis = document.querySelector("#printSection .modifyMe");
+    #    modThis.appendChild(document.createTextNode(" new"));
+    window.print();
+  $scope.printElement = (elem) ->
+#    console.log 'from printElement function' + elem
+    domClone = elem.cloneNode(true)
+    $printSection = document.getElementById("printSection")
+    unless $printSection
+      $printSection = document.createElement("div")
+      $printSection.id = "printSection"
+      document.body.appendChild $printSection
+    $printSection.innerHTML = ""
+    $printSection.appendChild domClone
+    return
+
+  $(".date").datepicker autoclose: true
 
   $scope.education = [
     {id: 1, name: 'SSC'}
@@ -188,16 +204,15 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
     {id: 4, name: 'Constituency 4'}
   ]
   $scope.gpus = [
-    {id: 1, name: 'GPU 1'}
-    {id: 2, name: 'GPU 2'}
-    {id: 3, name: 'GPU 3'}
-    {id: 4, name: 'GPU 4'}
+    {id: 1, name: ' MELLI DARA PAIYONG'}
   ]
   $scope.wards = [
-    {id: 1, name: 'Ward 1'}
-    {id: 2, name: 'Ward 2'}
-    {id: 3, name: 'Ward 3'}
-    {id: 4, name: 'Ward 4'}
+    {id: 1, name: 'MELLI DARA'}
+    {id: 2, name: 'MELLI GUMPA'}
+    {id: 3, name: 'UPPER PAIYONG'}
+    {id: 4, name: 'LOWER PAIYONG'}
+    {id: 5, name: 'KERABARI'}
+    {id: 6, name: 'MELLI BAZAAR'}
   ]
   $scope.grievanceTypes = [
     {id: 1, name: 'Grievance Type 1'}
@@ -206,15 +221,34 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
     {id: 4, name: 'Grievance Type 4'}
   ]
   $scope.departments = [
-    {id: 1, name: 'Department 1'}
-    {id: 2, name: 'Department 2'}
-    {id: 3, name: 'Department 3'}
-    {id: 4, name: 'Department 4'}
+    {id: 1, name: 'SOCIAL JUSTICE AND WELFARE DEPARTMENT'}
+    {id: 2, name: 'HORTICULTURE AND CASH CROP DEVELOPMENT DEPARTMENT'}
+    {id: 3, name: 'BACKWARD REGION GRANT FUND'}
+    {id: 4, name: 'RURAL MANAGEMENT AND DEVELOPMENT DEPARTMENT'}
+    {id: 5, name: 'ANIMAL HUSBANDRY LIVESTOCK FISHERIES AND VETERINARY SERVICES'}
+    {id: 6, name: 'HUMAN RESOURCE DEVELOPMENT DEPARTMENT'}
+    {id: 7, name: 'HEALTHCARE HUMAN SERVICES AND FAMILY WELFARE DEPARTMENT'}
+    {id: 8, name: 'FOOD SECURITY CIVIL SUPPLIES AND CONSUMER AFFAIRS DEPARTMENT'}
+    {id: 9, name: 'AGRICULTURE AND FOOD SECURITY DEVELOPMENT DEPARTMENT'}
+    {id: 10, name: 'MAHATMA GANDHI NATIONAL RURAL EMPLOYMENT GURANTEE ACT'}
   ]
   $scope.schemes = [
-    {id: 1, name: 'Scheme 1'}
-    {id: 2, name: 'Scheme 2'}
-    {id: 3, name: 'Scheme 3'}
-    {id: 4, name: 'Scheme 4'}
+    {id: 1, name: 'GREEN HOUSE'}
+    {id: 2, name: 'OLD AGE PENSION'}
+    {id: 3, name: 'INDIRA AWAS YOGNA'}
+    {id: 4, name: 'WIDOW PENSION'}
+    {id: 5, name: 'SUBSISTENCE ALLOWANCE'}
+    {id: 6, name: 'PRE MATRIC SCHOLARSHIP'}
+    {id: 7, name: 'POST MATRIC SCHOLARSHIP'}
+    {id: 8, name: 'COW'}
+    {id: 9, name: 'HOUSE UPGRADATION'}
+    {id: 10, name: 'CMRHM'}
+    {id: 11, name: 'GOAT'}
+    {id: 12, name: 'PLASTIC TANK'}
+    {id: 13, name: 'COW DUNG PIT'}
+    {id: 14, name: 'RURAL HOUSING SCHEME'}
+    {id: 15, name: 'LPG COOKING GAS CONNECTION'}
+    {id: 16, name: 'BPL RICE'}
+    {id: 17, name: 'EDUCATION SCHOLARSHIP'}
+    {id: 18, name: 'GCI SHEET'}
   ]
-

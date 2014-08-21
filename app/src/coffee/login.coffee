@@ -1,5 +1,13 @@
-app.controller 'LoginController', ($scope) ->
-  console.log "LoginController....."
+app.controller 'LoginController', ($scope, $rootScope, AUTH_EVENTS, USER_ROLES) ->
+  $scope.credentials =
+    username: ''
+    password: ''
 
-app.controller 'AdminController', ($scope) ->
-  console.log "AdminController....."
+  $scope.login = (credentials) ->
+    AuthService.login(credentials).then((user) ->
+        $rootScope.$broadcast AUTH_EVENTS.loginSuccess
+        $scope.setCurrentUser user
+    , () ->
+      $rootScope.$broadcast AUTH_EVENTS.loginFailed
+    )
+

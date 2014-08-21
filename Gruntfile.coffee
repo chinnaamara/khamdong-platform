@@ -37,7 +37,7 @@ module.exports = (grunt) ->
           'build/css/lib.min.css' : [
             'bower_components/bootstrap/dist/css/bootstrap.min.css',
             'bower_components/bootstrap/dist/css/bootstrap-theme.min.css',
-            'bower_components/bootstrapValidator/dist/css/bootstrapValidator.min.css'
+            'bower_components/bootstrap-datepicker/css/datepicker.css',
           ],
           'build/css/all.min.css' : ['app/src/css/*.css']
 
@@ -69,6 +69,7 @@ module.exports = (grunt) ->
         , 'bower_components/ng-file-upload/angular-file-upload.js'
         , 'bower_components/firebase/firebase.js'
         , 'bower_components/bootstrap/dist/js/bootstrap.js'
+        , 'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js'
         , 'bower_components/lodash/dist/lodash.compat.js'
         , 'bower_components/angular-ui-router/release/angular-ui-router.js'
         , 'bower_components/angularfire/angularfire.js'
