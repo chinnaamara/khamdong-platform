@@ -161,8 +161,10 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
 
   $scope.calculateAgeOnDOB = ->
     dob = $scope.grievance.dob
+    console.log dob
     date1 = new Date()
-    date2 = new Date($scope.grievance.dob)
+    date2 = new Date(dob)
+    console.log date2
     if dob
       y1 = date1.getFullYear()
       y2 = date2.getFullYear()
@@ -172,24 +174,26 @@ app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) 
       console.log "Invalid Date"
 
   $scope.printPdf = ->
-#    console.log 'From PdfFunction.........' +$scope.grievance
-    $scope.printElement(document.getElementById("printThis"));
-    modThis = document.querySelector("#printSection .modifyMe");
-    #    modThis.appendChild(document.createTextNode(" new"));
-    window.print();
-  $scope.printElement = (elem) ->
-#    console.log 'from printElement function' + elem
-    domClone = elem.cloneNode(true)
-    $printSection = document.getElementById("printSection")
+    printElement(document.getElementById 'printThis')
+    window.print()
+
+  printElement = (elem) ->
+    domClone = elem.cloneNode true
+    $printSection = document.getElementById 'printSection'
     unless $printSection
-      $printSection = document.createElement("div")
-      $printSection.id = "printSection"
+      $printSection = document.createElement 'div'
+      $printSection.id = 'printSection'
       document.body.appendChild $printSection
-    $printSection.innerHTML = ""
+    $printSection.innerHTML = ''
     $printSection.appendChild domClone
     return
 
   $(".date").datepicker autoclose: true
+#  $(".date").datepicker({
+#    viewMode: 'years'
+#    format: 'dd/mm/yyyy'
+#    autoclose: true
+#  })
 
   $scope.education = [
     {id: 1, name: 'SSC'}
