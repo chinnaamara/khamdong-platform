@@ -3,11 +3,14 @@ app.controller 'LoginController', ($scope, $rootScope, AUTH_EVENTS, USER_ROLES) 
     username: ''
     password: ''
 
-  $scope.login = (credentials) ->
-    AuthService.login(credentials).then((user) ->
-        $rootScope.$broadcast AUTH_EVENTS.loginSuccess
-        $scope.setCurrentUser user
-    , () ->
-      $rootScope.$broadcast AUTH_EVENTS.loginFailed
-    )
+#  $scope.login = (credentials) ->
+#    AuthService.login(credentials).then((user) ->
+#        $rootScope.$broadcast AUTH_EVENTS.loginSuccess
+#        $scope.setCurrentUser user
+#    , () ->
+#      $rootScope.$broadcast AUTH_EVENTS.loginFailed
+#    )
+
+  $scope.signIn = ->
+    console.log 'signing in.......'
 
