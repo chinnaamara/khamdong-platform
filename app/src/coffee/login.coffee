@@ -11,6 +11,7 @@ app.controller 'LoginController', ($scope, $rootScope, AUTH_EVENTS, USER_ROLES) 
 #      $rootScope.$broadcast AUTH_EVENTS.loginFailed
 #    )
 
-  $scope.signIn = ->
+  $scope.signIn = (credentials) ->
     console.log 'signing in.......'
+    console.log credentials
 
