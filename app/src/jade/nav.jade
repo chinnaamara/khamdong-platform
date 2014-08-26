@@ -4,31 +4,32 @@
 div#nav-bar
     nav.navbar.navbar-inverse.navbar-default(role='navigation')
         div.navbar-header
-            //img(src='../../images/govt')
-            a.navbar-brand OneSDF
-        ul.nav.navbar-nav.navbar-right
+            strong
+                //img(src='../../images/govt')
+                a.navbar-brand KHAMDONG APPLICATION
+        ul.nav.navbar-nav.navbar-right(ng-if='userName')
             li
                 a(ui-sref='userDashboard') Grievances
             li
                 a(ui-sref='newGrievance') New Grievance
             li(class='dropdown')
                 a(class='dropdown-toggle' data-toggle='dropdown')
-                    | Admin
+                    | {{ userName }}
                     b(class='caret')
                 ul(class='dropdown-menu')
                     li
-                        a(ui-sref='admin') Grievances
-                    li(class='divider')
+                        a(ui-sref='admin', ng-if='administrator') Grievances
+                    li(class='divider', ng-if='administrator')
                     li
-                        a(ui-sref='newDepartment') Add Department
-                    li(class='divider')
+                        a(ui-sref='newDepartment', ng-if='administrator') Add Department
+                    li(class='divider', ng-if='administrator')
                     li
-                        a(ui-sref='newScheme') Add Scheme
-                    li(class='divider')
+                        a(ui-sref='newScheme', ng-if='administrator') Add Scheme
+                    li(class='divider', ng-if='administrator')
                     li
-                        a(ui-sref='createUser') Create User
-                    li(class='divider')
+                        a(ui-sref='createUser', ng-if='administrator') Create User
+                    li(class='divider', ng-if='administrator')
                     li
-                        a(ui-sref='login') Logout
+                        a(ng-click='logout()') Logout
 
 

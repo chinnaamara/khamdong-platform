@@ -6,7 +6,22 @@ app.factory 'GrievancesFactory', ($firebase, BASEURI) ->
     retrieveGrievances: grievances
   }
 
-app.controller 'GrievancesController', ($scope, GrievancesFactory) ->
+app.controller 'GrievancesController', ($scope, GrievancesFactory, $rootScope, $window) ->
+  localData = localStorage.getItem('userEmail')
+#  $rootScope.userName = localData['email']
+  console.log localData
+  console.log 'root element: ' + $rootScope.token
+  console.log 'user: ' + $rootScope.userName
+  if ! localData
+    $window.location = '#/error'
+  else if localData == '"admin@technoidentity.com"'
+    $rootScope.userName = 'Admin'
+    $rootScope.administrator = 'Admin'
+  else
+    user = localData.split('"')
+    userName = user[1]
+    $rootScope.userName = userName
+
   $scope.grievances = GrievancesFactory.retrieveGrievances
   $scope.predicate = '-respondedDate'
 

@@ -72,6 +72,7 @@ module.exports = (grunt) ->
         , 'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js'
         , 'bower_components/lodash/dist/lodash.compat.js'
         , 'bower_components/angular-ui-router/release/angular-ui-router.js'
+        , 'bower_components/firebase-simple-login/firebase-simple-login.js'
         , 'bower_components/angularfire/angularfire.js'
         ]
         dest: 'build/js/lib.min.js'
