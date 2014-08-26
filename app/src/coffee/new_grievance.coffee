@@ -48,7 +48,23 @@ app.factory 'NewGrievanceFactory', ['BASEURI', '$firebase', '$http', (BASEURI, $
   }
 ]
 
-app.controller 'NewGrievanceController', ($scope, $upload, NewGrievanceFactory) ->
+app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrievanceFactory) ->
+
+  localData = localStorage.getItem('userEmail')
+  #  $rootScope.userName = localData['email']
+  console.log localData
+  console.log 'root element: ' + $rootScope.token
+  console.log 'user: ' + $rootScope.userName
+  if ! localData
+    $window.location = '#/error'
+  else if localData == '"admin@technoidentity.com"'
+    $rootScope.userName = 'Admin'
+    $rootScope.administrator = 'Admin'
+  else
+    user = localData.split('"')
+    userName = user[1]
+    $rootScope.userName = userName
+
   uuid = ->
     CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
     chars = CHARS

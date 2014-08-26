@@ -1,14 +1,27 @@
 /*
+    -----------------
   nav bar styles
+  -----------
 */
-
+#logo-img{
+    float: left;
+}
+.navbar-left a{
+    margin-top:15px;
+}
 .navbar.navbar-inverse.navbar-default {
     background: linear-gradient(to bottom right,#72BDFD 0,#357ebd 100%);
     border: none;
     min-height: inherit;
+
+}
+.nav.navbar-nav.navbar-right{
+    margin: 15px;
+    font-size: 18px;
 }
 .navbar.navbar-inverse.navbar-default  a{
     color: #ffffff;
+
 }
 .open>.dropdown-menu{
     background: #3492E4;
@@ -19,34 +32,43 @@
 .navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:focus, .navbar-inverse .navbar-nav>.open>a:hover{
     background: #D7DAEB !important;
 }
-/*ends */
+/* ---------ends------------  */
 /*
+    ---------------
   grievance print page
+    -------------------
 */
 #printThis{
-    border: 2px dotted #3492E4;
+    border: 4px ridge #36383A;
+    display:block;
+    padding:1%;
+    margin:1%;
+    font: bold normal normal 15px/1.0 "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 #printThis p{
-    padding: 10px 10px;
     margin: 12px 75px;
-
+    color: rgb(50, 1, 119);
+    padding: 7px;
     font: bold normal  normal 18px/1.2 "Helvetica Neue", Helvetica, Arial, sans-serif;
 
 }
 #printThis p .span4{
     float: right;
-    font-style: oblique;
-    font-weight: normal;
+    font-weight: 500;
+    font-style: normal;
+    color: rgb(69, 85, 148);
 }
 header img #printLogo{
     margin: 10px;
 }
 header div {
     text-align: center;
-    font-size: 26px;
+    color: lightslategrey;
+    font-size:30px;
 }
-/*
+/* ----------
     ends here
+    --------------
 */
 .modal-content {
     margin-top: 100px !important;
@@ -78,9 +100,11 @@ tbody a {
 .star-label {
     color: red;
 }
-
-/*
-for model dialog print*/
+@-moz-document url-prefix() {
+    fieldset { display: table-cell; }
+}
+/*------
+for model dialog print---------- */
 @media screen {
     #printSection {
         display: none;
@@ -100,3 +124,48 @@ for model dialog print*/
         top:0;
     }
 }
+/* -----ends here-------  */
+
+
+/*
+ ---------------------
+                    screen for tablets of screen width:768px
+ -----------------------
+ */
+@media only screen and (max-width:768px) {
+    html{
+        margin: auto;
+        width: 95%;
+        clear: both;
+    }
+    .navbar{
+        position: relative;
+    }
+    .navbar ul{
+        padding-left: 0;
+    }
+    .navbar ul li{
+        width: 100%;
+        text-align: center;
+        padding: 1%;
+
+    }
+    .navbar.navbar-inverse.navbar-default  a:link,.navbar.navbar-inverse.navbar-default  a:visited{
+        display: block;
+        height: 30px;
+        padding: 10px 45px;
+    }
+    .navbar-left img{
+        width: 15%;
+    }
+    .navbar.navbar-inverse.navbar-default  a:hover,.navbar.navbar-inverse.navbar-default  a:active
+    .navbar.navbar-inverse.navbar-default  a:link,.navbar.navbar-inverse.navbar-default  a:visited
+    {
+        background-color: #D7DAEB;
+        text-shadow: none;
+    }
+    @-moz-document url-prefix() {
+        fieldset { display: table-cell; }
+    }
+}
+
