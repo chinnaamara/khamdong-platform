@@ -6,7 +6,9 @@ div#nav-bar
         div.navbar-header
             div.navbar-left
                 img(src='../images/logo.png' alt='KHAMDONG APPLICATION' id='logo-img')
-                a.navbar-brand KHAMDONG APPLICATION
+                div.titleclass
+                    strong
+                        | KHAMDONG APPLICATION
         ul.nav.navbar-nav.navbar-right(ng-if='userName')
             li
                 a(ui-sref='userDashboard') Grievances

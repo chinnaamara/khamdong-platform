@@ -6,7 +6,7 @@ app.factory 'GrievancesFactory', ($firebase, BASEURI) ->
     retrieveGrievances: grievances
   }
 
-app.controller 'GrievancesController', ($scope, GrievancesFactory, $rootScope, $window) ->
+app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievanceFactory, $rootScope, $window) ->
   localData = localStorage.getItem('userEmail')
 #  $rootScope.userName = localData['email']
   console.log localData
@@ -36,11 +36,17 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, $rootScope, $
 
   printElement = (elem) ->
     domClone = elem.cloneNode true
-    $printSection = document.getElementById 'printSection'
-    unless $printSection
-      $printSection = document.createElement 'div'
-      $printSection.id = 'printSection'
-      document.body.appendChild $printSection
-    $printSection.innerHTML = ''
-    $printSection.appendChild domClone
+    printSection = document.getElementById 'printSection'
+    unless printSection
+      printSection = document.createElement 'div'
+      printSection.id = 'printSection'
+      document.body.appendChild printSection
+    printSection.innerHTML = ''
+    printSection.appendChild domClone
+    return
+
+  $scope.editDetails = (grievance) ->
+    console.log grievance
+    EditGrievanceFactory.retrieveGrievance = grievance
+    $window.location = '#/grievance/edit'
     return

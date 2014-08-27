@@ -9,7 +9,19 @@ app.factory 'SchemesFactory', ($firebase, BASEURI) ->
     add: addScheme
   }
 
-app.controller "AddSchemeController", ($scope, DepartmentsFactory, SchemesFactory) ->
+app.controller "AddSchemeController", ($scope, DepartmentsFactory, SchemesFactory, $rootScope) ->
+  localData = localStorage.getItem('userEmail')
+  if ! localData
+    $window.location = '#/error'
+  else if localData == '"admin@technoidentity.com"'
+    $scope.UserEmail = "admin@technoidentity.com"
+    $rootScope.userName = 'Admin'
+    $rootScope.administrator = 'Admin'
+  else
+    user = localData.split('"')
+    $scope.UserEmail = user[1]
+    $rootScope.userName = $scope.UserEmail
+
   $scope.departments = DepartmentsFactory.data
   $scope.addScheme = ->
     newScheme =

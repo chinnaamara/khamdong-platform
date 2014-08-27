@@ -23,20 +23,12 @@ div(id='loginModal', tabindex='-1', role='dialog', aria-hidden='true')
                     .row
                         .form-group
                             .col-md-6
-                                input.btn.btn-info.pull-left(type='submit', id='btn-signIn', value='Sign In')
+                                button.btn.btn-info.pull-left(type='submit', id='btn-signIn')
+                                    i.glyphicon.glyphicon-log-in
+                                    |   Sign In
                     | &nbsp;
                     .row
                         .alert.alert-danger(ng-show="error")
                             i.fa.fa-frown-o
                             | {{ errorMessage }}
-                            //| Invalid&nbsp;
-                            //strong Username/Email
-                            //| &nbsp;or&nbsp;
-                            //strong Password
-                            //| &nbsp;
-                        //.alert.alert-danger(ng-show="passwordError")
-                        //    i.fa.fa-frown-o
-                        //    | Invalid&nbsp;
-                        //    strong Password
-                        //    | &nbsp;
             .modal-footer(id='footer')

@@ -1,4 +1,4 @@
-app = angular.module 'PTS', ['ui.router', 'firebase', 'angularFileUpload']
+app = angular.module 'OneSDF', ['ui.router', 'firebase', 'angularFileUpload']
 app.constant 'BASEURI', 'https://pts.firebaseio.com/'
 app.constant 'AUTH_EVENTS', {
   loginSuccess: 'auth-login-success'
@@ -84,6 +84,13 @@ app.config(($stateProvider) ->
       views: {
         'viewA@': {templateUrl: 'html/nav.html', controller: 'LoginController'}
         'viewB@': {templateUrl: 'html/user_grievances.html', controller: 'GrievancesController'}
+      }
+    })
+  .state('editGrievance', {
+      url: '/grievance/edit'
+      views: {
+        'viewA@': {templateUrl: 'html/nav.html', controller: 'LoginController'}
+        'viewB@': {templateUrl: 'html/edit_grievance.html', controller: 'EditGrievanceController'}
       }
     })
   .state('error', {

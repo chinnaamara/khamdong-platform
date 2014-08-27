@@ -6,7 +6,20 @@ app.factory 'DashboardFactory', ($firebase, BASEURI) ->
     retrieveGrievances: grievances
   }
 
-app.controller 'DashboardController', ($scope, DashboardFactory, $window, DetailsFactory) ->
+app.controller 'DashboardController', ($scope, DashboardFactory, $window, DetailsFactory, $rootScope) ->
+
+  localData = localStorage.getItem('userEmail')
+  if ! localData
+    $window.location = '#/error'
+  else if localData == '"admin@technoidentity.com"'
+    $scope.UserEmail = "admin@technoidentity.com"
+    $rootScope.userName = 'Admin'
+    $rootScope.administrator = 'Admin'
+  else
+    user = localData.split('"')
+    $scope.UserEmail = user[1]
+    $rootScope.userName = $scope.UserEmail
+
   $scope.grievances = DashboardFactory.retrieveGrievances
 #  console.log $scope.grievances
   $scope.predicate = '-applicationDate'

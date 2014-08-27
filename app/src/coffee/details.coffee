@@ -21,7 +21,19 @@ app.factory 'DetailsFactory', ($firebase, BASEURI) ->
     post: submitResponse
   }
 
-app.controller 'DetailsController', ($scope, DetailsFactory) ->
+app.controller 'DetailsController', ($scope, DetailsFactory, $rootScope) ->
+  localData = localStorage.getItem('userEmail')
+  if ! localData
+    $window.location = '#/error'
+  else if localData == '"admin@technoidentity.com"'
+    $scope.UserEmail = "admin@technoidentity.com"
+    $rootScope.userName = 'Admin'
+    $rootScope.administrator = 'Admin'
+  else
+    user = localData.split('"')
+    $scope.UserEmail = user[1]
+    $rootScope.userName = $scope.UserEmail
+
   statusMessage = " "
   $scope.accept = true
   $scope.reject = true

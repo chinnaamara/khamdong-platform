@@ -153,80 +153,89 @@ div
                         .col-lg-12
                             .col-lg-6
                                 button.btn.btn-success(id='btn-createGrievance', ng-click='createGrievance()', ng-disabled='grievanceForm.$invalid')
-                                    | Submit
+                                    i.glyphicon.glyphicon-ok
+                                    |   Submit
                                 button.btn.btn-info(id='btn-print', ng-disabled='reportButton', href="", data-toggle="modal", data-target="#myDetails")
-                                    | Print
-                                //input.btn.btn-warning(type='reset', id='btn-reset', value='Reset')
-                                input.btn.btn-warning(type='button', id='btn-close', value='Back' ui-sref="userDashboard")
+                                    i.glyphicon.glyphicon-print
+                                    |   Print
+                                button.btn.btn-warning(id='btn-close', ui-sref="userDashboard")
+                                    i.glyphicon.glyphicon-circle-arrow-left
+                                    |   Back
                             .col-lg-6
                                 .alert.alert-success(ng-show='error')
                                     i.fa.fa-check-circle-o
                                         | Grievance Submitted Successfully!
 div#printThisPdf
-        #myDetails.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-            .modal-dialog
+        #myDetails.modal.fade.bs-example-modal-lg(tabindex='-1', role='dialog', aria-labelledby='myLargeModalLabel', aria-hidden='true')
+            .modal-dialog.modal-lg
                 .modal-content
                     .modal-header
-                        button.close(type='button', data-dismiss='modal')
-                            span(aria-hidden='true') ×
-                            span.sr-only Close
-                        h4#myModalLabel.modal-title Grievance Details
+                        //button.close(type='button', data-dismiss='modal')
+                        //    span(aria-hidden='true') ×
+                        //    span.sr-only Close
                     .modal-body
                         div#printThis
+                            header
+                                div
+                                    | Grievance Report
                             p
-                                span.span3.offset2 Name:
+                                span.span3.offset2 Name
                                 span.span4.offset2 {{ new_grievance.name }}
                             p
-                                span.span3.offset2 Father Name:
+                                span.span3.offset2 Father Name
                                 span.span4.offset2 {{ new_grievance.fatherName }}
                             p
-                                span.span3.offset2 DOB:
+                                span.span3.offset2 DOB
                                 span.span4.offset2 {{ new_grievance.dob }}
                             p
-                                span.span3.offset2 Phone Number:
+                                span.span3.offset2 Phone Number
                                 span.span4.offset2 {{ new_grievance.phoneNumber }}
                             p
-                                span.span3.offset2 Education:
+                                span.span3.offset2 Education
                                 span.span4.offset2 {{ new_grievance.education }}
                             p
-                                span.span3.offset2 Address:
+                                span.span3.offset2 Address
                                 span.span4.offset2 {{ new_grievance.address }}
                             p
-                                span.span3.offset2 GPU:
+                                span.span3.offset2 GPU
                                 span.span4.offset2 {{ new_grievance.gpu }}
                             p
-                                span.span3.offset2 Ward:
+                                span.span3.offset2 Ward
                                 span.span4.offset2 {{ new_grievance.ward }}
                             p
-                                span.span3.offset2 Constituency:
+                                span.span3.offset2 Constituency
                                 span.span4.offset2 {{ new_grievance.constituency }}
                             p
-                                span.span3.offset2 Department:
+                                span.span3.offset2 Department
                                 span.span4.offset2 {{ new_grievance.department }}
                             p
-                                span.span3.offset2 Scheme:
+                                span.span3.offset2 Scheme
                                 span.span4.offset2 {{ new_grievance.scheme }}
                             p
-                                span.span3.offset2 Grievance Type:
+                                span.span3.offset2 Grievance Type
                                 span.span4.offset2 {{ new_grievance.grievanceType }}
                             p
-                                span.span3.offset2 Note:
+                                span.span3.offset2 Note
                                 span.span4.offset2 {{ new_grievance.note }}
                             p
-                                span.span3.offset2 Requirement:
+                                span.span3.offset2 Requirement
                                 span.span4.offset2 {{ new_grievance.requirement }}
                             p
-                                span.span3.offset2 Status:
+                                span.span3.offset2 Status
                                 span.span4.offset2 {{ new_grievance.status }}
                             p
-                                span.span3.offset2 Responded Message:
+                                span.span3.offset2 Responded Message
                                 span.span4.offset2 {{ new_grievance.message }}
                             p
-                                span.span3.offset2 Applied Date:
+                                span.span3.offset2 Applied Date
                                 span.span4.offset2 {{ new_grievance.applicationDate }}
                             p
-                                span.span3.offset2 Responded Date:
+                                span.span3.offset2 Responded Date
                                 span.span4.offset2 {{ new_grievance.respondedDate }}
                     .modal-footer
-                        button.btn.btn-info(type='button' ng-click='printPdf()') Print
-                        button.btn.btn-warning(type='button', data-dismiss='modal') Close
+                        button.btn.btn-sm.btn-info(type='button', ng-click="printPdf()")
+                            i.glyphicon.glyphicon-print
+                            |   Print
+                        button.btn.btn-sm.btn-danger(type='button', data-dismiss='modal')
+                            i.glyphicon.glyphicon-remove
+                            |   Close

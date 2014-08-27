@@ -22,18 +22,16 @@ section.container
                                     th Constituency
                                     th
                                         | Applied Date
-                                        br
-                                        | (mm/dd/yyyy Time)
                                     th Status
                             tbody
                                 tr(ng-repeat='grievance in grievances | orderByPriority | filter: grievanceKey | orderBy : predicate')
                                     td(class='buttons-td')
-                                        a.btn.btn-info(href="", ng-click="showDetails(grievance)")
-                                            i.icon-trash.icon-white
-                                            | Details
-                                        a.btn.btn-info(href="", data-toggle="modal", data-target="#myDoc", ng-click="showDoc(grievance)")
-                                            i.icon-trash.icon-white
-                                            | Doc
+                                        a.btn.btn-sm.btn-info(href="", ng-click="showDetails(grievance)")
+                                            i.glyphicon.glyphicon-info-sign
+                                            |   Info
+                                        a.btn.btn-sm.btn-info(href="", data-toggle="modal", id='grievancePrint', data-target="#myDoc", ng-click="showDoc(grievance)")
+                                            i.glyphicon.glyphicon-file
+                                            |   File
                                     td
                                         span {{ grievance.grievanceType }}
                                     td
@@ -64,4 +62,6 @@ section.container
                                 .modal-body
                                     canvas(id='document')
                                 .modal-footer
-                                    button.btn.btn-warning(type='button', data-dismiss='modal') Close
+                                    button.btn.btn-sm.btn-danger(type='button', data-dismiss='modal')
+                                        i.glyphicon.glyphicon-remove
+                                        |   Close

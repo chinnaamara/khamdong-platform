@@ -28,6 +28,7 @@ app.factory 'NewGrievanceFactory', ['BASEURI', '$firebase', '$http', (BASEURI, $
     addRef.child('respondedDate').set data.respondedDate
     addRef.child('status').set data.status
     addRef.child('message').set data.message
+    addRef.child('email').set data.email
     return 'true'
   sendSms = (data) ->
     console.log 'sending'
@@ -49,7 +50,7 @@ app.factory 'NewGrievanceFactory', ['BASEURI', '$firebase', '$http', (BASEURI, $
 ]
 
 app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrievanceFactory) ->
-
+  $scope.UserEmail = ''
   localData = localStorage.getItem('userEmail')
   #  $rootScope.userName = localData['email']
   console.log localData
@@ -58,12 +59,13 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
   if ! localData
     $window.location = '#/error'
   else if localData == '"admin@technoidentity.com"'
+    $scope.UserEmail = "admin@technoidentity.com"
     $rootScope.userName = 'Admin'
     $rootScope.administrator = 'Admin'
   else
     user = localData.split('"')
-    userName = user[1]
-    $rootScope.userName = userName
+    $scope.UserEmail = user[1]
+    $rootScope.userName = $scope.UserEmail
 
   uuid = ->
     CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
@@ -150,6 +152,7 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
       respondedDate: "--/--/----"
       status: "Open"
       message: "Waiting"
+      email: $scope.UserEmail
     }
     $scope.new_grievance = newGrievance
     smsData = {

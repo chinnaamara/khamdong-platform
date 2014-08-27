@@ -35,7 +35,19 @@ app.factory 'DepartmentsFactory', ($firebase, BASEURI) ->
   }
 
 
-app.controller "AddDepartmentController", ($scope, DepartmentsFactory) ->
+app.controller "AddDepartmentController", ($scope, DepartmentsFactory, $rootScope) ->
+  localData = localStorage.getItem('userEmail')
+  if ! localData
+    $window.location = '#/error'
+  else if localData == '"admin@technoidentity.com"'
+    $scope.UserEmail = "admin@technoidentity.com"
+    $rootScope.userName = 'Admin'
+    $rootScope.administrator = 'Admin'
+  else
+    user = localData.split('"')
+    $scope.UserEmail = user[1]
+    $rootScope.userName = $scope.UserEmail
+
   $scope.addDept = ->
     newDept =
       id: DepartmentsFactory.UUID()

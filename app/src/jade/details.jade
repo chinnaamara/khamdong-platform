@@ -119,7 +119,11 @@ section.container
 
                     .col-lg-6.pull-right
                                 button.btn.btn-success(id='btn-createGrievance', ng-disabled='accept', ng-click='submit()')
-                                    | Accept
+                                    i.glyphicon.glyphicon-ok
+                                    |   Accept
                                 button.btn.btn-danger(id='btn-print', ng-disabled='reject', ng-click='submit()')
-                                    | Reject
-                                input.btn.btn-warning(type='button', id='btn-close', value='Back', ui-sref="admin")
+                                    i.glyphicon.glyphicon-remove
+                                    |   Reject
+                                button.btn.btn-warning(id='btn-close', ui-sref="admin")
+                                    i.glyphicon.glyphicon-circle-arrow-left
+                                    |   Back

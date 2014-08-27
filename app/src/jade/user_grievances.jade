@@ -10,7 +10,8 @@ div
                     .panel-body
                         .col-xs-4.pull-left
                             button.btn.btn-info(ui-sref='newGrievance')
-                                | Create New Grievance
+                                i.glyphicon.glyphicon-plus
+                                |   Create New
                         .col-xs-4.pull-right
                             input(type="search", class="form-control", ng-model="grievanceKey", placeholder="search by mobile number")
                         .table-responsive
@@ -28,14 +29,16 @@ div
                                         th Message
                                         th
                                             | Responded Date
-                                            br
-                                            | (mm/dd/yyyy Time)
                                 tbody
                                     tr(ng-repeat='grievance in grievances | orderByPriority | filter: grievanceKey | orderBy : predicate')
                                         td
-                                            a.btn.btn-info(href="", data-toggle="modal", data-target="#myDetails", ng-click="showDetails(grievance)")
-                                                i.icon-trash.icon-white
-                                                | Print
+                                            //{{ grievance.status }}
+                                            a.btn.btn-sm.btn-warning(href="", ng-click="editDetails(grievance)", ng-if='grievance.status == "Open"')
+                                                i.glyphicon.glyphicon-edit
+                                                |   Edit
+                                            a.btn.btn-sm.btn-info(href="", data-toggle="modal",id='grievancePrint', data-target="#myDetails", ng-click="showDetails(grievance)")
+                                                i.glyphicon.glyphicon-print
+                                                |   Print
                                         td
                                             span {{ grievance.name }}
                                         td
@@ -60,16 +63,14 @@ div#printThissdf
         .modal-dialog.modal-lg
             .modal-content
                 .modal-header
-                    button.close(type='button btn-primary', data-dismiss='modal' data-target='.bs-example-modal-lg')
-                        span(aria-hidden='true') ×
-                        span.sr-only Close
-                    h4#myModalLabel.modal-title Grievance Details
+                    //button.close(type='button btn-primary', data-dismiss='modal' data-target='.bs-example-modal-lg')
+                    //    span(aria-hidden='true') ×
+                    //    span.sr-only Close
                 .modal-body
                     div#printThis
                         header
                             div
-                                img(id='printLogo' src='../images/govt-of-sikkim_logo-small.png')
-                                |Party Application
+                                | Grievance Report
                         p
                             span.span3.offset2 Name
                             span.span4.offset2 {{ grievance.name }}
@@ -125,5 +126,9 @@ div#printThissdf
                             span.span3.offset2 Responded Date
                             span.span4.offset2 {{ grievance.respondedDate }}
                 .modal-footer
-                    button.btn.btn-info(type='button', ng-click="viewPdf()") Print
-                    button.btn.btn-warning(type='button', data-dismiss='modal') Close
+                    button.btn.btn-sm.btn-info(type='button', ng-click="viewPdf()")
+                        i.glyphicon.glyphicon-print
+                        |   Print
+                    button.btn.btn-sm.btn-danger(type='button', data-dismiss='modal')
+                        i.glyphicon.glyphicon-remove
+                        |   Close
