@@ -25,10 +25,10 @@ div
                                         th Department
                                         th Scheme
                                         th Requirement
+                                        th Applied Date
+                                        th Responded Date
                                         th Status
                                         th Message
-                                        th
-                                            | Responded Date
                                 tbody
                                     tr(ng-repeat='grievance in grievances | orderByPriority | filter: grievanceKey | orderBy : predicate')
                                         td
@@ -52,11 +52,13 @@ div
                                         td
                                             span {{ grievance.requirement }}
                                         td
+                                            span {{ grievance.applicationDate }}
+                                        td
+                                            span {{ grievance.respondedDate }}
+                                        td
                                             span {{ grievance.status }}
                                         td
                                             span {{ grievance.message }}
-                                        td
-                                            span {{ grievance.respondedDate }}
 
 div#printThissdf
     #myDetails.modal.fade.bs-example-modal-lg(tabindex='-1', role='dialog', aria-labelledby='myLargeModalLabel', aria-hidden='true')

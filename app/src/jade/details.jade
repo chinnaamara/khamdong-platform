@@ -6,7 +6,7 @@ section.container
         .col-lg-12
             .panel.panel-primary
                 .panel-heading
-                    | {{ grievance.id }}
+                    | Details  {{ grievance.id }}
                 .panel-body
                     form#grievanceForm(name='grievanceForm',class='form-horizonal',type='form',novalidate)
                         .col-lg-6
@@ -127,3 +127,8 @@ section.container
                                 button.btn.btn-warning(id='btn-close', ui-sref="admin")
                                     i.glyphicon.glyphicon-circle-arrow-left
                                     |   Back
+
+                    .col-lg-12
+                        .alert.alert-warning(ng-show='responce')
+                            i.fa.fa-check-circle-o
+                                | {{ responceMessage }}

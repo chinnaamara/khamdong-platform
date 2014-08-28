@@ -20,8 +20,8 @@ section.container
                                     th Name
                                     th Mobile Number
                                     th Constituency
-                                    th
-                                        | Applied Date
+                                    th Applied Date
+                                    th Responded Date
                                     th Status
                             tbody
                                 tr(ng-repeat='grievance in grievances | orderByPriority | filter: grievanceKey | orderBy : predicate')
@@ -48,6 +48,8 @@ section.container
                                         span {{ grievance.constituency }}
                                     td
                                         span {{ grievance.applicationDate }}
+                                    td
+                                        span {{ grievance.respondedDate }}
                                     td
                                         span {{ grievance.status }}
 

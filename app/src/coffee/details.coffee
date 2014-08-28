@@ -40,16 +40,19 @@ app.controller 'DetailsController', ($scope, DetailsFactory, $rootScope) ->
   $scope.status = " "
   $scope.message = " "
   $scope.newValue = (value) ->
+    $scope.responce = false
     if value == 'Accept'
       $scope.accept = false
       $scope.reject = true
       statusMessage = "Accepted"
       $scope.message = "Approved"
+      $scope.responceMessage = "Grievance Approved Successfully!"
     else if value == 'Reject'
       $scope.accept = true
       $scope.reject = false
       statusMessage = "Rejected"
       $scope.message = "Cancelled"
+      $scope.responceMessage = "Grievance Rejected Successfully!"
 
   $scope.grievance = {}
 #  console.log DetailsFactory.retrieveGrievance
@@ -72,7 +75,8 @@ app.controller 'DetailsController', ($scope, DetailsFactory, $rootScope) ->
     }
     $scope.$watch(DetailsFactory.post(resMessage), (res) ->
       if res
-        console.log 'accepted/rejected success'
+#        console.log 'accepted/rejected success'
+        $scope.responce = true
 #        $scope.error = true;
     )
 
@@ -83,14 +87,34 @@ app.controller 'DetailsController', ($scope, DetailsFactory, $rootScope) ->
     {id: 4, name: 'Grievance Type 4'}
   ]
   $scope.departments = [
-    {id: 1, name: 'Department 1'}
-    {id: 2, name: 'Department 2'}
-    {id: 3, name: 'Department 3'}
-    {id: 4, name: 'Department 4'}
+    {id: 1, name: 'SOCIAL JUSTICE AND WELFARE DEPARTMENT'}
+    {id: 2, name: 'HORTICULTURE AND CASH CROP DEVELOPMENT DEPARTMENT'}
+    {id: 3, name: 'BACKWARD REGION GRANT FUND'}
+    {id: 4, name: 'RURAL MANAGEMENT AND DEVELOPMENT DEPARTMENT'}
+    {id: 5, name: 'ANIMAL HUSBANDRY LIVESTOCK FISHERIES AND VETERINARY SERVICES'}
+    {id: 6, name: 'HUMAN RESOURCE DEVELOPMENT DEPARTMENT'}
+    {id: 7, name: 'HEALTHCARE HUMAN SERVICES AND FAMILY WELFARE DEPARTMENT'}
+    {id: 8, name: 'FOOD SECURITY CIVIL SUPPLIES AND CONSUMER AFFAIRS DEPARTMENT'}
+    {id: 9, name: 'AGRICULTURE AND FOOD SECURITY DEVELOPMENT DEPARTMENT'}
+    {id: 10, name: 'MAHATMA GANDHI NATIONAL RURAL EMPLOYMENT GURANTEE ACT'}
   ]
   $scope.schemes = [
-    {id: 1, name: 'Scheme 1'}
-    {id: 2, name: 'Scheme 2'}
-    {id: 3, name: 'Scheme 3'}
-    {id: 4, name: 'Scheme 4'}
+    {id: 1, name: 'GREEN HOUSE'}
+    {id: 2, name: 'OLD AGE PENSION'}
+    {id: 3, name: 'INDIRA AWAS YOGNA'}
+    {id: 4, name: 'WIDOW PENSION'}
+    {id: 5, name: 'SUBSISTENCE ALLOWANCE'}
+    {id: 6, name: 'PRE MATRIC SCHOLARSHIP'}
+    {id: 7, name: 'POST MATRIC SCHOLARSHIP'}
+    {id: 8, name: 'COW'}
+    {id: 9, name: 'HOUSE UPGRADATION'}
+    {id: 10, name: 'CMRHM'}
+    {id: 11, name: 'GOAT'}
+    {id: 12, name: 'PLASTIC TANK'}
+    {id: 13, name: 'COW DUNG PIT'}
+    {id: 14, name: 'RURAL HOUSING SCHEME'}
+    {id: 15, name: 'LPG COOKING GAS CONNECTION'}
+    {id: 16, name: 'BPL RICE'}
+    {id: 17, name: 'EDUCATION SCHOLARSHIP'}
+    {id: 18, name: 'GCI SHEET'}
   ]
