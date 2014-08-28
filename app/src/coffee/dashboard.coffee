@@ -42,47 +42,71 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
     $window.location = '#/details'
 
   $scope.showDoc = (data) ->
-    canvas1 = document.getElementById "recommendedDocCanvas"
-    ctx1 = canvas1.getContext("2d")
-    img1 = new Image()
-    img1.onload = ->
-      ctx1.drawImage(this, 0, 0, canvas1.width, canvas1.height)
-    img1.src = "data:image/gif;base64," + data.recommendedDoc
-    document.getElementById("downloadrecommendedDoc").href = "data:image/png;base64," + data.recommendedDoc
-    document.getElementById("downloadrecommendedDoc").download = 'recommended_doc.png'
+    $scope.noDocs = false
+    if data.recommendedDoc
+      $scope.recommendedDoc = true
+      canvas1 = document.getElementById "recommendedDocCanvas"
+      ctx1 = canvas1.getContext("2d")
+      img1 = new Image()
+      img1.onload = ->
+        ctx1.drawImage(this, 0, 0, canvas1.width, canvas1.height)
+      img1.src = "data:image/gif;base64," + data.recommendedDoc
+      document.getElementById("downloadrecommendedDoc").href = "data:image/png;base64," + data.recommendedDoc
+      document.getElementById("downloadrecommendedDoc").download = 'recommended_doc.png'
+    else
+      $scope.recommendedDoc = false
 
-    canvas2 = document.getElementById "aadharCardCanvas"
-    ctx2 = canvas2.getContext("2d")
-    img2 = new Image()
-    img2.onload = ->
-      ctx2.drawImage(this, 0, 0, canvas2.width, canvas2.height)
-    img2.src = "data:image/gif;base64," + data.aadharCard
-    document.getElementById("downloadAadhar").href = "data:image/png;base64," + data.aadharCard
-    document.getElementById("downloadAadhar").download = 'aadhar.png'
+    if data.aadharCard
+      $scope.aadharDoc = true
+      canvas2 = document.getElementById "aadharCardCanvas"
+      ctx2 = canvas2.getContext("2d")
+      img2 = new Image()
+      img2.onload = ->
+        ctx2.drawImage(this, 0, 0, canvas2.width, canvas2.height)
+      img2.src = "data:image/gif;base64," + data.aadharCard
+      document.getElementById("downloadAadhar").href = "data:image/png;base64," + data.aadharCard
+      document.getElementById("downloadAadhar").download = 'aadhar.png'
+    else
+      $scope.aadharDoc = false
 
-    canvas3 = document.getElementById "voterIdCanvas"
-    ctx3 = canvas3.getContext("2d")
-    img3 = new Image()
-    img3.onload = ->
-      ctx3.drawImage(this, 0, 0, canvas3.width, canvas3.height)
-    img3.src = "data:image/gif;base64," + data.voterCard
-    document.getElementById("downloadVoter").href = "data:image/png;base64," + data.voterCard
-    document.getElementById("downloadVoter").download = 'voter.png'
+    if data.voterCard
+      $scope.voterDoc = true
+      canvas3 = document.getElementById "voterIdCanvas"
+      ctx3 = canvas3.getContext("2d")
+      img3 = new Image()
+      img3.onload = ->
+        ctx3.drawImage(this, 0, 0, canvas3.width, canvas3.height)
+      img3.src = "data:image/gif;base64," + data.voterCard
+      document.getElementById("downloadVoter").href = "data:image/png;base64," + data.voterCard
+      document.getElementById("downloadVoter").download = 'voter.png'
+    else
+      $scope.voterDoc = false
 
-    canvas4 = document.getElementById "sscCertificateCanvas"
-    ctx4 = canvas4.getContext("2d")
-    img4 = new Image()
-    img4.onload = ->
-      ctx4.drawImage(this, 0, 0, canvas4.width, canvas4.height)
-    img4.src = "data:image/gif;base64," + data.sscCertificate
-    document.getElementById("downloadSSC").href = "data:image/png;base64," + data.sscCertificate
-    document.getElementById("downloadSSC").download = 'ssc.png'
+    if data.sscCertificate
+      $scope.sscDoc = true
+      canvas4 = document.getElementById "sscCertificateCanvas"
+      ctx4 = canvas4.getContext("2d")
+      img4 = new Image()
+      img4.onload = ->
+        ctx4.drawImage(this, 0, 0, canvas4.width, canvas4.height)
+      img4.src = "data:image/gif;base64," + data.sscCertificate
+      document.getElementById("downloadSSC").href = "data:image/png;base64," + data.sscCertificate
+      document.getElementById("downloadSSC").download = 'ssc.png'
+    else
+      $scope.sscDoc = false
 
-    canvas5 = document.getElementById "otherDocCanvas"
-    ctx5 = canvas5.getContext("2d")
-    img5 = new Image()
-    img5.onload = ->
-      ctx5.drawImage(this, 0, 0, canvas5.width, canvas5.height)
-    img5.src = "data:image/gif;base64," + data.otherDoc
-    document.getElementById("downloadOther").href = "data:image/png;base64," + data.otherDoc
-    document.getElementById("downloadOther").download = 'other_doc.png'
+    if data.otherDoc
+      $scope.otherDoc = true
+      canvas5 = document.getElementById "otherDocCanvas"
+      ctx5 = canvas5.getContext("2d")
+      img5 = new Image()
+      img5.onload = ->
+        ctx5.drawImage(this, 0, 0, canvas5.width, canvas5.height)
+      img5.src = "data:image/gif;base64," + data.otherDoc
+      document.getElementById("downloadOther").href = "data:image/png;base64," + data.otherDoc
+      document.getElementById("downloadOther").download = 'other_doc.png'
+    else
+      $scope.otherDoc = false
+
+    if ! data.recommendedDoc && ! data.aadharCard && ! data.voterCard && ! data.sscCertificate && ! data.otherDoc
+      $scope.noDocs = true

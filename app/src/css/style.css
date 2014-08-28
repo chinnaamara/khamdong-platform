@@ -113,6 +113,15 @@ tbody a {
 .star-label {
     color: red;
 }
+.imageDownload{
+    width:100%;
+}
+.noImage{
+    width:40%;
+}
+#submitedDocs{
+
+}
 @-moz-document url-prefix() {
     fieldset { display: table-cell; }
 }
