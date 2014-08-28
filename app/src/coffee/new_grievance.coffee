@@ -94,11 +94,10 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
   $scope.file = " "
   $scope.onFileSelect = ($files) ->
     file = $files[0]
-#    console.log file
-    reader=new FileReader()
-    reader.readAsArrayBuffer(file)
-    reader.onload=(e)->
-#      $scope.file=btoa(String.fromCharCode.apply(null, new Uint8Array(file.target.result)))
+    reader = new FileReader()
+    reader.readAsArrayBuffer file
+    reader.onload = (e) ->
+#      $scope.file = btoa(String.fromCharCode.apply(null, new Uint8Array(file.target.result)))
       $scope.file = arrayBufferToBase64 e.target.result
       return
     return
@@ -109,7 +108,7 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
      _.forEach(_.range(bytes.length),(e) ->
        binary += String.fromCharCode bytes[e]
       )
-     window.btoa binary
+     btoa binary
 #  $scope.sendSms = () ->
 ##    $.ajax({
 ##      url: "http://api.mVaayoo.com/mvaayooapi/MessageCompose?user=technorrp@gmail.com:Design_20&senderID=TEST SMS&receipientno=9000991520&msgtxt= final message from chinna by mVaayoo API&state=4",
@@ -206,6 +205,12 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
     $printSection.innerHTML = ''
     $printSection.appendChild domClone
     return
+  $scope.notRecommended = true
+  $scope.checkboxEvent = (val) ->
+    if val == true
+      $scope.notRecommended = false
+    else
+      $scope.notRecommended = true
 
   $(".date").datepicker autoclose: true
 #  $(".date").datepicker({

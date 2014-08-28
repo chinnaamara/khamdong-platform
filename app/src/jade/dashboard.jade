@@ -61,7 +61,10 @@ section.container
                                     h4#myModalLabel.modal-title Grievance Document
                                 .modal-body
                                     canvas(id='document')
+                                    a.btn.btn-sm.btn-info(type='button', id='downloadFile')
+                                        i.glyphicon.glyphicon-download
+                                        |   Download
                                 .modal-footer
-                                    button.btn.btn-sm.btn-danger(type='button', data-dismiss='modal')
+                                    button.btn.btn-sm.btn-danger(data-dismiss='modal')
                                         i.glyphicon.glyphicon-remove
                                         |   Close

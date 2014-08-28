@@ -63,7 +63,9 @@
     float: right;
     font-weight: 500;
     font-style: normal;
-    color: rgb(69, 85, 148);
+    color: #455594;
+    word-wrap: break-word;
+    width: 45%;
 }
 header img #printLogo{
     margin: 10px;

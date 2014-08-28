@@ -23,6 +23,7 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
   $scope.grievances = DashboardFactory.retrieveGrievances
 #  console.log $scope.grievances
   $scope.predicate = '-applicationDate'
+  $scope.file = ''
   $scope.showDetails = (details) ->
     DetailsFactory.retrieveGrievance = details
 #    DetailsFactory.retrieveGrievance = {
@@ -42,6 +43,7 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
     $window.location = '#/details'
 
   $scope.showDoc = (data) ->
+    $scope.file = data.file
     canvas = document.getElementById "document"
     ctx = canvas.getContext("2d")
     img = new Image()
@@ -49,3 +51,5 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
       ctx.drawImage(this, 0, 0, canvas.width, canvas.height)
 #    img.src = pdfCanvas.toDataURL(data.file);
     img.src = "data:image/gif;base64," + data.file
+    document.getElementById("downloadFile").href = "data:image/png;base64," + data.file
+    document.getElementById("downloadFile").download = 'submittedDoc.png'

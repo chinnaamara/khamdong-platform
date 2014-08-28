@@ -129,18 +129,25 @@ div
                                     required)
                                         option(value='',selected) -- Select Scheme --
                                 .form-group.has-warning
-                                    label.control-label(for='note')
+                                    label.control-label(for='requirement')
                                         | Requirement
                                         span(class='star-label') *
                                     div
                                         textarea#requirement.form-control(name='requirement',ng-model='grievance.requirement',placeholder='Requirement', required)
                                         small(class="label label-danger",ng-show="grievanceForm.requirement.$invalid && grievanceForm.requirement.$dirty") Required Requirement
                                 .form-group.has-warning
+                                    label.control-label(for='recommended')
+                                        | Is Recommended
+                                        span(class='star-label') *
+                                    div
+                                        input#recommended.checkbox-inline(type='checkbox',name='recommended',ng-model='checked', ng-change='checkboxEvent(checked)', required)
+                                        small(class="label label-danger",ng-show="grievanceForm.recommended.$invalid && grievanceForm.recommended.$dirty") Must recommended by Panchayath/ Gram Sabha/ Ward Sabha
+                                .form-group.has-warning
                                     label.control-label(for='grievance-file')
                                         | Upload File
                                         span(class='star-label') *
                                     div(ng-class="{ 'has-error' : grievanceForm.grievanceFile.$invalid }")
-                                        input#grievanceFile.form-control(type='file',name='grievanceFile', ng-model='grievance.file', ng-file-select="onFileSelect($files)")
+                                        input#grievanceFile.form-control(type='file',name='grievanceFile', ng-model='grievance.file', ng-file-select="onFileSelect($files)", ng-disabled='notRecommended')
                                         small(class="label label-danger",ng-show="grievanceForm.grievanceFile.$invalid && grievanceForm.grievanceFile.$dirty") Required Grievance File
                                     //div(ng-class="{ 'has-error' : grievanceForm.grievanceFile.$invalid }")
                                     //    input#grievanceFile.form-control(type='file',name='grievanceFile', ng-model='grievance.file', nv-file-select="", uploader="uploader")
