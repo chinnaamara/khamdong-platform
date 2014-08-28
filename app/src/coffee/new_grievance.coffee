@@ -23,7 +23,11 @@ app.factory 'NewGrievanceFactory', ['BASEURI', '$firebase', '$http', (BASEURI, $
     addRef.child('requirement').set data.requirement
     addRef.child('grievanceType').set data.grievanceType
     addRef.child('note').set data.note
-    addRef.child('file').set data.file
+    addRef.child('recommendedDoc').set data.recommendedDoc
+    addRef.child('aadharCard').set data.aadharCard
+    addRef.child('voterCard').set data.voterCard
+    addRef.child('sscCertificate').set data.sscCertificate
+    addRef.child('otherDoc').set data.otherDoc
     addRef.child('applicationDate').set data.applicationDate
     addRef.child('respondedDate').set data.respondedDate
     addRef.child('status').set data.status
@@ -91,14 +95,27 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
 #  console.log id
   $scope.address = " "
   $scope.note = " "
-  $scope.file = " "
-  $scope.onFileSelect = ($files) ->
+  $scope.recommendedDoc = " "
+  $scope.aadharCard = " "
+  $scope.voterCard = " "
+  $scope.sscCertificate = " "
+  $scope.otherDoc = " "
+  $scope.onFileSelect = ($files, fileName) ->
     file = $files[0]
     reader = new FileReader()
     reader.readAsArrayBuffer file
     reader.onload = (e) ->
+      if fileName == 'recommended'
+        $scope.recommendedDoc = arrayBufferToBase64 e.target.result
+      else if fileName == 'aadhar'
+        $scope.aadharCard = arrayBufferToBase64 e.target.result
+      else if fileName == 'voter'
+        $scope.voterCard = arrayBufferToBase64 e.target.result
+      else if fileName == 'ssc'
+        $scope.sscCertificate = arrayBufferToBase64 e.target.result
+      else
+        $scope.otherDoc = arrayBufferToBase64 e.target.result
 #      $scope.file = btoa(String.fromCharCode.apply(null, new Uint8Array(file.target.result)))
-      $scope.file = arrayBufferToBase64 e.target.result
       return
     return
 
@@ -145,7 +162,11 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
       grievanceType: $scope.grievance.grievanceType
       scheme: $scope.grievance.scheme
       requirement: $scope.grievance.requirement
-      file: $scope.file
+      recommendedDoc: $scope.recommendedDoc
+      aadharCard: $scope.aadharCard
+      voterCard: $scope.voterCard
+      sscCertificate: $scope.sscCertificate
+      otherDoc: $scope.otherDoc
       note: $scope.note
       applicationDate: new Date().toLocaleString()
       respondedDate: "--/--/----"

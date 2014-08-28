@@ -60,10 +60,36 @@ section.container
                                         span.sr-only Close
                                     h4#myModalLabel.modal-title Grievance Document
                                 .modal-body
-                                    canvas(id='document')
-                                    a.btn.btn-sm.btn-info(type='button', id='downloadFile')
-                                        i.glyphicon.glyphicon-download
-                                        |   Download
+                                    div
+                                        h3 Copy of Recommended Document
+                                        canvas(id='recommendedDocCanvas')
+                                        a.btn.btn-sm.btn-info(type='button', id='downloadrecommendedDoc')
+                                            i.glyphicon.glyphicon-download
+                                            |   Download
+                                    div
+                                        h3 Copy of Aadhar Card
+                                        canvas(id='aadharCardCanvas')
+                                        a.btn.btn-sm.btn-info(type='button', id='downloadAadhar')
+                                            i.glyphicon.glyphicon-download
+                                            |   Download
+                                    div
+                                        h3 Copy of Voter Card
+                                        canvas(id='voterIdCanvas')
+                                        a.btn.btn-sm.btn-info(type='button', id='downloadVoter')
+                                            i.glyphicon.glyphicon-download
+                                            |   Download
+                                    div
+                                        h3 Copy of SSC Certificate
+                                        canvas(id='sscCertificateCanvas')
+                                        a.btn.btn-sm.btn-info(type='button', id='downloadSSC')
+                                            i.glyphicon.glyphicon-download
+                                            |   Download
+                                    div
+                                        h3 Copy of Other Document
+                                        canvas(id='otherDocCanvas')
+                                        a.btn.btn-sm.btn-info(type='button', id='downloadOther')
+                                            i.glyphicon.glyphicon-download
+                                            |   Download
                                 .modal-footer
                                     button.btn.btn-sm.btn-danger(data-dismiss='modal')
                                         i.glyphicon.glyphicon-remove
