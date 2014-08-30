@@ -8,69 +8,75 @@ div
                 .panel.panel-primary
                     .panel-heading Grievances
                     .panel-body
-                        .col-xs-4.pull-left
-                            button.btn.btn-info(ui-sref='newGrievance')
-                                i.glyphicon.glyphicon-plus
-                                |   Create New
-                        .col-xs-4.pull-right
-                            input(type="search", class="form-control", ng-model="grievanceKey", placeholder="search by mobile number")
-                        .table-responsive
-                            table#userGrievancesTable(class="table table-striped table-bordered table-condensed")
-                                thead
-                                    tr
-                                        th #
-                                        th Reference Id
-                                        th Name
-                                        th Mobile Number
-                                        //th Grievance Type
-                                        th Department
-                                        th Scheme
-                                        th Requirement
-                                        th Applied Date
-                                        th Responded Date
-                                        th Status
-                                        th Message
-                                tbody
-                                    tr(ng-repeat='grievance in grievances | orderByPriority | filter: grievanceKey | orderBy : predicate')
-                                        td
-                                            //{{ grievance.status }}
-                                            a.btn.btn-sm.btn-warning(href="", ng-click="editDetails(grievance)", ng-if='grievance.status == "Open"')
-                                                i.glyphicon.glyphicon-edit
-                                                |   Edit
-                                            a.btn.btn-sm.btn-info(href="", data-toggle="modal",id='grievancePrint', data-target="#myDetails", ng-click="showDetails(grievance)")
-                                                i.glyphicon.glyphicon-print
-                                                |   Print
-                                        td
-                                            span {{ grievance.referenceNum }}
-                                        td
-                                            span {{ grievance.name }}
-                                        td
-                                            span {{ grievance.phoneNumber }}
-                                        //td
-                                        //    span {{ grievance.grievanceType }}
-                                        td
-                                            span {{ grievance.department }}
-                                        td
-                                            span {{ grievance.scheme }}
-                                        td
-                                            span {{ grievance.requirement }}
-                                        td
-                                            span {{ grievance.applicationDate }}
-                                        td
-                                            span {{ grievance.respondedDate }}
-                                        td
-                                            span {{ grievance.status }}
-                                        td
-                                            span {{ grievance.message }}
+                        .loader-div(ng-show='loading')
+                            //img.noImage(src = '../images/loader.jpg')
+                            //br
+                            h4 Loading, Please wait...
+                        .main-div(ng-show="loadDone")
+                            .top-div
+                                .col-xs-4.pull-left
+                                    button.btn.btn-info(ui-sref='newGrievance')
+                                        i.glyphicon.glyphicon-plus
+                                        |   Create New
+                                .col-xs-4.pull-right
+                                    input(type="search", class="form-control", ng-model="grievanceKey", placeholder="search by mobile number")
+                            .table-responsive
+                                table#userGrievancesTable(class="table table-striped table-bordered table-condensed")
+                                    thead
+                                        tr
+                                            th #
+                                            th Reference Id
+                                            th Name
+                                            th Mobile Number
+                                            //th Grievance Type
+                                            th Department
+                                            th Scheme
+                                            th Requirement
+                                            th Applied Date
+                                            th Responded Date
+                                            th Status
+                                            th Message
+                                    tbody
+                                        tr(ng-repeat='grievance in grievances | orderByPriority | filter: grievanceKey | orderBy : predicate')
+                                            td
+                                                //{{ grievance.status }}
+                                                a.btn.btn-sm.btn-warning(href="", ng-click="editDetails(grievance)", ng-if='grievance.status == "Open"')
+                                                    i.glyphicon.glyphicon-edit
+                                                    |   Edit
+                                                a.btn.btn-sm.btn-info(href="", data-toggle="modal",id='grievancePrint', data-target="#myDetails", ng-click="showDetails(grievance)")
+                                                    i.glyphicon.glyphicon-print
+                                                    |   Print
+                                            td
+                                                span {{ grievance.referenceNum }}
+                                            td
+                                                span {{ grievance.name }}
+                                            td
+                                                span {{ grievance.phoneNumber }}
+                                            //td
+                                            //    span {{ grievance.grievanceType }}
+                                            td
+                                                span {{ grievance.department }}
+                                            td
+                                                span {{ grievance.scheme }}
+                                            td
+                                                span {{ grievance.requirement }}
+                                            td
+                                                span {{ grievance.applicationDate }}
+                                            td
+                                                span {{ grievance.respondedDate }}
+                                            td
+                                                span {{ grievance.status }}
+                                            td
+                                                span {{ grievance.message }}
 
-                        .pull-right
-                            button.btn.btn-info.btn-sm#prev(ng-click='pageBack()')
-                                i.glyphicon.glyphicon-arrow-left
-                                |   Previous
-                            button.btn.btn-info.btn-sm#next(ng-click='pageNext()')
-                                |   Next
-                                &nbsp;
-                                i.glyphicon.glyphicon-arrow-right
+                            .pull-right
+                                button.btn.btn-info.btn-sm#prev(ng-click='pageBack()')
+                                    i.glyphicon.glyphicon-arrow-left
+                                    |   Previous
+                                button.btn.btn-info.btn-sm#next(ng-click='pageNext()')
+                                    |   Next
+                                    &nbsp;
+                                    i.glyphicon.glyphicon-arrow-right
 
 
 div#printThissdf

@@ -18,11 +18,13 @@ app.factory 'GrievancesFactory', ($firebase, BASEURI) ->
   }
 
 app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievanceFactory, $rootScope, $window) ->
+  $scope.loadDone = false
+  $scope.loading = true
   localData = localStorage.getItem('userEmail')
 #  $rootScope.userName = localData['email']
-  console.log localData
-  console.log 'root element: ' + $rootScope.token
-  console.log 'user: ' + $rootScope.userName
+#  console.log localData
+#  console.log 'root element: ' + $rootScope.token
+#  console.log 'user: ' + $rootScope.userName
   if ! localData
     $window.location = '#/error'
   else if localData == '"admin@technoidentity.com"'
@@ -44,8 +46,9 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
   postsQuery.on('value', (snapshot) ->
     console.log 'snapshot', snapshot.val()
     $scope.grievances = _.values snapshot.val()
+    $scope.loadDone = true
+    $scope.loading = false
     lastPageNumber = $scope.grievances[$scope.grievances.length - 1]
-    console.log lastPageNumber.id
     GrievancesFactory.pageNext(lastPageNumber.id, limitCount + 1, (res) ->
       if res
         console.log res

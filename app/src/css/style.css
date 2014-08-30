@@ -117,7 +117,7 @@ tbody a {
     width:100%;
 }
 .noImage{
-    width:40%;
+    width:20%;
 }
 #submitedDocs{
 
@@ -216,4 +216,7 @@ for model dialog print---------- */
     .navbar.navbar-inverse.navbar-default  a{
         font-size: 24px;
     }
+}
+.top-div{
+    margin-bottom: 10px;
 }

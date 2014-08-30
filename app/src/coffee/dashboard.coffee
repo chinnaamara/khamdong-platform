@@ -18,7 +18,8 @@ app.factory 'DashboardFactory', ($firebase, BASEURI) ->
   }
 
 app.controller 'DashboardController', ($scope, DashboardFactory, $window, DetailsFactory, $rootScope) ->
-
+  $scope.loadDone = false
+  $scope.loading = true
   localData = localStorage.getItem('userEmail')
   if ! localData
     $window.location = '#/error'
@@ -43,6 +44,8 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
   postsQuery.on('value', (snapshot) ->
     console.log 'snapshot', snapshot.val()
     $scope.grievances = _.values snapshot.val()
+    $scope.loadDone = true
+    $scope.loading = false
     lastPageNumber = $scope.grievances[$scope.grievances.length - 1]
     console.log lastPageNumber.id
     DashboardFactory.pageNext(lastPageNumber.id, limitCount + 1, (res) ->
@@ -97,11 +100,6 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
     $window.location = '#/details'
 
   $scope.showDoc = (data) ->
-    console.log data.recommendedDoc
-    console.log data.aadharCard
-    console.log data.voterCard
-    console.log data.sscCertificate
-    console.log data.otherDoc
     $scope.noDocs = false
     if data.recommendedDoc
       $scope.recommendedDoc = true
@@ -169,5 +167,4 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
       $scope.otherDoc = false
 
     if ! data.recommendedDoc && ! data.aadharCard && ! data.voterCard && ! data.sscCertificate && ! data.otherDoc
-      console.log "nodocs"
       $scope.noDocs = true
