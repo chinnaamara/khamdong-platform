@@ -106,6 +106,17 @@ app.controller 'DetailsController', ($scope, DetailsFactory, $rootScope) ->
 #        $scope.error = true;
     )
 
+  $scope.gpus = [
+    {id: 1, name: ' MelliDara Paiyong'}
+  ]
+  $scope.wards = [
+    {id: 1, name: 'MelliDara'}
+    {id: 2, name: 'MelliGumpa'}
+    {id: 3, name: 'UpperPaiyong'}
+    {id: 4, name: 'LowerPaiyong'}
+    {id: 5, name: 'Kerabari'}
+    {id: 6, name: 'MelliBazaar'}
+  ]
   $scope.grievanceTypes = [
     {id: 1, name: 'Grievance Type 1'}
     {id: 2, name: 'Grievance Type 2'}
@@ -113,34 +124,32 @@ app.controller 'DetailsController', ($scope, DetailsFactory, $rootScope) ->
     {id: 4, name: 'Grievance Type 4'}
   ]
   $scope.departments = [
-    {id: 1, name: 'SOCIAL JUSTICE AND WELFARE DEPARTMENT'}
-    {id: 2, name: 'HORTICULTURE AND CASH CROP DEVELOPMENT DEPARTMENT'}
-    {id: 3, name: 'BACKWARD REGION GRANT FUND'}
-    {id: 4, name: 'RURAL MANAGEMENT AND DEVELOPMENT DEPARTMENT'}
-    {id: 5, name: 'ANIMAL HUSBANDRY LIVESTOCK FISHERIES AND VETERINARY SERVICES'}
-    {id: 6, name: 'HUMAN RESOURCE DEVELOPMENT DEPARTMENT'}
-    {id: 7, name: 'HEALTHCARE HUMAN SERVICES AND FAMILY WELFARE DEPARTMENT'}
-    {id: 8, name: 'FOOD SECURITY CIVIL SUPPLIES AND CONSUMER AFFAIRS DEPARTMENT'}
-    {id: 9, name: 'AGRICULTURE AND FOOD SECURITY DEVELOPMENT DEPARTMENT'}
-    {id: 10, name: 'MAHATMA GANDHI NATIONAL RURAL EMPLOYMENT GURANTEE ACT'}
+    {id: 1, name: 'Social Justice & Welfare'}
+    {id: 2, name: 'Horticulture & Cash Crop Development'}
+    {id: 3, name: 'Backward Region Grant Fund'}
+    {id: 4, name: 'Rural Management & Development'}
+    {id: 5, name: 'Animal Husbandry & Veterinary Services'}
+    {id: 6, name: 'Livestock & Fisheries'}
+    {id: 7, name: 'Human Resource Development'}
+    {id: 8, name: 'Health care Human Services & Family Welfare'}
+    {id: 9, name: 'Civil Supplies & Consumer Affairs'}
+    {id: 10, name: 'Agriculture & Food Security Development'}
   ]
   $scope.schemes = [
-    {id: 1, name: 'GREEN HOUSE'}
-    {id: 2, name: 'OLD AGE PENSION'}
-    {id: 3, name: 'INDIRA AWAS YOGNA'}
-    {id: 4, name: 'WIDOW PENSION'}
-    {id: 5, name: 'SUBSISTENCE ALLOWANCE'}
-    {id: 6, name: 'PRE MATRIC SCHOLARSHIP'}
-    {id: 7, name: 'POST MATRIC SCHOLARSHIP'}
-    {id: 8, name: 'COW'}
-    {id: 9, name: 'HOUSE UPGRADATION'}
-    {id: 10, name: 'CMRHM'}
-    {id: 11, name: 'GOAT'}
-    {id: 12, name: 'PLASTIC TANK'}
-    {id: 13, name: 'COW DUNG PIT'}
-    {id: 14, name: 'RURAL HOUSING SCHEME'}
-    {id: 15, name: 'LPG COOKING GAS CONNECTION'}
-    {id: 16, name: 'BPL RICE'}
-    {id: 17, name: 'EDUCATION SCHOLARSHIP'}
-    {id: 18, name: 'GCI SHEET'}
+    {id: 1, name: 'Green House'}
+    {id: 2, name: 'Old Age Pension'}
+    {id: 3, name: 'Indira Awas Yogna'}
+    {id: 4, name: 'Widow Pension'}
+    {id: 5, name: 'Subsistence Allowance'}
+    {id: 6, name: 'Pre Metric Scholarship'}
+    {id: 7, name: 'Post Metric Scholarship'}
+    {id: 8, name: 'House Upgradation'}
+    {id: 9, name: 'CMRHM'}
+    {id: 10, name: 'Plastic Tasnk'}
+    {id: 11, name: 'Cow Dung Pit'}
+    {id: 12, name: 'Rural Housing Scheme'}
+    {id: 13, name: 'LPG Cooking Gas Connection'}
+    {id: 14, name: 'BPL Rice'}
+    {id: 15, name: 'Education Scholarship'}
+    {id: 16, name: 'GCI Sheet'}
   ]

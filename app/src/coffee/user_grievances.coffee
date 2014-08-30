@@ -64,7 +64,7 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
     )
     GrievancesFactory.pageNext(lastPageNumber.id, limitCount + 1, (res) ->
       if res
-        $("#next").prop "disabled", res.length < limitCount
+        $("#next").prop "disabled", res.length <= 1
     )
   $scope.pageBack = () ->
     pageNumber--

@@ -63,7 +63,7 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
     )
     DashboardFactory.pageNext(lastPageNumber.id, limitCount + 1, (res) ->
       if res
-        $("#next").prop "disabled", res.length < limitCount
+        $("#next").prop "disabled", res.length <= 1
     )
   $scope.pageBack = () ->
     pageNumber--
@@ -97,6 +97,11 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
     $window.location = '#/details'
 
   $scope.showDoc = (data) ->
+    console.log data.recommendedDoc
+    console.log data.aadharCard
+    console.log data.voterCard
+    console.log data.sscCertificate
+    console.log data.otherDoc
     $scope.noDocs = false
     if data.recommendedDoc
       $scope.recommendedDoc = true
@@ -164,4 +169,5 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
       $scope.otherDoc = false
 
     if ! data.recommendedDoc && ! data.aadharCard && ! data.voterCard && ! data.sscCertificate && ! data.otherDoc
+      console.log "nodocs"
       $scope.noDocs = true

@@ -61,16 +61,15 @@ section.container
                                 div
                                     textarea#address.form-control(name='address',ng-model='grievance.address',placeholder='Address')
                             .form-group.has-warning
-                                label.control-label(for='constituency')
-                                    | Constituency
+                                label.control-label(for='ward')
+                                    | Ward
                                     span(class='star-label') *
-                                select#constituency.form-control(
-                                name='constituency',
-                                ng-options='c.name as c.name for c in constituencies',
-                                ng-model='grievance.constituency',
+                                select#ward.form-control(
+                                name='ward',
+                                ng-options='w.name as w.name for w in wards',
+                                ng-model='grievance.ward',
                                 required)
-                                    option(value='',selected) -- Select Constituency --
-                        .col-lg-6
+                                    option(value='',selected) -- Select Ward --
                             .form-group.has-warning
                                 label.control-label(for='gpu')
                                     | GPU
@@ -82,15 +81,17 @@ section.container
                                 required)
                                     option(value='',selected) -- Select GPU --
                             .form-group.has-warning
-                                label.control-label(for='ward')
-                                    | Ward
+                                label.control-label(for='constituency')
+                                    | Constituency
                                     span(class='star-label') *
-                                select#ward.form-control(
-                                name='ward',
-                                ng-options='w.name as w.name for w in wards',
-                                ng-model='grievance.ward',
+                                select#constituency.form-control(
+                                name='constituency',
+                                ng-options='c.name as c.name for c in constituencies',
+                                ng-model='grievance.constituency',
                                 required)
-                                    option(value='',selected) -- Select Ward --
+                                    option(value='',selected) -- Select Constituency --
+
+                        .col-lg-6
                             .form-group.has-warning
                                 label.control-label(for='grievanceType')
                                     | Grievance Type
@@ -129,12 +130,30 @@ section.container
                                     textarea#requirement.form-control(name='requirement',ng-model='grievance.requirement',placeholder='Requirement', required)
                                     small(class="label label-danger",ng-show="grievanceForm.requirement.$invalid && grievanceForm.requirement.$dirty") Required Requirement
                             .form-group.has-warning
-                                label.control-label(for='grievance-file')
-                                    | Upload File
-                                    span(class='star-label') *
-                                div(ng-class="{ 'has-error' : grievanceForm.grievanceFile.$invalid }")
-                                    input#grievanceFile.form-control(type='file',name='grievanceFile', ng-model='grievance.file', ng-file-select="onFileSelect($files)")
-                                    small(class="label label-danger",ng-show="grievanceForm.grievanceFile.$invalid && grievanceForm.grievanceFile.$dirty") Required Grievance File
+                                label.control-label(for='recommendedDoc')
+                                    | Upload Copy of Recommended Document
+                                div(ng-class="{ 'has-error' : grievanceForm.recommendedDoc.$invalid }")
+                                    input#recommendedDoc.form-control(type='file',name='recommendedDoc', ng-model='grievance.recommendedDoc', ng-file-select="onFileSelect($files, 'recommended')", ng-disabled='notRecommended')
+                            .form-group.has-warning
+                                label.control-label(for='aadharDoc')
+                                    | Upload Copy of Aadhar Card
+                                div(ng-class="{ 'has-error' : grievanceForm.aadharDoc.$invalid }")
+                                    input#aadharDoc.form-control(type='file',name='aadharDoc', ng-model='grievance.aadharDoc', ng-file-select="onFileSelect($files, 'aadhar')", ng-disabled='notRecommended')
+                            .form-group.has-warning
+                                label.control-label(for='voterId')
+                                    | Upload Copy of Voter Id Card
+                                div(ng-class="{ 'has-error' : grievanceForm.voterId.$invalid }")
+                                    input#voterId.form-control(type='file',name='voterId', ng-model='grievance.voterId', ng-file-select="onFileSelect($files, 'voter')", ng-disabled='notRecommended')
+                            .form-group.has-warning
+                                label.control-label(for='sscCertificate')
+                                    | Upload Copy of SSC Certificate
+                                div(ng-class="{ 'has-error' : grievanceForm.sscCertificate.$invalid }")
+                                    input#sscCertificate.form-control(type='file',name='sscCertificate', ng-model='grievance.sscCertificate', ng-file-select="onFileSelect($files, 'ssc')", ng-disabled='notRecommended')
+                            .form-group.has-warning
+                                label.control-label(for='otherDoc')
+                                    | Upload Copy of Any Other Document
+                                div(ng-class="{ 'has-error' : grievanceForm.otherDoc.$invalid }")
+                                    input#otherDoc.form-control(type='file',name='otherDoc', ng-model='grievance.otherDoc', ng-file-select="onFileSelect($files, 'other')", ng-disabled='notRecommended')
                             .form-group.has-warning
                                 label.control-label(for='note')
                                     | Note
