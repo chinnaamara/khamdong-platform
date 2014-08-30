@@ -9,6 +9,7 @@ app.factory 'NewGrievanceFactory', ['BASEURI', '$firebase', '$http', (BASEURI, $
   add = (data) ->
     addRef = new Firebase BASEURI + 'grievances/' + data.id
     addRef.child('id').set data.id
+    addRef.child('referenceNum').set data.referenceNum
     addRef.child('name').set data.name
     addRef.child('fatherName').set data.fatherName
     addRef.child('dob').set data.dob
@@ -37,7 +38,8 @@ app.factory 'NewGrievanceFactory', ['BASEURI', '$firebase', '$http', (BASEURI, $
   sendSms = (data) ->
     console.log 'sending'
     $http
-    .post('https://api.mVaayoo.com/mvaayooapi/MessageCompose?user=technorrp@gmail.com:Design_20&senderID=TEST SMS&receipientno=' + data.mobile + '&msgtxt= ' + data.message + ' API&state=4')
+#    .post('https://api.mVaayoo.com/mvaayooapi/MessageCompose?user=technorrp@gmail.com:Design_20&senderID=TEST SMS&receipientno=' + data.mobile + '&msgtxt= ' + data.message + ' API&state=4')
+    .post('http://api.mVaayoo.com/mvaayooapi/MessageCompose?user=Dilip@cannybee.in:8686993306&senderID=TEST SMS&receipientno=' + data.mobile + '&msgtxt= ' + data.message + ' &state=4')
 #    .post('http://api.mVaayoo.com/mvaayooapi/MessageCompose?user=technorrp@gmail.com:Design_20&senderID=TEST SMS&receipientno=9000991520&msgtxt= message at 11:18am from chinna by mVaayoo API&state=4')
     .success((data, status, headers, config) ->
       alert 'success'
@@ -91,8 +93,27 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
       i++
     uuid.join ""
 
-#  id = uuid()
-#  console.log id
+  grievanceReferenceNo = (ward) ->
+    CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
+    chars = CHARS
+    refId = new Array(8)
+    rand = 0
+    r = undefined
+    i = 0
+
+    while i < 8
+      rand = 0x2000000 + (Math.random() * 0x1000000) | 0  if rand <= 0x02
+      r = rand & 0xf
+      rand = rand >> 4
+      refId[i] = chars[(if (i is 19) then (r & 0x3) | 0x8 else r)]
+      i++
+    refNum = refId.join ""
+    str1 = ward.substring(0, 2).toUpperCase()
+    str2 = ward.substring(5, 7).toUpperCase()
+    str1 + str2 + refNum
+
+
+
   $scope.address = " "
   $scope.note = " "
   $scope.recommendedDoc = " "
@@ -147,8 +168,12 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
 
   $scope.reportButton = true
   $scope.createGrievance = () ->
+
+    refId = grievanceReferenceNo $scope.grievance.ward
+
     newGrievance = {
       id: uuid()
+      referenceNum: refId
       name: $scope.grievance.name
       fatherName: $scope.grievance.fatherName
       dob: $scope.grievance.dob
@@ -177,7 +202,7 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
     $scope.new_grievance = newGrievance
     smsData = {
       mobile: $scope.grievance.phoneNumber
-      message: "Dear " + $scope.grievance.name + " your req for " +  $scope.grievance.requirement + " is registered."
+      message: "Hi " + $scope.grievance.name + ", your grievance request is registered with Khamdong. Your reference number is " + refId + "."
     }
 
     $scope.$watch(NewGrievanceFactory.addGrievance(newGrievance), (res) ->
@@ -256,12 +281,12 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
     {id: 1, name: ' MELLI DARA PAIYONG'}
   ]
   $scope.wards = [
-    {id: 1, name: 'MELLI DARA'}
-    {id: 2, name: 'MELLI GUMPA'}
-    {id: 3, name: 'UPPER PAIYONG'}
-    {id: 4, name: 'LOWER PAIYONG'}
+    {id: 1, name: 'MELLIDARA'}
+    {id: 2, name: 'MELLIGUMPA'}
+    {id: 3, name: 'UPPERPAIYONG'}
+    {id: 4, name: 'LOWERPAIYONG'}
     {id: 5, name: 'KERABARI'}
-    {id: 6, name: 'MELLI BAZAAR'}
+    {id: 6, name: 'MELLIBAZAAR'}
   ]
   $scope.grievanceTypes = [
     {id: 1, name: 'Grievance Type 1'}

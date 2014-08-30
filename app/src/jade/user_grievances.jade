@@ -19,8 +19,9 @@ div
                                 thead
                                     tr
                                         th #
+                                        th Reference Id
                                         th Name
-                                        th Phone Number
+                                        th Mobile Number
                                         th Grievance Type
                                         th Department
                                         th Scheme
@@ -39,6 +40,8 @@ div
                                             a.btn.btn-sm.btn-info(href="", data-toggle="modal",id='grievancePrint', data-target="#myDetails", ng-click="showDetails(grievance)")
                                                 i.glyphicon.glyphicon-print
                                                 |   Print
+                                        td
+                                            span {{ grievance.referenceNum }}
                                         td
                                             span {{ grievance.name }}
                                         td

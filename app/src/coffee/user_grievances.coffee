@@ -37,7 +37,7 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
 
   $("#prev").prop "disabled", true
   pageNumber = 0
-  limitCount = 2
+  limitCount = 5
   lastPageNumber = null
   postsRef = GrievancesFactory.grievancesRef
   postsQuery = postsRef.startAt().limit(limitCount)

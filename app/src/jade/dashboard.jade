@@ -13,6 +13,7 @@ section.container
                             thead
                                 tr
                                     th #
+                                    th Reference Id
                                     th Grievance Type
                                     th Department
                                     th Scheme
@@ -26,12 +27,14 @@ section.container
                             tbody
                                 tr(ng-repeat='grievance in grievances | orderByPriority | filter: grievanceKey | orderBy : predicate')
                                     td(class='buttons-td')
-                                        a.btn.btn-sm.btn-info(href="", ng-click="showDetails(grievance)")
-                                            i.glyphicon.glyphicon-info-sign
-                                            |   Info
-                                        a.btn.btn-sm.btn-info(href="", data-toggle="modal", id='grievancePrint', data-target="#myDoc", ng-click="showDoc(grievance)")
+                                        a.btn.btn-sm.btn-info(href="", data-toggle="modal", data-target="#myDoc", ng-click="showDoc(grievance)")
                                             i.glyphicon.glyphicon-file
                                             |   File
+                                        a.btn.btn-sm.btn-info(href="", id='grievancePrint', ng-click="showDetails(grievance)")
+                                            i.glyphicon.glyphicon-info-sign
+                                            |   Info
+                                    td
+                                        span {{ grievance.referenceNum }}
                                     td
                                         span {{ grievance.grievanceType }}
                                     td
@@ -52,6 +55,15 @@ section.container
                                         span {{ grievance.respondedDate }}
                                     td
                                         span {{ grievance.status }}
+
+                        .pull-right
+                            button.btn.btn-info.btn-sm#prev(ng-click='pageBack()')
+                                i.glyphicon.glyphicon-arrow-left
+                                |   Previous
+                            button.btn.btn-info.btn-sm#next(ng-click='pageNext()')
+                                |   Next
+                                &nbsp;
+                                i.glyphicon.glyphicon-arrow-right
 
                     #myDoc.modal.fade.bs-example-modal-lg(tabindex='-1', role='dialog', aria-labelledby='myLargeModalLabel', aria-hidden='true')
                         .modal-dialog.modal-lg
