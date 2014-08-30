@@ -1,4 +1,4 @@
-app.factory 'DetailsFactory', ($firebase, BASEURI) ->
+app.factory 'DetailsFactory', ($firebase, BASEURI, $http) ->
   grievanceByid = {}
   submitResponse = (data) ->
     messageRef = new Firebase BASEURI + 'grievances/' + data.id
@@ -16,9 +16,21 @@ app.factory 'DetailsFactory', ($firebase, BASEURI) ->
 #    messageRef.child('status').set data.status
 #    return 'true'
 
+  sendSms = (data) ->
+    console.log 'sending'
+    $http
+    .post('http://api.mVaayoo.com/mvaayooapi/MessageCompose?user=Dilip@cannybee.in:8686993306&senderID=TEST SMS&receipientno=' + data.mobile + '&msgtxt= ' + data.message + ' &state=4')
+    .success((data, status, headers, config) ->
+      alert 'success'
+    )
+    .error((status) ->
+#      alert status.responseText
+    )
+
   return {
     retrieveGrievance: grievanceByid
     post: submitResponse
+    sendSms: sendSms
   }
 
 app.controller 'DetailsController', ($scope, DetailsFactory, $rootScope) ->
@@ -39,6 +51,7 @@ app.controller 'DetailsController', ($scope, DetailsFactory, $rootScope) ->
   $scope.reject = true
   $scope.status = " "
   $scope.message = " "
+  $scope.smsText = " "
   $scope.newValue = (value) ->
     $scope.responce = false
     if value == 'Accept'
@@ -47,12 +60,16 @@ app.controller 'DetailsController', ($scope, DetailsFactory, $rootScope) ->
       statusMessage = "Accepted"
       $scope.message = "Approved"
       $scope.responceMessage = "Grievance Approved Successfully!"
+      $scope.smsText = "is approved, check more details in website."
     else if value == 'Reject'
       $scope.accept = true
       $scope.reject = false
       statusMessage = "Rejected"
       $scope.message = "Cancelled"
       $scope.responceMessage = "Grievance Rejected Successfully!"
+      $scope.smsText = " is rejected, please get details from GPU."
+
+
 
   $scope.grievance = {}
 #  console.log DetailsFactory.retrieveGrievance
@@ -61,7 +78,12 @@ app.controller 'DetailsController', ($scope, DetailsFactory, $rootScope) ->
   currentYear = new Date().getFullYear()
   yearofBirth = new Date($scope.grievance.dob).getFullYear()
   $scope.age = currentYear - yearofBirth
+
   $scope.submit = (data) ->
+    smsData = {
+      mobile: $scope.grievance.phoneNumber
+      message: "Hi " + $scope.grievance.name + ", your grievance request with reference number " + $scope.grievance.referenceNum + $scope.smsText
+    }
     console.log $scope.grievance.id
     resMessage = {
       id: $scope.grievance.id
@@ -77,6 +99,10 @@ app.controller 'DetailsController', ($scope, DetailsFactory, $rootScope) ->
       if res
 #        console.log 'accepted/rejected success'
         $scope.responce = true
+        $scope.$watch(DetailsFactory.sendSms(smsData), (status) ->
+          if status
+            console.log "sms sent to " + smsData.mobile
+        )
 #        $scope.error = true;
     )
 
