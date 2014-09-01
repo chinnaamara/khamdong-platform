@@ -60,7 +60,7 @@ app.controller 'DetailsController', ($scope, DetailsFactory, $rootScope) ->
       statusMessage = "Accepted"
       $scope.message = "Approved"
       $scope.responceMessage = "Grievance Approved Successfully!"
-      $scope.smsText = "is approved, check more details in website."
+      $scope.smsText = "is approved, check more details from GPU."
     else if value == 'Reject'
       $scope.accept = true
       $scope.reject = false
