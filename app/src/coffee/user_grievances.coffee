@@ -55,7 +55,7 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
     )
   )
 
-  $scope.pageNext = () ->
+  $scope.pageNext = ->
     pageNumber++
     $scope.noPrevious = false
     bottomRecord = $scope.grievances[$scope.grievances.length - 1]
@@ -70,7 +70,7 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
         $scope.noNext = res.length <= 1 ? true : false
     )
 
-  $scope.pageBack = () ->
+  $scope.pageBack = ->
     pageNumber--
     $scope.noNext = false
     topRecord = $scope.grievances[0]
@@ -80,8 +80,6 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
         $scope.grievances = res
         $scope.noPrevious = pageNumber is 0 ? true : false
     )
-
-
 
   $scope.predicate = '-respondedDate'
 

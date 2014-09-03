@@ -31,7 +31,7 @@ section.container
                                 tbody
                                     tr(ng-repeat='grievance in grievances | orderByPriority | filter: grievanceKey | orderBy : predicate')
                                         td(class='buttons-td')
-                                            a.btn.btn-sm.btn-info(href="", data-toggle="modal", data-target="#myDoc", ng-click="showDoc(grievance)")
+                                            a.btn.btn-sm.btn-info(href="", data-toggle="modal", data-target="#myDoc", ng-click="showDocuments(grievance)")
                                                 i.glyphicon.glyphicon-file
                                                 |   File
                                             a.btn.btn-sm.btn-info(href="", id='grievancePrint', ng-click="showDetails(grievance)")
@@ -98,10 +98,10 @@ section.container
                         i.glyphicon.glyphicon-download
                         |   Download
                     hr
-                div(ng-show='sscDoc')
-                    h3 Copy of SSC Certificate
-                    canvas.imageDownload(id='sscCertificateCanvas')
-                    a.btn.btn-sm.btn-info(type='button', id='downloadSSC')
+                div(ng-show='casteDoc')
+                    h3 Copy of Caste Certificate
+                    canvas.imageDownload(id='casteCertificateCanvas')
+                    a.btn.btn-sm.btn-info(type='button', id='downloadCasteCertificate')
                         i.glyphicon.glyphicon-download
                         |   Download
                     hr

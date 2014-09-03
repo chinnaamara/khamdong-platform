@@ -18,8 +18,6 @@ app.factory 'DashboardFactory', ($firebase, BASEURI) ->
   }
 
 app.controller 'DashboardController', ($scope, DashboardFactory, $window, DetailsFactory, $rootScope) ->
-  $scope.loadDone = false
-  $scope.loading = true
   localData = localStorage.getItem('userEmail')
   if ! localData
     $window.location = '#/error'
@@ -33,76 +31,57 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
     $rootScope.userName = $scope.UserEmail
 
 #  $scope.grievances = DashboardFactory.retrieveGrievances
-#  console.log $scope.grievances
-
+  $scope.loadDone = false
+  $scope.loading = true
   $scope.noPrevious = true
-#  $("#prev").prop "disabled", true
   pageNumber = 0
-  limitCount = 4
-  lastPageNumber = null
-  postsRef = DashboardFactory.grievancesRef
-  postsQuery = postsRef.startAt().limit(limitCount)
-  postsQuery.on('value', (snapshot) ->
+  recordsPerPage = 4
+  bottomRecord = null
+
+  getQuery = DashboardFactory.grievancesRef
+  getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
     $scope.grievances = _.values snapshot.val()
     $scope.loadDone = true
     $scope.loading = false
-    lastPageNumber = $scope.grievances[$scope.grievances.length - 1]
-    DashboardFactory.pageNext(lastPageNumber.referenceNum, limitCount + 1, (res) ->
+    bottomRecord = $scope.grievances[$scope.grievances.length - 1]
+    DashboardFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
       if res
         $scope.noNext = res.length <= 1 ? true : false
-#        $("#next").prop "disabled", res.length <= 1
     )
   )
-  $scope.pageNext = () ->
+
+  $scope.pageNext = ->
     pageNumber++
     $scope.noPrevious = false
-#    $("#prev").prop "disabled", false
-    lastItem = $scope.grievances[$scope.grievances.length - 1]
-    DashboardFactory.pageNext(lastItem.referenceNum, limitCount + 1, (res) ->
+    bottomRecord = $scope.grievances[$scope.grievances.length - 1]
+    DashboardFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
       if res
         res.shift()
         $scope.grievances = res
-        lastPageNumber = $scope.grievances[$scope.grievances.length - 1]
+        bottomRecord = $scope.grievances[$scope.grievances.length - 1]
     )
-    DashboardFactory.pageNext(lastPageNumber.referenceNum, limitCount + 1, (res) ->
+    DashboardFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
       if res
         $scope.noNext = res.length <= 1 ? true : false
-#        $("#next").prop "disabled", res.length <= 1
     )
-  $scope.pageBack = () ->
+
+  $scope.pageBack = ->
     pageNumber--
     $scope.noNext = false
-#    $("#next").prop "disabled", false
-    firstItem = $scope.grievances[0]
-    DashboardFactory.pageBack(firstItem.referenceNum, limitCount + 1, (res) ->
+    topRecord = $scope.grievances[0]
+    DashboardFactory.pageBack(topRecord.referenceNum, recordsPerPage + 1, (res) ->
       if res
         res.pop()
         $scope.grievances = res
         $scope.noPrevious = pageNumber is 0 ? true : false
-#        $("#prev").prop "disabled", pageNumber is 0
     )
-
 
   $scope.predicate = '-applicationDate'
   $scope.showDetails = (details) ->
     DetailsFactory.retrieveGrievance = details
-#    DetailsFactory.retrieveGrievance = {
-#      name: details.name
-#      fatherName: details.fatherName
-#      dob: details.dob
-#      phoneNumber: details.phoneNumber
-#      address: details.address
-#      education: details.education
-#      gpu: details.gpu
-#      ward: details.ward
-#      constituency: details.constituency
-#      department: details.department
-#      grievanceType: details.grievanceType
-#      note: details.note
-#    }
     $window.location = '#/details'
 
-  $scope.showDoc = (data) ->
+  $scope.showDocuments = (data) ->
     $scope.noDocs = false
     if data.recommendedDoc
       $scope.recommendedDoc = true
@@ -126,7 +105,7 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
         ctx2.drawImage(this, 0, 0, canvas2.width, canvas2.height)
       img2.src = "data:image/gif;base64," + data.coiDoc
       document.getElementById("downloadCOIDoc").href = "data:image/png;base64," + data.coiDoc
-      document.getElementById("downloadCOIDoc").download = 'aadhar.png'
+      document.getElementById("downloadCOIDoc").download = 'coi.png'
     else
       $scope.COIDoc = false
 
@@ -143,18 +122,18 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
     else
       $scope.voterDoc = false
 
-    if data.sscCertificate
-      $scope.sscDoc = true
-      canvas4 = document.getElementById "sscCertificateCanvas"
+    if data.casteCertificate
+      $scope.casteDoc = true
+      canvas4 = document.getElementById "casteCertificateCanvas"
       ctx4 = canvas4.getContext("2d")
       img4 = new Image()
       img4.onload = ->
         ctx4.drawImage(this, 0, 0, canvas4.width, canvas4.height)
-      img4.src = "data:image/gif;base64," + data.sscCertificate
-      document.getElementById("downloadSSC").href = "data:image/png;base64," + data.sscCertificate
-      document.getElementById("downloadSSC").download = 'ssc.png'
+      img4.src = "data:image/gif;base64," + data.casteCertificate
+      document.getElementById("downloadCasteCertificate").href = "data:image/png;base64," + data.casteCertificate
+      document.getElementById("downloadCasteCertificate").download = 'caste.png'
     else
-      $scope.sscDoc = false
+      $scope.casteDoc = false
 
     if data.otherDoc
       $scope.otherDoc = true

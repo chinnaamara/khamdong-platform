@@ -145,10 +145,10 @@ section.container
                                 div(ng-class="{ 'has-error' : grievanceForm.voterId.$invalid }")
                                     input#voterId.form-control(type='file',name='voterId', ng-model='grievance.voterId', ng-file-select="onFileSelect($files, 'voter')", ng-disabled='notRecommended')
                             .form-group.has-warning
-                                label.control-label(for='sscCertificate')
-                                    | Upload Copy of SSC Certificate
-                                div(ng-class="{ 'has-error' : grievanceForm.sscCertificate.$invalid }")
-                                    input#sscCertificate.form-control(type='file',name='sscCertificate', ng-model='grievance.sscCertificate', ng-file-select="onFileSelect($files, 'ssc')", ng-disabled='notRecommended')
+                                label.control-label(for='casteCertificate')
+                                    | Upload Copy of Caste Certificate
+                                div(ng-class="{ 'has-error' : grievanceForm.casteCertificate.$invalid }")
+                                    input#casteCertificate.form-control(type='file',name='casteCertificate', ng-model='grievance.casteCertificate', ng-file-select="onFileSelect($files, 'caste')", ng-disabled='notRecommended')
                             .form-group.has-warning
                                 label.control-label(for='otherDoc')
                                     | Upload Copy of Any Other Document
@@ -168,6 +168,6 @@ section.container
                                 i.glyphicon.glyphicon-circle-arrow-left
                                 |   Back
                         .col-lg-6
-                            .alert.alert-success(ng-show='error')
+                            .alert.alert-success(ng-show='successMessage')
                                 i.fa.fa-check-circle-o
                                     | Grievance Updated Successfully!
