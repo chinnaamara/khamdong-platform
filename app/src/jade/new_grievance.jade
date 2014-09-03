@@ -11,7 +11,7 @@ div
                         | New Grievance Details
                     .panel-body
                         form#grievanceForm(name='grievanceForm',class='form-horizonal',type='form',novalidate)
-                            .col-lg-6
+                            .col-lg-4
                                 .form-group.has-warning
                                     label.control-label(for='name')
                                         | Name
@@ -66,6 +66,10 @@ div
                                         | Address
                                     div
                                         textarea#address.form-control(name='address',ng-model='address',placeholder='Address')
+
+
+                            .col-lg-4
+
                                 .form-group.has-warning
                                     label.control-label(for='ward')
                                         | Ward
@@ -107,7 +111,6 @@ div
                                     required)
                                         option(value='',selected) -- Select Grievance Type --
 
-                            .col-lg-6
                                 .form-group.has-warning
                                     label.control-label(for='department')
                                         | Department
@@ -135,6 +138,7 @@ div
                                     div
                                         textarea#requirement.form-control(name='requirement',ng-model='grievance.requirement',placeholder='Requirement', required)
                                         small(class="label label-danger",ng-show="grievanceForm.requirement.$invalid && grievanceForm.requirement.$dirty") Required Requirement
+                            .col-lg-4
                                 .form-group.has-warning
                                     label.control-label(for='recommended')
                                         | Is Recommended By Panchayat/ GramSabha/ WardSabha
@@ -145,28 +149,36 @@ div
                                 .form-group.has-warning
                                     label.control-label(for='recommendedDoc')
                                         | Upload Copy of Recommended Document
+                                        span(class='star-label') *
                                     div(ng-class="{ 'has-error' : grievanceForm.recommendedDoc.$invalid }")
-                                        input#recommendedDoc.form-control(type='file',name='recommendedDoc', ng-model='grievance.recommendedDoc', ng-file-select="onFileSelect($files, 'recommended')", ng-disabled='notRecommended')
+                                        input#recommendedDoc.form-control(type='file', name='recommendedDoc', ng-model='recommendedDoc', ng-file-select="onFileSelect($files, 'recommended')", ng-disabled='notRecommended', required)
                                         small(class="label label-danger",ng-show="grievanceForm.recommendedDoc.$invalid && grievanceForm.recommendedDoc.$dirty") Required Copy Of Recommended Document
                                     //div(ng-class="{ 'has-error' : grievanceForm.grievanceFile.$invalid }")
                                     //    input#grievanceFile.form-control(type='file',name='grievanceFile', ng-model='grievance.file', nv-file-select="", uploader="uploader")
                                     //    small(class="label label-danger",ng-show="grievanceForm.grievanceFile.$invalid && grievanceForm.grievanceFile.$dirty") Required Grievance File
                                 .form-group.has-warning
-                                    label.control-label(for='aadharDoc')
-                                        | Upload Copy of Aadhar Card
-                                    div(ng-class="{ 'has-error' : grievanceForm.aadharDoc.$invalid }")
-                                        input#aadharDoc.form-control(type='file',name='aadharDoc', ng-model='grievance.aadharDoc', ng-file-select="onFileSelect($files, 'aadhar')", ng-disabled='notRecommended')
-                                        small(class="label label-danger",ng-show="grievanceForm.aadharDoc.$invalid && grievanceForm.aadharDoc.$dirty") Required Copy Of Aadhar Card
+                                    label.control-label(for='coiDoc')
+                                        | Upload Copy of Certificate of Identity
+                                        span(class='star-label') *
+                                    div(ng-class="{ 'has-error' : grievanceForm.coiDoc.$invalid }")
+                                        input#coiDoc.form-control(type='file', name='coiDoc', ng-model='coiDoc', ng-file-select="onFileSelect($files, 'coi')", ng-disabled='notRecommended')
+                                        small(class="label label-danger",ng-show="grievanceForm.coiDoc.$invalid && grievanceForm.coiDoc.$dirty") Required Copy Of COI
+                                //.form-group.has-warning
+                                //    label.control-label(for='aadharDoc')
+                                //        | Upload Copy of Aadhar Card
+                                //    div(ng-class="{ 'has-error' : grievanceForm.aadharDoc.$invalid }")
+                                //        input#aadharDoc.form-control(type='file',name='aadharDoc', ng-model='grievance.aadharDoc', ng-file-select="onFileSelect($files, 'aadhar')", ng-disabled='notRecommended')
+                                //        small(class="label label-danger",ng-show="grievanceForm.aadharDoc.$invalid && grievanceForm.aadharDoc.$dirty") Required Copy Of Aadhar Card
                                 .form-group.has-warning
                                     label.control-label(for='voterId')
                                         | Upload Copy of Voter Id Card
                                     div(ng-class="{ 'has-error' : grievanceForm.voterId.$invalid }")
                                         input#voterId.form-control(type='file',name='voterId', ng-model='grievance.voterId', ng-file-select="onFileSelect($files, 'voter')", ng-disabled='notRecommended')
                                 .form-group.has-warning
-                                    label.control-label(for='sscCertificate')
-                                        | Upload Copy of SSC Certificate
-                                    div(ng-class="{ 'has-error' : grievanceForm.sscCertificate.$invalid }")
-                                        input#sscCertificate.form-control(type='file',name='sscCertificate', ng-model='grievance.sscCertificate', ng-file-select="onFileSelect($files, 'ssc')", ng-disabled='notRecommended')
+                                    label.control-label(for='casteCertificate')
+                                        | Upload Copy of Caste Certificate
+                                    div(ng-class="{ 'has-error' : grievanceForm.casteCertificate.$invalid }")
+                                        input#casteCertificate.form-control(type='file',name='casteCertificate', ng-model='grievance.casteCertificate', ng-file-select="onFileSelect($files, 'caste')", ng-disabled='notRecommended')
                                 .form-group.has-warning
                                     label.control-label(for='otherDoc')
                                         | Upload Copy of Any Other Document
@@ -177,20 +189,22 @@ div
                                         | Note
                                     div
                                         textarea#note.form-control(name='note',ng-model='note',placeholder='Note')
-                                .form-group.has-warning
-                                    button.btn.btn-success(id='btn-createGrievance', ng-click='createGrievance()', ng-disabled='grievanceForm.$invalid')
-                                        i.glyphicon.glyphicon-ok
-                                        |   Submit
-                                    button.btn.btn-info(id='btn-print', ng-disabled='reportButton', href="", data-toggle="modal", data-target="#myDetails")
-                                        i.glyphicon.glyphicon-print
-                                        |   Print
-                                    button.btn.btn-warning(id='btn-close', ui-sref="userDashboard")
-                                        i.glyphicon.glyphicon-circle-arrow-left
-                                        |   Back
-                        .col-lg-12
-                                .alert.alert-success(ng-show='error')
-                                    i.fa.fa-check-circle-o
-                                        | Grievance Submitted Successfully!
+                            .col-lg-12
+                                .col-lg-6
+                                    .form-group.has-warning
+                                        button.btn.btn-success(id='btn-createGrievance', ng-click='createGrievance()', ng-disabled='grievanceForm.$invalid')
+                                            i.glyphicon.glyphicon-ok
+                                            |   Submit
+                                        button.btn.btn-info(id='btn-print', ng-disabled='reportButton', href="", data-toggle="modal", data-target="#myDetails")
+                                            i.glyphicon.glyphicon-print
+                                            |   Print
+                                        button.btn.btn-warning(id='btn-close', ui-sref="userDashboard")
+                                            i.glyphicon.glyphicon-circle-arrow-left
+                                            |   Back
+                                .col-lg-6
+                                    .alert.alert-success(ng-show='error')
+                                        i.fa.fa-check-circle-o
+                                            | Grievance Submitted Successfully!
 div#printThisPdf
         #myDetails.modal.fade.bs-example-modal-lg(tabindex='-1', role='dialog', aria-labelledby='myLargeModalLabel', aria-hidden='true')
             .modal-dialog.modal-lg
@@ -204,6 +218,9 @@ div#printThisPdf
                             header
                                 div
                                     | Grievance Report
+                            p
+                                span.span3.offset2 Reference Id
+                                span.span4.offset2 {{ new_grievance.referenceNum }}
                             p
                                 span.span3.offset2 Name
                                 span.span4.offset2 {{ new_grievance.name }}

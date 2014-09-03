@@ -3,11 +3,10 @@ app.factory 'NewGrievanceFactory', ['BASEURI', '$firebase', '$http', (BASEURI, $
   grievances = ->
     getRef = new Firebase BASEURI + 'grievances/'
     data = $firebase getRef
-    console.log data
     return data
 
   add = (data) ->
-    addRef = new Firebase BASEURI + 'grievances/' + data.id
+    addRef = new Firebase BASEURI + 'grievances/' + data.referenceNum
     addRef.child('id').set data.id
     addRef.child('referenceNum').set data.referenceNum
     addRef.child('name').set data.name
@@ -25,7 +24,7 @@ app.factory 'NewGrievanceFactory', ['BASEURI', '$firebase', '$http', (BASEURI, $
     addRef.child('grievanceType').set data.grievanceType
     addRef.child('note').set data.note
     addRef.child('recommendedDoc').set data.recommendedDoc
-    addRef.child('aadharCard').set data.aadharCard
+    addRef.child('coiDoc').set data.coiDoc
     addRef.child('voterCard').set data.voterCard
     addRef.child('sscCertificate').set data.sscCertificate
     addRef.child('otherDoc').set data.otherDoc
@@ -36,16 +35,16 @@ app.factory 'NewGrievanceFactory', ['BASEURI', '$firebase', '$http', (BASEURI, $
     addRef.child('email').set data.email
     return 'true'
   sendSms = (data) ->
-    console.log 'sending'
     $http
 #    .post('https://api.mVaayoo.com/mvaayooapi/MessageCompose?user=technorrp@gmail.com:Design_20&senderID=TEST SMS&receipientno=' + data.mobile + '&msgtxt= ' + data.message + ' API&state=4')
     .post('http://api.mVaayoo.com/mvaayooapi/MessageCompose?user=Dilip@cannybee.in:8686993306&senderID=TEST SMS&receipientno=' + data.mobile + '&msgtxt= ' + data.message + ' &state=4')
-#    .post('http://api.mVaayoo.com/mvaayooapi/MessageCompose?user=technorrp@gmail.com:Design_20&senderID=TEST SMS&receipientno=9000991520&msgtxt= message at 11:18am from chinna by mVaayoo API&state=4')
     .success((data, status, headers, config) ->
-      alert 'success'
+#      alert 'success'
+      alert "Message sent to your mobile number"
     )
     .error((status) ->
-      alert status.responseText
+#      alert status.responseText
+      alert "Message sent to your mobile number"
     )
 
   return {
@@ -55,13 +54,9 @@ app.factory 'NewGrievanceFactory', ['BASEURI', '$firebase', '$http', (BASEURI, $
   }
 ]
 
-app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrievanceFactory) ->
+app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrievanceFactory, $window) ->
   $scope.UserEmail = ''
   localData = localStorage.getItem('userEmail')
-  #  $rootScope.userName = localData['email']
-  console.log localData
-  console.log 'root element: ' + $rootScope.token
-  console.log 'user: ' + $rootScope.userName
   if ! localData
     $window.location = '#/error'
   else if localData == '"admin@technoidentity.com"'
@@ -94,45 +89,39 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
     uuid.join ""
 
   grievanceReferenceNo = (ward) ->
-    CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
-    chars = CHARS
-    refId = new Array(8)
-    rand = 0
-    r = undefined
-    i = 0
-
-    while i < 8
-      rand = 0x2000000 + (Math.random() * 0x1000000) | 0  if rand <= 0x02
-      r = rand & 0xf
-      rand = rand >> 4
-      refId[i] = chars[(if (i is 19) then (r & 0x3) | 0x8 else r)]
-      i++
-    refNum = refId.join ""
-    str1 = ward.substring(0, 2).toUpperCase()
-    str2 = ward.substring(5, 7).toUpperCase()
-    str1 + str2 + refNum
+    date = new Date()
+    refID = date.getTime()
+    str1 = ward.substring(0, 1).toUpperCase()
+    str2 = ward.substring(5, 6).toUpperCase()
+    str1 + str2 + refID
 
 
 
   $scope.address = " "
   $scope.note = " "
   $scope.recommendedDoc = ""
-  $scope.aadharCard = ""
+  $scope.coiDoc = ""
   $scope.voterCard = ""
   $scope.sscCertificate = ""
   $scope.otherDoc = ""
+
   $scope.onFileSelect = ($files, fileName) ->
     file = $files[0]
+    console.log file.name
+    console.log file.type
+    console.log file.size
     reader = new FileReader()
     reader.readAsArrayBuffer file
     reader.onload = (e) ->
       if fileName == 'recommended'
         $scope.recommendedDoc = arrayBufferToBase64 e.target.result
-      else if fileName == 'aadhar'
-        $scope.aadharCard = arrayBufferToBase64 e.target.result
+      else if fileName == 'coi'
+        $scope.coiDoc = arrayBufferToBase64 e.target.result
+#      else if fileName == 'aadhar'
+#        $scope.aadharCard = arrayBufferToBase64 e.target.result
       else if fileName == 'voter'
         $scope.voterCard = arrayBufferToBase64 e.target.result
-      else if fileName == 'ssc'
+      else if fileName == 'caste'
         $scope.sscCertificate = arrayBufferToBase64 e.target.result
       else
         $scope.otherDoc = arrayBufferToBase64 e.target.result
@@ -188,7 +177,7 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
       scheme: $scope.grievance.scheme
       requirement: $scope.grievance.requirement
       recommendedDoc: $scope.recommendedDoc
-      aadharCard: $scope.aadharCard
+      coiDoc: $scope.coiDoc
       voterCard: $scope.voterCard
       sscCertificate: $scope.sscCertificate
       otherDoc: $scope.otherDoc
@@ -202,7 +191,7 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
     $scope.new_grievance = newGrievance
     smsData = {
       mobile: $scope.grievance.phoneNumber
-      message: "Hi " + $scope.grievance.name + ", your grievance request is registered with Khamdong. Your reference number is " + refId + "."
+      message: "Hi " + $scope.grievance.name + ", your grievance request is registered at Khamdong, by " + $scope.grievance.ward + " ward. Your reference number is " + refId + "."
     }
 
     $scope.$watch(NewGrievanceFactory.addGrievance(newGrievance), (res) ->
@@ -210,12 +199,12 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
         $scope.reportButton = false
 #        console.log 'added success'
         $scope.error = true;
-        $scope.$watch(NewGrievanceFactory.sendSms(smsData), (status) ->
-#          console.log 'return'
-          if status
-            console.log "sms sent to " + smsData.mobile
-#            console.log status
-        )
+#        $scope.$watch(NewGrievanceFactory.sendSms(smsData), (status) ->
+##          console.log 'return'
+#          if status
+#            console.log "sms sent to " + smsData.mobile
+##            console.log status
+#        )
     )
 
 

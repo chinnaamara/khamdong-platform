@@ -9,7 +9,7 @@ section.container
                     | Reference Number:  {{ grievance.referenceNum }}
                 .panel-body
                     form#grievanceForm(name='grievanceForm',class='form-horizonal',type='form',novalidate)
-                        .col-lg-6
+                        .col-lg-4
                             .form-group.has-warning
                                 label.control-label(for='name')
                                     | Name
@@ -31,11 +31,6 @@ section.container
                                 div
                                     input#age.form-control(type='text', name='age', ng-model='age', readonly)
                             .form-group.has-warning
-                                label.control-label(for='phoneNumber')
-                                    | Phone Number
-                                div
-                                    input#phoneNumber.form-control(type='tel', name='phoneNumber', ng-model='grievance.phoneNumber', readonly)
-                            .form-group.has-warning
                                 label.control-label(for='education')
                                     | Education
                                 div
@@ -45,6 +40,12 @@ section.container
                                     | Address
                                 div
                                     textarea#address.form-control(name='address',ng-model='grievance.address', readonly)
+                        .col-lg-4
+                            .form-group.has-warning
+                                label.control-label(for='phoneNumber')
+                                    | Phone Number
+                                div
+                                    input#phoneNumber.form-control(type='tel', name='phoneNumber', ng-model='grievance.phoneNumber', readonly)
                             .form-group.has-warning
                                 label.control-label(for='constituency')
                                     | Constituency
@@ -55,7 +56,6 @@ section.container
                                     | GPU
                                 div
                                     input#gpu.form-control(type='text', name='gpu', ng-model='grievance.gpu', readonly)
-                        .col-lg-6
                             .form-group.has-warning
                                 label.control-label(for='ward')
                                     | Ward
@@ -75,6 +75,7 @@ section.container
                                 ng-model='grievance.grievanceType',
                                 required)
                                     option(value='',selected) -- Select Grievance Type --
+                        .col-lg-4
                             .form-group.has-warning
                                 label.control-label(for='department')
                                     | Department
@@ -104,20 +105,18 @@ section.container
                             .form-group.has-warning
                                 label.control-label.input-group(for='status') Status
                                 .btn-group(data-toggle='buttons')
-                                    input(type="radio", ng-model="status", value="Accept", ng-change='newValue(status)')
-                                    | Accept
+                                    input(type="radio", ng-model="status", value="Approve", ng-change='newValue(status)')
+                                    | Approve
                                     &nbsp;&nbsp;
                                     input(type="radio", ng-model="status", value="Reject", ng-change='newValue(status)')
                                     | Reject
                                 br
-                                br
-                                div
-                                    label.control-label.input-group(for='message') Reject Message
-                                    textarea.form-control(name='rejectMessage',ng-model='message', ng-disabled='reject', placeholder='Reject Message')
-                                    //br
-                                    //tt status = {{status | json}}
-
-                    .col-lg-6.pull-right
+                            .form-group.has-warning
+                                label.control-label.input-group(for='message') Status Message
+                                textarea.form-control(name='rejectMessage',ng-model='message', ng-disabled='reject', placeholder='Reject Message')
+                                //br
+                                //tt status = {{status | json}}
+                            .form-group.has-warning
                                 button.btn.btn-success(id='btn-createGrievance', ng-disabled='accept', ng-click='submit()')
                                     i.glyphicon.glyphicon-ok
                                     |   Accept

@@ -35,48 +35,51 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
 #  $scope.grievances = DashboardFactory.retrieveGrievances
 #  console.log $scope.grievances
 
-  $("#prev").prop "disabled", true
+  $scope.noPrevious = true
+#  $("#prev").prop "disabled", true
   pageNumber = 0
-  limitCount = 5
+  limitCount = 4
   lastPageNumber = null
   postsRef = DashboardFactory.grievancesRef
   postsQuery = postsRef.startAt().limit(limitCount)
   postsQuery.on('value', (snapshot) ->
-    console.log 'snapshot', snapshot.val()
     $scope.grievances = _.values snapshot.val()
     $scope.loadDone = true
     $scope.loading = false
     lastPageNumber = $scope.grievances[$scope.grievances.length - 1]
-    console.log lastPageNumber.id
-    DashboardFactory.pageNext(lastPageNumber.id, limitCount + 1, (res) ->
+    DashboardFactory.pageNext(lastPageNumber.referenceNum, limitCount + 1, (res) ->
       if res
-        console.log res
-        $("#next").prop "disabled", res.length <= 1
+        $scope.noNext = res.length <= 1 ? true : false
+#        $("#next").prop "disabled", res.length <= 1
     )
   )
   $scope.pageNext = () ->
     pageNumber++
-    $("#prev").prop "disabled", false
+    $scope.noPrevious = false
+#    $("#prev").prop "disabled", false
     lastItem = $scope.grievances[$scope.grievances.length - 1]
-    DashboardFactory.pageNext(lastItem.id, limitCount + 1, (res) ->
+    DashboardFactory.pageNext(lastItem.referenceNum, limitCount + 1, (res) ->
       if res
         res.shift()
         $scope.grievances = res
         lastPageNumber = $scope.grievances[$scope.grievances.length - 1]
     )
-    DashboardFactory.pageNext(lastPageNumber.id, limitCount + 1, (res) ->
+    DashboardFactory.pageNext(lastPageNumber.referenceNum, limitCount + 1, (res) ->
       if res
-        $("#next").prop "disabled", res.length <= 1
+        $scope.noNext = res.length <= 1 ? true : false
+#        $("#next").prop "disabled", res.length <= 1
     )
   $scope.pageBack = () ->
     pageNumber--
-    $("#next").prop "disabled", false
+    $scope.noNext = false
+#    $("#next").prop "disabled", false
     firstItem = $scope.grievances[0]
-    DashboardFactory.pageBack(firstItem.id, limitCount + 1, (res) ->
+    DashboardFactory.pageBack(firstItem.referenceNum, limitCount + 1, (res) ->
       if res
         res.pop()
         $scope.grievances = res
-        $("#prev").prop "disabled", pageNumber is 0
+        $scope.noPrevious = pageNumber is 0 ? true : false
+#        $("#prev").prop "disabled", pageNumber is 0
     )
 
 
@@ -114,18 +117,18 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
     else
       $scope.recommendedDoc = false
 
-    if data.aadharCard
-      $scope.aadharDoc = true
-      canvas2 = document.getElementById "aadharCardCanvas"
+    if data.coiDoc
+      $scope.COIDoc = true
+      canvas2 = document.getElementById "COIDocCanvas"
       ctx2 = canvas2.getContext("2d")
       img2 = new Image()
       img2.onload = ->
         ctx2.drawImage(this, 0, 0, canvas2.width, canvas2.height)
-      img2.src = "data:image/gif;base64," + data.aadharCard
-      document.getElementById("downloadAadhar").href = "data:image/png;base64," + data.aadharCard
-      document.getElementById("downloadAadhar").download = 'aadhar.png'
+      img2.src = "data:image/gif;base64," + data.coiDoc
+      document.getElementById("downloadCOIDoc").href = "data:image/png;base64," + data.coiDoc
+      document.getElementById("downloadCOIDoc").download = 'aadhar.png'
     else
-      $scope.aadharDoc = false
+      $scope.COIDoc = false
 
     if data.voterCard
       $scope.voterDoc = true

@@ -9,7 +9,7 @@ section.container
                     | Reference Id: {{ grievance.referenceNum }}
                 .panel-body
                     form#grievanceForm(name='grievanceForm',class='form-horizonal',type='form',novalidate)
-                        .col-lg-6
+                        .col-lg-4
                             .form-group.has-warning
                                 label.control-label(for='name')
                                     | Name
@@ -60,6 +60,7 @@ section.container
                                     | Address
                                 div
                                     textarea#address.form-control(name='address',ng-model='grievance.address',placeholder='Address')
+                        .col-lg-4
                             .form-group.has-warning
                                 label.control-label(for='ward')
                                     | Ward
@@ -90,8 +91,6 @@ section.container
                                 ng-model='grievance.constituency',
                                 required)
                                     option(value='',selected) -- Select Constituency --
-
-                        .col-lg-6
                             .form-group.has-warning
                                 label.control-label(for='grievanceType')
                                     | Grievance Type
@@ -129,16 +128,17 @@ section.container
                                 div
                                     textarea#requirement.form-control(name='requirement',ng-model='grievance.requirement',placeholder='Requirement', required)
                                     small(class="label label-danger",ng-show="grievanceForm.requirement.$invalid && grievanceForm.requirement.$dirty") Required Requirement
+                        .col-lg-4
                             .form-group.has-warning
                                 label.control-label(for='recommendedDoc')
                                     | Upload Copy of Recommended Document
                                 div(ng-class="{ 'has-error' : grievanceForm.recommendedDoc.$invalid }")
                                     input#recommendedDoc.form-control(type='file',name='recommendedDoc', ng-model='grievance.recommendedDoc', ng-file-select="onFileSelect($files, 'recommended')", ng-disabled='notRecommended')
                             .form-group.has-warning
-                                label.control-label(for='aadharDoc')
-                                    | Upload Copy of Aadhar Card
-                                div(ng-class="{ 'has-error' : grievanceForm.aadharDoc.$invalid }")
-                                    input#aadharDoc.form-control(type='file',name='aadharDoc', ng-model='grievance.aadharDoc', ng-file-select="onFileSelect($files, 'aadhar')", ng-disabled='notRecommended')
+                                label.control-label(for='coiDoc')
+                                    | Upload Copy of Certificate of Identity
+                                div(ng-class="{ 'has-error' : grievanceForm.coiDoc.$invalid }")
+                                    input#coiDoc.form-control(type='file',name='coiDoc', ng-model='grievance.coiDoc', ng-file-select="onFileSelect($files, 'coi')", ng-disabled='notRecommended')
                             .form-group.has-warning
                                 label.control-label(for='voterId')
                                     | Upload Copy of Voter Id Card

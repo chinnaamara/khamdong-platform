@@ -61,10 +61,10 @@ section.container
                                             span {{ grievance.status }}
 
                             .pull-right
-                                button.btn.btn-info.btn-sm#prev(ng-click='pageBack()')
+                                button.btn.btn-info.btn-sm#prev(ng-click='pageBack()', ng-disabled='noPrevious')
                                     i.glyphicon.glyphicon-arrow-left
                                     |   Previous
-                                button.btn.btn-info.btn-sm#next(ng-click='pageNext()')
+                                button.btn.btn-info.btn-sm#next(ng-click='pageNext()', ng-disabled='noNext')
                                     |   Next
                                     &nbsp;
                                     i.glyphicon.glyphicon-arrow-right
@@ -84,10 +84,10 @@ section.container
                         i.glyphicon.glyphicon-download
                         |   Download
                     hr
-                div(ng-show='aadharDoc')
-                    h3 Copy of Aadhar Card
-                    canvas.imageDownload(id='aadharCardCanvas')
-                    a.btn.btn-sm.btn-info(type='button', id='downloadAadhar')
+                div(ng-show='COIDoc')
+                    h3 Copy of Certificate of Identity
+                    canvas.imageDownload(id='COIDocCanvas')
+                    a.btn.btn-sm.btn-info(type='button', id='downloadCOIDoc')
                         i.glyphicon.glyphicon-download
                         |   Download
                     hr

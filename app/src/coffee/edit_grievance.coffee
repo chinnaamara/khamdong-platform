@@ -1,7 +1,7 @@
 app.factory 'EditGrievanceFactory', ($firebase, BASEURI) ->
   grievanceByid = {}
   update = (data) ->
-    updateRef = new Firebase BASEURI + 'grievances/' + data.id
+    updateRef = new Firebase BASEURI + 'grievances/' + data.referenceNum
     updateRef.child('name').set data.name
     updateRef.child('fatherName').set data.fatherName
     updateRef.child('dob').set data.dob
@@ -16,7 +16,7 @@ app.factory 'EditGrievanceFactory', ($firebase, BASEURI) ->
     updateRef.child('scheme').set data.scheme
     updateRef.child('requirement').set data.requirement
     updateRef.child('recommendedDoc').set data.recommendedDoc
-    updateRef.child('aadharCard').set data.aadharCard
+    updateRef.child('coiDoc').set data.coiDoc
     updateRef.child('voterCard').set data.voterCard
     updateRef.child('sscCertificate').set data.sscCertificate
     updateRef.child('otherDoc').set data.otherDoc
@@ -33,7 +33,7 @@ app.factory 'EditGrievanceFactory', ($firebase, BASEURI) ->
     saveGrievance: update
   }
 
-app.controller 'EditGrievanceController', ($scope, EditGrievanceFactory, $rootScope) ->
+app.controller 'EditGrievanceController', ($scope, EditGrievanceFactory, $rootScope, $window) ->
   $scope.UserEmail = ''
   localData = localStorage.getItem('userEmail')
   console.log localData
@@ -54,7 +54,7 @@ app.controller 'EditGrievanceController', ($scope, EditGrievanceFactory, $rootSc
   data = EditGrievanceFactory.retrieveGrievance
   $scope.grievance = data
   $scope.recommendedDoc = data.recommendedDoc
-  $scope.aadharCard = data.aadharCard
+  $scope.coiDoc = data.coiDoc
   $scope.voterCard = data.voterCard
   $scope.sscCertificate = data.sscCertificate
   $scope.otherDoc = data.otherDoc
@@ -70,8 +70,8 @@ app.controller 'EditGrievanceController', ($scope, EditGrievanceFactory, $rootSc
     reader.onload = (e) ->
       if fileName == 'recommended'
         $scope.recommendedDoc = arrayBufferToBase64 e.target.result
-      else if fileName == 'aadhar'
-        $scope.aadharCard = arrayBufferToBase64 e.target.result
+      else if fileName == 'coi'
+        $scope.coiDoc = arrayBufferToBase64 e.target.result
       else if fileName == 'voter'
         $scope.voterCard = arrayBufferToBase64 e.target.result
       else if fileName == 'ssc'
@@ -93,6 +93,7 @@ app.controller 'EditGrievanceController', ($scope, EditGrievanceFactory, $rootSc
 #    console.log $scope.file
     updateRecord = {
       id: $scope.grievance.id
+      referenceNum: $scope.grievance.referenceNum
       name: $scope.grievance.name
       fatherName: $scope.grievance.fatherName
       dob: $scope.grievance.dob
@@ -107,7 +108,7 @@ app.controller 'EditGrievanceController', ($scope, EditGrievanceFactory, $rootSc
       scheme: $scope.grievance.scheme
       requirement: $scope.grievance.requirement
       recommendedDoc: $scope.recommendedDoc
-      aadharCard: $scope.aadharCard
+      coiDoc: $scope.coiDoc
       voterCard: $scope.voterCard
       sscCertificate: $scope.sscCertificate
       otherDoc: $scope.otherDoc

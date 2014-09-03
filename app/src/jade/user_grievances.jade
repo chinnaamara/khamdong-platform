@@ -70,10 +70,10 @@ div
                                                 span {{ grievance.message }}
 
                             .pull-right
-                                button.btn.btn-info.btn-sm#prev(ng-click='pageBack()')
+                                button.btn.btn-info.btn-sm#prev(ng-click='pageBack()', ng-disabled='noPrevious')
                                     i.glyphicon.glyphicon-arrow-left
                                     |   Previous
-                                button.btn.btn-info.btn-sm#next(ng-click='pageNext()')
+                                button.btn.btn-info.btn-sm#next(ng-click='pageNext()', ng-disabled='noNext')
                                     |   Next
                                     &nbsp;
                                     i.glyphicon.glyphicon-arrow-right
@@ -93,59 +93,62 @@ div#printThissdf
                             div
                                 | Grievance Report
                         p
+                            span.span3.offset2 Reference Id
+                            span.span4.offset2 {{ grievanceById.referenceNum }}
+                        p
                             span.span3.offset2 Name
-                            span.span4.offset2 {{ grievance.name }}
+                            span.span4.offset2 {{ grievanceById.name }}
                         p
                             span.span3.offset2 Father Name
-                            span.span4.offset2 {{ grievance.fatherName }}
+                            span.span4.offset2 {{ grievanceById.fatherName }}
                         p
                             span.span3.offset2 DOB
-                            span.span4.offset2 {{ grievance.dob }}
+                            span.span4.offset2 {{ grievanceById.dob }}
                         p
                             span.span3.offset2 Phone Number
-                            span.span4.offset2 {{ grievance.phoneNumber }}
+                            span.span4.offset2 {{ grievanceById.phoneNumber }}
                         p
                             span.span3.offset2 Education
-                            span.span4.offset2 {{ grievance.education }}
+                            span.span4.offset2 {{ grievanceById.education }}
                         p
                             span.span3.offset2 Address
-                            span.span4.offset2 {{ grievance.address }}
+                            span.span4.offset2 {{ grievanceById.address }}
                         p
                             span.span3.offset2 GPU
-                            span.span4.offset2 {{ grievance.gpu }}
+                            span.span4.offset2 {{ grievanceById.gpu }}
                         p
                             span.span3.offset2 Ward
-                            span.span4.offset2 {{ grievance.ward }}
+                            span.span4.offset2 {{ grievanceById.ward }}
                         p
                             span.span3.offset2 Constituency
-                            span.span4.offset2 {{ grievance.constituency }}
+                            span.span4.offset2 {{ grievanceById.constituency }}
                         p
                             span.span3.offset2 Department
-                            span.span4.offset2 {{ grievance.department }}
+                            span.span4.offset2 {{ grievanceById.department }}
                         p
                             span.span3.offset2 Scheme
-                            span.span4.offset2 {{ grievance.scheme }}
+                            span.span4.offset2 {{ grievanceById.scheme }}
                         p
                             span.span3.offset2 Grievance Type
-                            span.span4.offset2 {{ grievance.grievanceType }}
+                            span.span4.offset2 {{ grievanceById.grievanceType }}
                         p
                             span.span3.offset2 Note
-                            span.span4.offset2 {{ grievance.note }}
+                            span.span4.offset2 {{ grievanceById.note }}
                         p
                             span.span3.offset2 Requirement
-                            span.span4.offset2 {{ grievance.requirement }}
+                            span.span4.offset2 {{ grievanceById.requirement }}
                         p
                             span.span3.offset2 Status
-                            span.span4.offset2 {{ grievance.status }}
+                            span.span4.offset2 {{ grievanceById.status }}
                         p
                             span.span3.offset2 Responded Message
-                            span.span4.offset2 {{ grievance.message }}
+                            span.span4.offset2 {{ grievanceById.message }}
                         p
                             span.span3.offset2 Applied Date
-                            span.span4.offset2 {{ grievance.applicationDate }}
+                            span.span4.offset2 {{ grievanceById.applicationDate }}
                         p
                             span.span3.offset2 Responded Date
-                            span.span4.offset2 {{ grievance.respondedDate }}
+                            span.span4.offset2 {{ grievanceById.respondedDate }}
                 .modal-footer
                     button.btn.btn-sm.btn-info(type='button', ng-click="viewPdf()")
                         i.glyphicon.glyphicon-print

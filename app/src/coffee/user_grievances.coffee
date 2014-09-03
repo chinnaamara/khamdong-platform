@@ -1,6 +1,12 @@
 app.factory 'GrievancesFactory', ($firebase, BASEURI) ->
   grievancesRef = new Firebase BASEURI + 'grievances'
   grievances = $firebase grievancesRef
+#  grievances = (callback) ->
+#    grievancesRef.on('value', ((snapshot) ->
+#      callback _.values(snapshot.val())
+#    ), (error) ->
+#      error.code
+#    )
   pageNext = (name, numberOfItems, cb) ->
     grievancesRef.startAt(null, name).limit(numberOfItems).once('value', (snapshot) ->
       cb _.values snapshot.val()
@@ -18,13 +24,7 @@ app.factory 'GrievancesFactory', ($firebase, BASEURI) ->
   }
 
 app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievanceFactory, $rootScope, $window) ->
-  $scope.loadDone = false
-  $scope.loading = true
   localData = localStorage.getItem('userEmail')
-#  $rootScope.userName = localData['email']
-#  console.log localData
-#  console.log 'root element: ' + $rootScope.token
-#  console.log 'user: ' + $rootScope.userName
   if ! localData
     $window.location = '#/error'
   else if localData == '"admin@technoidentity.com"'
@@ -36,48 +36,49 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
     $rootScope.userName = userName
 
 #  $scope.grievances = GrievancesFactory.retrieveGrievances
-
-  $("#prev").prop "disabled", true
+  $scope.loadDone = false
+  $scope.loading = true
+  $scope.noPrevious = true
   pageNumber = 0
-  limitCount = 5
-  lastPageNumber = null
-  postsRef = GrievancesFactory.grievancesRef
-  postsQuery = postsRef.startAt().limit(limitCount)
-  postsQuery.on('value', (snapshot) ->
-    console.log 'snapshot', snapshot.val()
+  recordsPerPage = 4
+  bottomRecord = null
+
+  getQuery = GrievancesFactory.grievancesRef
+  getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
     $scope.grievances = _.values snapshot.val()
     $scope.loadDone = true
     $scope.loading = false
-    lastPageNumber = $scope.grievances[$scope.grievances.length - 1]
-    GrievancesFactory.pageNext(lastPageNumber.id, limitCount + 1, (res) ->
+    bottomRecord = $scope.grievances[$scope.grievances.length - 1]
+    GrievancesFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
       if res
-        console.log res
-        $("#next").prop "disabled", res.length <= 1
+        $scope.noNext = res.length <= 1 ? true : false
     )
   )
+
   $scope.pageNext = () ->
     pageNumber++
-    $("#prev").prop "disabled", false
-    lastItem = $scope.grievances[$scope.grievances.length - 1]
-    GrievancesFactory.pageNext(lastItem.id, limitCount + 1, (res) ->
+    $scope.noPrevious = false
+    bottomRecord = $scope.grievances[$scope.grievances.length - 1]
+    GrievancesFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
       if res
         res.shift()
         $scope.grievances = res
-        lastPageNumber = $scope.grievances[$scope.grievances.length - 1]
+        bottomRecord = $scope.grievances[$scope.grievances.length - 1]
     )
-    GrievancesFactory.pageNext(lastPageNumber.id, limitCount + 1, (res) ->
+    GrievancesFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
       if res
-        $("#next").prop "disabled", res.length <= 1
+        $scope.noNext = res.length <= 1 ? true : false
     )
+
   $scope.pageBack = () ->
     pageNumber--
-    $("#next").prop "disabled", false
-    firstItem = $scope.grievances[0]
-    GrievancesFactory.pageBack(firstItem.id, limitCount + 1, (res) ->
+    $scope.noNext = false
+    topRecord = $scope.grievances[0]
+    GrievancesFactory.pageBack(topRecord.referenceNum, recordsPerPage + 1, (res) ->
       if res
         res.pop()
         $scope.grievances = res
-        $("#prev").prop "disabled", pageNumber is 0
+        $scope.noPrevious = pageNumber is 0 ? true : false
     )
 
 
@@ -85,8 +86,7 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
   $scope.predicate = '-respondedDate'
 
   $scope.showDetails = (data) ->
-    $scope.grievance = data
-#    console.log data
+    $scope.grievanceById = data
     return
 
   $scope.viewPdf = ->
@@ -105,7 +105,6 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
     return
 
   $scope.editDetails = (grievance) ->
-    console.log grievance
     EditGrievanceFactory.retrieveGrievance = grievance
     $window.location = '#/grievance/edit'
     return

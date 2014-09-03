@@ -1,7 +1,7 @@
 app.factory 'DetailsFactory', ($firebase, BASEURI, $http) ->
   grievanceByid = {}
   submitResponse = (data) ->
-    messageRef = new Firebase BASEURI + 'grievances/' + data.id
+    messageRef = new Firebase BASEURI + 'grievances/' + data.referenceNum
     messageRef.child('grievanceType').set data.grievanceType
     messageRef.child('department').set data.department
     messageRef.child('scheme').set data.scheme
@@ -54,20 +54,20 @@ app.controller 'DetailsController', ($scope, DetailsFactory, $rootScope) ->
   $scope.smsText = " "
   $scope.newValue = (value) ->
     $scope.responce = false
-    if value == 'Accept'
+    if value == 'Approve'
       $scope.accept = false
       $scope.reject = true
-      statusMessage = "Accepted"
-      $scope.message = "Approved"
-      $scope.responceMessage = "Grievance Approved Successfully!"
-      $scope.smsText = "is approved, check more details from GPU."
+      statusMessage = "Approved"
+      $scope.message = "Your grievance is approved."
+      $scope.responceMessage = "Grievance Approved!"
+      $scope.smsText = " is approved, please get more details from GPU."
     else if value == 'Reject'
       $scope.accept = true
       $scope.reject = false
       statusMessage = "Rejected"
       $scope.message = "Cancelled"
-      $scope.responceMessage = "Grievance Rejected Successfully!"
-      $scope.smsText = " is rejected, please get details from GPU."
+      $scope.responceMessage = "Grievance Rejected!"
+      $scope.smsText = " is rejected, please get more details from GPU."
 
 
 
@@ -87,6 +87,7 @@ app.controller 'DetailsController', ($scope, DetailsFactory, $rootScope) ->
     console.log $scope.grievance.id
     resMessage = {
       id: $scope.grievance.id
+      referenceNum: $scope.grievance.referenceNum
       grievanceType: $scope.grievance.grievanceType
       department: $scope.grievance.department
       scheme: $scope.grievance.scheme
