@@ -6,34 +6,65 @@ app.factory 'NewGrievanceFactory', ['BASEURI', '$firebase', '$http', (BASEURI, $
     return data
 
   add = (data) ->
-    addRef = new Firebase BASEURI + 'grievances/' + data.referenceNum
-    addRef.child('id').set data.id
-    addRef.child('referenceNum').set data.referenceNum
-    addRef.child('name').set data.name
-    addRef.child('fatherName').set data.fatherName
-    addRef.child('dob').set data.dob
-    addRef.child('phoneNumber').set data.phoneNumber
-    addRef.child('address').set data.address
-    addRef.child('education').set data.education
-    addRef.child('gpu').set data.gpu
-    addRef.child('ward').set data.ward
-    addRef.child('constituency').set data.constituency
-    addRef.child('department').set data.department
-    addRef.child('scheme').set data.scheme
-    addRef.child('requirement').set data.requirement
-    addRef.child('grievanceType').set data.grievanceType
-    addRef.child('note').set data.note
-    addRef.child('recommendedDoc').set data.recommendedDoc
-    addRef.child('coiDoc').set data.coiDoc
-    addRef.child('voterCard').set data.voterCard
-    addRef.child('casteCertificate').set data.casteCertificate
-    addRef.child('otherDoc').set data.otherDoc
-    addRef.child('applicationDate').set data.applicationDate
-    addRef.child('respondedDate').set data.respondedDate
-    addRef.child('status').set data.status
-    addRef.child('message').set data.message
-    addRef.child('email').set data.email
+    getRef.child(data.referenceNum).setWithPriority({
+      id: data.id
+      referenceNum: data.referenceNum
+      name: data.name
+      fatherName: data.fatherName
+      dob: data.dob
+      phoneNumber: data.phoneNumber
+      address: data.address
+      education: data.education
+      gpu: data.gpu
+      ward: data.ward
+      constituency: data.constituency
+      department: data.department
+      scheme: data.scheme
+      requirement: data.requirement
+      grievanceType: data.grievanceType
+      note: data.note
+      recommendedDoc: data.recommendedDoc
+      coiDoc: data.coiDoc
+      voterCard: data.voterCard
+      casteCertificate: data.casteCertificate
+      otherDoc: data.otherDoc
+      applicationDate: data.applicationDate
+      respondedDate: data.respondedDate
+      status: data.status
+      message: data.message
+      email: data.email
+    }, data.ward)
     return 'true'
+
+#  add = (data) ->
+#    addRef = new Firebase BASEURI + 'grievances/' + data.referenceNum
+#    addRef.child('id').set data.id
+#    addRef.child('referenceNum').set data.referenceNum
+#    addRef.child('name').set data.name
+#    addRef.child('fatherName').set data.fatherName
+#    addRef.child('dob').set data.dob
+#    addRef.child('phoneNumber').set data.phoneNumber
+#    addRef.child('address').set data.address
+#    addRef.child('education').set data.education
+#    addRef.child('gpu').set data.gpu
+#    addRef.child('ward').set data.ward
+#    addRef.child('constituency').set data.constituency
+#    addRef.child('department').set data.department
+#    addRef.child('scheme').set data.scheme
+#    addRef.child('requirement').set data.requirement
+#    addRef.child('grievanceType').set data.grievanceType
+#    addRef.child('note').set data.note
+#    addRef.child('recommendedDoc').set data.recommendedDoc
+#    addRef.child('coiDoc').set data.coiDoc
+#    addRef.child('voterCard').set data.voterCard
+#    addRef.child('casteCertificate').set data.casteCertificate
+#    addRef.child('otherDoc').set data.otherDoc
+#    addRef.child('applicationDate').set data.applicationDate
+#    addRef.child('respondedDate').set data.respondedDate
+#    addRef.child('status').set data.status
+#    addRef.child('message').set data.message
+#    addRef.child('email').set data.email
+#    return 'true'
 
   sendSms = (data) ->
     $http
@@ -97,23 +128,27 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
     console.log file.name
     console.log file.type
     console.log file.size
-    reader = new FileReader()
-    reader.readAsArrayBuffer file
-    reader.onload = (e) ->
-      if fileName == 'recommended'
-        $scope.recommendedDoc = arrayBufferToBase64 e.target.result
-      else if fileName == 'coi'
-        $scope.coiDoc = arrayBufferToBase64 e.target.result
-#      else if fileName == 'aadhar'
-#        $scope.aadharCard = arrayBufferToBase64 e.target.result
-      else if fileName == 'voter'
-        $scope.voterCard = arrayBufferToBase64 e.target.result
-      else if fileName == 'caste'
-        $scope.casteCertificate = arrayBufferToBase64 e.target.result
-      else
-        $scope.otherDoc = arrayBufferToBase64 e.target.result
-#      $scope.file = btoa(String.fromCharCode.apply(null, new Uint8Array(file.target.result)))
-      return
+    if file.size <= 1024 * 1024 * 2
+      reader = new FileReader()
+      reader.readAsArrayBuffer file
+      reader.onload = (e) ->
+        if fileName == 'recommended'
+          $scope.recommendedDoc = arrayBufferToBase64 e.target.result
+        else if fileName == 'coi'
+          $scope.coiDoc = arrayBufferToBase64 e.target.result
+  #      else if fileName == 'aadhar'
+  #        $scope.aadharCard = arrayBufferToBase64 e.target.result
+        else if fileName == 'voter'
+          $scope.voterCard = arrayBufferToBase64 e.target.result
+        else if fileName == 'caste'
+          $scope.casteCertificate = arrayBufferToBase64 e.target.result
+        else
+          $scope.otherDoc = arrayBufferToBase64 e.target.result
+        #      $scope.file = btoa(String.fromCharCode.apply(null, new Uint8Array(file.target.result)))
+        return
+    else
+      console.log "Invalid file"
+      $files.name = ''
     return
 
   arrayBufferToBase64 = (arrayBuffer) ->
@@ -176,10 +211,10 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
       if res
         $scope.reportButton = false
         $scope.successMessage = true;
-        $scope.$watch(NewGrievanceFactory.sendSms(smsData), (status) ->
-          if status
-            console.log "sms sent to " + smsData.mobile
-        )
+#        $scope.$watch(NewGrievanceFactory.sendSms(smsData), (status) ->
+#          if status
+#            console.log "sms sent to " + smsData.mobile
+#        )
     )
 
   $scope.calculateAgeOnDOB = () ->

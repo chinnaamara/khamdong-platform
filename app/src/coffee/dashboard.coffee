@@ -44,10 +44,13 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
     $scope.loadDone = true
     $scope.loading = false
     bottomRecord = $scope.grievances[$scope.grievances.length - 1]
-    DashboardFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
-      if res
-        $scope.noNext = res.length <= 1 ? true : false
-    )
+    if bottomRecord
+      DashboardFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
+        if res
+          $scope.noNext = res.length <= 1 ? true : false
+      )
+    else
+      $scope.noNext = true
   )
 
   $scope.pageNext = ->

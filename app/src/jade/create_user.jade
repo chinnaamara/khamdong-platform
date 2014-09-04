@@ -2,31 +2,58 @@
    Created by chinna on 11/8/14.
 section.container
     .row
-        .col-lg-12
-            //h2(class='text-center') Add New Grievance
-            //br
-            .alert.alert-success(ng-show='error')
-                i.fa.fa-check-circle-o
-                | User Created Successfully!
+        .col-lg-4.pull-right
             .panel.panel-primary
                 .panel-heading
-                    | New User
+                    | Create New User
                 .panel-body
-                    form(ng-submit='addUser()')
+                    form#createUserForm(name='createUserForm', class='form-horizonal', type='form', novalidate)
                         .form-group.has-warning
-                            label user Name
-                            input.form-control(type='text', ng-model='userName')
+                            label.control-label(for='name')
+                                | Name
+                                span(class='star-label') *
+                            div(ng-class="{ 'has-error' : createUserForm.name.$invalid }")
+                                input#name.form-control(type='text',name='name',ng-model='user.name',placeholder='Name', required, autofocus)
+                                small(class="label label-danger",ng-show="createUserForm.name.$invalid && createUserForm.name.$dirty") Required Name.!
                         .form-group.has-warning
-                            label password
-                            input.form-control(type='password', ng-model='userPassword')
+                            label.control-label(for='email')
+                                | Email
+                                span(class='star-label') *
+                            div(ng-class="{ 'has-error' : createUserForm.email.$invalid }")
+                                input#email.form-control(type='email',name='email',ng-model='user.email',placeholder='Email', required)
+                                small(class="label label-danger",ng-show="createUserForm.email.$invalid && createUserForm.email.$dirty") Required Email.!
                         .form-group.has-warning
-                            label Email
-                            input.form-control(type='email', ng-model='userEmail')
+                            label.control-label(for='password')
+                                | Password
+                                span(class='star-label') *
+                            div(ng-class="{ 'has-error' : createUserForm.password.$invalid }")
+                                input#password.form-control(type='password',name='password',ng-model='user.password',placeholder='Password', required, ng-minlength="6")
+                                small(class="label label-danger",ng-show="createUserForm.password.$invalid && createUserForm.password.$dirty") Password should be atleast 6 characters.!
                         .form-group.has-warning
-                            label Role
-                            select.form-control(ng-model='role')
-                                option(value='admin') Admin
-                                option(value='client') Client
+                            label.control-label(for='ward')
+                                | Ward
+                                span(class='star-label') *
+                            select#ward.form-control(
+                            name='ward',
+                            ng-options='w.name as w.name for w in wards',
+                            ng-model='user.ward',
+                            required)
+                                option(value='',selected) -- Select Ward --
+                        .form-group.has-warning
+                            label.control-label(for='role')
+                                | Role
+                                span(class='star-label') *
+                            select#role.form-control(
+                            name='role',
+                            ng-options='r.role as r.role for r in userRoles',
+                            ng-model='user.role',
+                            required)
+                                option(value='',selected) -- Select Role --
                         div.pull-right
-                            input.btn.btn-primary(type='submit', value='Add')
-                            input.btn.btn-primary(type='reset', value='Cancel')
+                                button.btn.btn-primary(id='btn-createUser', ng-click='addUser()', ng-disabled='createUserForm.$invalid')
+                                    i.glyphicon.glyphicon-plus
+                                    |   Add
+
+            .alert.alert-danger(ng-show='successMessage')
+                i.fa.fa-check-circle-o
+                | {{ successText }}

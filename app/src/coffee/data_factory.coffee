@@ -19,6 +19,11 @@ app.factory 'DataFactory', () ->
       i++
     uuid.join ""
 
+  userRoles = [
+    {id: 1, role: 'User'}
+    {id: 2, role: 'Admin'}
+    {id: 3, role: 'SuperUser'}
+  ]
   education = [
     {id: 1, name: 'SSC'}
     {id: 2, name: 'Intermediate'}
@@ -82,6 +87,7 @@ app.factory 'DataFactory', () ->
 
   return {
     uuid: uuid
+    userRoles: userRoles
     education: education
     constituencies: constituencies
     gpus: gpus

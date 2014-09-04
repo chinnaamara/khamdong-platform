@@ -17,12 +17,23 @@ app.controller 'LoginController', ($scope, $firebase, BASEURI, $firebaseSimpleLo
     username: ''
     password: ''
 
+  $scope.fetchUserDetails = (email) ->
+    getRef = new Firebase BASEURI + 'users'
+    getRef.startAt(email).endAt(email).once('value', (snapshot) ->
+      $scope.userDetails = _.values snapshot.val()
+      console.log $scope.userDetails
+      $window.localStorage["role"] = JSON.stringify $scope.userDetails[0].role
+      $window.localStorage["ward"] = JSON.stringify $scope.userDetails[0].ward
+      $window.localStorage["name"] = JSON.stringify $scope.userDetails[0].name
+    )
+    return
+
   $scope.signIn = (credentials) ->
     auth.$login('password', {
       email: credentials.username
       password: credentials.password
     }).then((user) ->
-#      console.log user
+      $scope.fetchUserDetails user.email
       $rootScope.token = user.firebaseAuthToken
       $rootScope.userName = user.email
       $rootScope.$broadcast AUTH_EVENTS.loginSuccess

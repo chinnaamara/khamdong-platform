@@ -7,12 +7,12 @@ app.factory 'GrievancesFactory', ($firebase, BASEURI) ->
 #    ), (error) ->
 #      error.code
 #    )
-  pageNext = (name, numberOfItems, cb) ->
-    grievancesRef.startAt(null, name).limit(numberOfItems).once('value', (snapshot) ->
+  pageNext = (name, noOfRecords, cb) ->
+    grievancesRef.startAt(null, name).limit(noOfRecords).once('value', (snapshot) ->
       cb _.values snapshot.val()
     )
-  pageBack = (name, numberOfItems, cb) ->
-    grievancesRef.endAt(null, name).limit(numberOfItems).once('value', (snapshot) ->
+  pageBack = (name, noOfRecords, cb) ->
+    grievancesRef.endAt(null, name).limit(noOfRecords).once('value', (snapshot) ->
       cb _.values snapshot.val()
     )
 
@@ -44,15 +44,19 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
   bottomRecord = null
 
   getQuery = GrievancesFactory.grievancesRef
-  getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
+#  getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
+  getQuery.startAt('Kerabari').endAt('Kerabari').on('value', (snapshot) ->
     $scope.grievances = _.values snapshot.val()
     $scope.loadDone = true
     $scope.loading = false
     bottomRecord = $scope.grievances[$scope.grievances.length - 1]
-    GrievancesFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
-      if res
-        $scope.noNext = res.length <= 1 ? true : false
-    )
+    if bottomRecord
+      GrievancesFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
+        if res
+          $scope.noNext = res.length <= 1 ? true : false
+      )
+    else
+      $scope.noNext = true
   )
 
   $scope.pageNext = ->
