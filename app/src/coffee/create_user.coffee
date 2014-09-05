@@ -20,15 +20,14 @@ app.factory 'UsersFactory',['$firebase', 'BASEURI', '$firebaseSimpleLogin', ($fi
 
   createUser = (data) ->
     auth.$createUser(data.email, data.password).then((user) ->
-      console.log 'User: ' , user
+#      console.log 'User: ' , user
       return 'true'
     , (error) ->
-      console.log 'error: ' + error.code
+#      console.log 'error: ' + error.code
       removeUser data.id
-      responseMessage = error
 #      return error
     )
-    return responseMessage
+    return
 #    auth.$createUser(data.email, data.password, (error, user) ->
 #      console.log error
 #      console.log user
@@ -78,6 +77,8 @@ app.controller 'CreateUserController', ($scope, UsersFactory, $rootScope, $windo
   auth = $firebaseSimpleLogin addUserRef
 
   $scope.addUser = ->
+    $scope.errorMessage = false
+    $scope.successMessage = false
     newUser =
       id: userId $scope.user.ward
       name: $scope.user.name
@@ -90,12 +91,12 @@ app.controller 'CreateUserController', ($scope, UsersFactory, $rootScope, $windo
 
 
     $scope.$watch(UsersFactory.register(newUser), (res_first) ->
-      console.log "First Response: " +  res_first
       if res_first
         $scope.signUp(newUser)
       else
-        $scope.successMessage = true
-        $scope.successText = "User Not Created.!"
+        $scope.errorMessage = true
+        $scope.errorText = "User Not Created.!"
+
       )
     return
 #        $scope.$watch(UsersFactory.create(newUser), (res) ->
@@ -121,15 +122,15 @@ app.controller 'CreateUserController', ($scope, UsersFactory, $rootScope, $windo
 
   $scope.signUp = (data) ->
     auth.$createUser(data.email, data.password).then((user) ->
-      console.log 'User: ' , user
+#      console.log 'User: ' , user
       $scope.successMessage = true
       $scope.successText = "User created successfully.!"
       return
     , (error) ->
       console.log 'error: ' + error.code
       removeUser data.id
-      $scope.successMessage = true
-      $scope.successText = "Email already used.! Try another Email."
+      $scope.errorMessage = true
+      $scope.errorText = "Email already used.! Try another Email."
       return
     )
     return

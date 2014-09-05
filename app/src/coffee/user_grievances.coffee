@@ -45,7 +45,7 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
 
   getQuery = GrievancesFactory.grievancesRef
 #  getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
-  getQuery.startAt('Kerabari').endAt('Kerabari').on('value', (snapshot) ->
+  getQuery.startAt('MelliDara').endAt('MelliDara').on('value', (snapshot) ->
     $scope.grievances = _.values snapshot.val()
     $scope.loadDone = true
     $scope.loading = false

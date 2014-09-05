@@ -54,6 +54,9 @@ section.container
                                     i.glyphicon.glyphicon-plus
                                     |   Add
 
-            .alert.alert-danger(ng-show='successMessage')
+            .alert.alert-success(ng-show='successMessage')
                 i.fa.fa-check-circle-o
                 | {{ successText }}
+            .alert.alert-danger(ng-show='errorMessage')
+                i.fa.fa-check-circle-o
+                | {{ errorText }}
