@@ -22,10 +22,10 @@ app.controller 'LoginController', ($scope, $firebase, BASEURI, $firebaseSimpleLo
     getRef.startAt(email).endAt(email).once('value', (snapshot) ->
       $scope.userDetails = _.values snapshot.val()
       console.log $scope.userDetails
-      $window.localStorage['email'] = JSON.stringify $scope.userDetails[0].email
-      $window.localStorage['role'] = JSON.stringify $scope.userDetails[0].role
-      $window.localStorage['ward'] = JSON.stringify $scope.userDetails[0].ward
-      $window.localStorage['name'] = JSON.stringify $scope.userDetails[0].name
+      $window.localStorage.setItem('email', $scope.userDetails[0].email)
+      $window.localStorage.setItem('role', $scope.userDetails[0].role)
+      $window.localStorage.setItem('ward', $scope.userDetails[0].ward)
+      $window.localStorage.setItem('name', $scope.userDetails[0].name)
       $window.location = '#/user/grievances'
     )
     return

@@ -91,16 +91,14 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
     if ! session
       $window.location = '#/error'
     else
-      userName = localStorage.getItem('name')
-      user = userName.split('"')
-      $rootScope.userName = user[1].toUpperCase()
+      $rootScope.userName = localStorage.getItem('name').toUpperCase()
       role = localStorage.getItem('role')
-      role = role.split('"')[1]
       $rootScope.administrator = role == 'Admin' ? true : false
 
   $scope.init()
 
-  $scope.UserEmail = localStorage.getItem('email').split('"')[1]
+  $scope.ward = localStorage.getItem('ward')
+  $scope.UserEmail = localStorage.getItem('email')
   $scope.education = DataFactory.education
   $scope.constituencies = DataFactory.constituencies
   $scope.gpus = DataFactory.gpus
@@ -113,7 +111,7 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
     date = new Date()
     refID = date.getTime()
     str1 = ward.substring(0, 1).toUpperCase()
-    str2 = ward.substring(5, 6).toUpperCase()
+    str2 = ward.substring(6, 7).toUpperCase()
     str1 + str2 + refID
 
   uuid = DataFactory.uuid()
@@ -174,7 +172,7 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
 
   $scope.reportButton = true
   $scope.createGrievance = () ->
-    refId = grievanceReferenceNo $scope.grievance.ward
+    refId = grievanceReferenceNo $scope.ward
     newGrievance = {
       id: uuid
       referenceNum: refId
@@ -185,7 +183,7 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
       address: $scope.address
       education: $scope.grievance.education
       gpu: $scope.grievance.gpu
-      ward: $scope.grievance.ward
+      ward: $scope.ward
       constituency: $scope.grievance.constituency
       department: $scope.grievance.department
       grievanceType: $scope.grievance.grievanceType
@@ -206,7 +204,7 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
     $scope.new_grievance = newGrievance
     smsData = {
       mobile: $scope.grievance.phoneNumber
-      message: "Hi " + $scope.grievance.name + ", your grievance request is registered at Khamdong, by " + $scope.grievance.ward + " ward. Your reference number is " + refId + "."
+      message: "Hi " + $scope.grievance.name + ", your grievance request is registered at Khamdong, by " + $scope.ward + " ward. Your reference number is " + refId + "."
     }
 
     $scope.$watch(NewGrievanceFactory.addGrievance(newGrievance), (res) ->

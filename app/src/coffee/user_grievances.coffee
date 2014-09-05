@@ -29,17 +29,13 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
     if ! session
       $window.location = '#/error'
     else
-      userName = localStorage.getItem('name')
-      user = userName.split('"')
-      $rootScope.userName = user[1].toUpperCase()
+      $rootScope.userName = localStorage.getItem('name').toUpperCase()
       role = localStorage.getItem('role')
-      role = role.split('"')[1]
       $rootScope.administrator = role == 'Admin' ? true : false
 
   $scope.init()
 
   ward = localStorage.getItem('ward')
-  ward = ward.split('"')[1]
   $scope.loadDone = false
   $scope.loading = true
   $scope.noPrevious = true

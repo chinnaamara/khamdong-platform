@@ -39,16 +39,13 @@ app.controller 'EditGrievanceController', ($scope, EditGrievanceFactory, DataFac
     if ! session
       $window.location = '#/error'
     else
-      userName = localStorage.getItem('name')
-      user = userName.split('"')
-      $rootScope.userName = user[1].toUpperCase()
+      $rootScope.userName = localStorage.getItem('name').toUpperCase()
       role = localStorage.getItem('role')
-      role = role.split('"')[1]
       $rootScope.administrator = role == 'Admin' ? true : false
 
   $scope.init()
 
-  $scope.UserEmail = localStorage.getItem('email').split('"')[1]
+  $scope.UserEmail = localStorage.getItem('email')
   $scope.education = DataFactory.education
   $scope.constituencies = DataFactory.constituencies
   $scope.gpus = DataFactory.gpus

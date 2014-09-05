@@ -54,25 +54,20 @@ app.controller 'CreateUserController', ($scope, UsersFactory, $rootScope, $windo
     if ! session
       $window.location = '#/error'
     else
-      userName = localStorage.getItem('name')
-      user = userName.split('"')
-      $rootScope.userName = user[1].toUpperCase()
+      $rootScope.userName = localStorage.getItem('name').toUpperCase()
       role = localStorage.getItem('role')
-      role = role.split('"')[1]
       $rootScope.administrator = role == 'Admin' ? true : false
 
   $scope.init()
 
   $scope.userRoles = DataFactory.userRoles
-  Data = DataFactory.wards
-  Data[6] = {id: 7, name: "Administrator"}
-  $scope.wards = Data
+  $scope.wards = DataFactory.wards
 
   userId = (ward) ->
     date = new Date()
     refID = date.getTime()
     str1 = ward.substring(0, 1).toUpperCase()
-    str2 = ward.substring(5, 6).toUpperCase()
+    str2 = ward.substring(6, 7).toUpperCase()
     str1 + str2 + refID
 
   addUserRef = new Firebase BASEURI + 'users'

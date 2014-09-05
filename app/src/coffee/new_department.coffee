@@ -41,11 +41,8 @@ app.controller "AddDepartmentController", ($scope, DepartmentsFactory, $rootScop
     if ! session
       $window.location = '#/error'
     else
-      userName = localStorage.getItem('name')
-      user = userName.split('"')
-      $rootScope.userName = user[1].toUpperCase()
+      $rootScope.userName = localStorage.getItem('name').toUpperCase()
       role = localStorage.getItem('role')
-      role = role.split('"')[1]
       $rootScope.administrator = role == 'Admin' ? true : false
 
   $scope.init()

@@ -40,12 +40,14 @@ app.factory 'DataFactory', () ->
     {id: 1, name: ' MelliDara Paiyong'}
   ]
   wards = [
-    {id: 1, name: 'MelliDara'}
-    {id: 2, name: 'MelliGumpa'}
-    {id: 3, name: 'UpperPaiyong'}
-    {id: 4, name: 'LowerPaiyong'}
+    {id: 1, name: 'Melli Dara'}
+    {id: 2, name: 'Melli Gumpa'}
+    {id: 3, name: 'Upper Paiyong'}
+    {id: 4, name: 'Lower Paiyong'}
     {id: 5, name: 'Kerabari'}
-    {id: 6, name: 'MelliBazaar'}
+    {id: 6, name: 'Melli Bazaar'}
+    {id: 7, name: 'Super User'}
+    {id: 8, name: 'Administrator'}
   ]
   grievanceTypes = [
     {id: 1, name: 'Grievance Type 1'}
