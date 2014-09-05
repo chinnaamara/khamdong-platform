@@ -74,6 +74,7 @@ module.exports = (grunt) ->
         , 'bower_components/angular-ui-router/release/angular-ui-router.js'
         , 'bower_components/firebase-simple-login/firebase-simple-login.js'
         , 'bower_components/angularfire/angularfire.js'
+        , 'bower_components/ng-table/ng-table.js'
         ]
         dest: 'build/js/lib.min.js'
 

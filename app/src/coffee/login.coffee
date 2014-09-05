@@ -21,7 +21,7 @@ app.controller 'LoginController', ($scope, $firebase, BASEURI, $firebaseSimpleLo
     getRef = new Firebase BASEURI + 'users'
     getRef.startAt(email).endAt(email).once('value', (snapshot) ->
       $scope.userDetails = _.values snapshot.val()
-      console.log $scope.userDetails
+      $scope.loading = false
       $window.localStorage.setItem('email', $scope.userDetails[0].email)
       $window.localStorage.setItem('role', $scope.userDetails[0].role)
       $window.localStorage.setItem('ward', $scope.userDetails[0].ward)
@@ -29,8 +29,11 @@ app.controller 'LoginController', ($scope, $firebase, BASEURI, $firebaseSimpleLo
       $window.location = '#/user/grievances'
     )
     return
-
+  $scope.sighning = false
   $scope.signIn = (credentials) ->
+    $scope.sighning = true
+    $scope.loading = true
+    $scope.error = false
     auth.$login('password', {
       email: credentials.username
       password: credentials.password
@@ -47,6 +50,8 @@ app.controller 'LoginController', ($scope, $firebase, BASEURI, $firebaseSimpleLo
       return
     , (error) ->
 #      $rootScope.$broadcast AUTH_EVENTS.loginFailed
+      $scope.sighning = false
+      $scope.loading = false
       $scope.error = true
       $scope.errorMessage = error.code
 #      console.log 'error: ' , error

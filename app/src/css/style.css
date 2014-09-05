@@ -233,3 +233,8 @@ table{
 .search{
     padding: 1%;
 }
+
+#loadingPic{
+    padding: 3%;
+    margin-top: 2%;
+}

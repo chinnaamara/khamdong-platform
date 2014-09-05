@@ -23,12 +23,15 @@ div(id='loginModal', tabindex='-1', role='dialog', aria-hidden='true')
                     .row
                         .form-group
                             .col-md-6
-                                button.btn.btn-info.pull-left(type='submit', id='btn-signIn')
+                                button.btn.btn-info.pull-left(type='submit', id='btn-signIn', ng-disabled='sighning')
                                     i.glyphicon.glyphicon-log-in
                                     |   Sign In
+                                .loader-div(ng-show='loading', id='loadingImage')
+                                    img#loadingPic(src='../images/loading.jpg')
                     | &nbsp;
                     .row
                         .alert.alert-danger(ng-show="error")
                             i.fa.fa-frown-o
                             | {{ errorMessage }}
+
             .modal-footer(id='footer')

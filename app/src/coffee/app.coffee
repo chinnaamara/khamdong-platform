@@ -1,4 +1,4 @@
-app = angular.module 'Khamdong', ['ui.router', 'firebase', 'angularFileUpload']
+app = angular.module 'Khamdong', ['ui.router', 'firebase', 'angularFileUpload', 'ngTable']
 app.constant 'BASEURI', 'https://pts.firebaseio.com/'
 app.constant 'AUTH_EVENTS', {
   loginSuccess: 'auth-login-success'
