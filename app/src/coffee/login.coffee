@@ -22,9 +22,11 @@ app.controller 'LoginController', ($scope, $firebase, BASEURI, $firebaseSimpleLo
     getRef.startAt(email).endAt(email).once('value', (snapshot) ->
       $scope.userDetails = _.values snapshot.val()
       console.log $scope.userDetails
-      $window.localStorage["role"] = JSON.stringify $scope.userDetails[0].role
-      $window.localStorage["ward"] = JSON.stringify $scope.userDetails[0].ward
-      $window.localStorage["name"] = JSON.stringify $scope.userDetails[0].name
+      $window.localStorage['email'] = JSON.stringify $scope.userDetails[0].email
+      $window.localStorage['role'] = JSON.stringify $scope.userDetails[0].role
+      $window.localStorage['ward'] = JSON.stringify $scope.userDetails[0].ward
+      $window.localStorage['name'] = JSON.stringify $scope.userDetails[0].name
+      $window.location = '#/user/grievances'
     )
     return
 
@@ -35,17 +37,16 @@ app.controller 'LoginController', ($scope, $firebase, BASEURI, $firebaseSimpleLo
     }).then((user) ->
       $scope.fetchUserDetails user.email
       $rootScope.token = user.firebaseAuthToken
-      $rootScope.userName = user.email
-      $rootScope.$broadcast AUTH_EVENTS.loginSuccess
-      if user.email == 'admin@technoidentity.com'
-        $rootScope.administrator = 'Admin'
-        $rootScope.userName = 'Admin'
-      $window.localStorage["userEmail"] = JSON.stringify user.email
+#      $rootScope.userName = user.email
+#      $rootScope.$broadcast AUTH_EVENTS.loginSuccess
+#      if user.email == 'admin@technoidentity.com'
+#        $rootScope.administrator = 'Admin'
+#        $rootScope.userName = 'Admin'
 #      $scope.setCurrentUser user
-      $window.location = '#/user/grievances'
+
       return
     , (error) ->
-      $rootScope.$broadcast AUTH_EVENTS.loginFailed
+#      $rootScope.$broadcast AUTH_EVENTS.loginFailed
       $scope.error = true
       $scope.errorMessage = error.code
 #      console.log 'error: ' , error

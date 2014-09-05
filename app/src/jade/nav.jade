@@ -15,7 +15,7 @@ div#nav-bar
             li
                 a(ui-sref='newGrievance') New Grievance
             li(class='dropdown')
-                a(class='dropdown-toggle' data-toggle='dropdown')
+                a(class='dropdown-toggle', data-toggle='dropdown')
                     |   {{ userName }}
                     &nbsp;
                     i.glyphicon.glyphicon-user
@@ -34,6 +34,6 @@ div#nav-bar
                         a(ui-sref='createUser', ng-if='administrator') Create User
                     li(class='divider', ng-if='administrator')
                     li
-                        a(ng-click='logout()') Logout
+                        a(ng-click='logout()', ui-sref='logout') Logout
 
 

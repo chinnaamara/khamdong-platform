@@ -24,18 +24,22 @@ app.factory 'GrievancesFactory', ($firebase, BASEURI) ->
   }
 
 app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievanceFactory, $rootScope, $window) ->
-  localData = localStorage.getItem('userEmail')
-  if ! localData
-    $window.location = '#/error'
-  else if localData == '"admin@technoidentity.com"'
-    $rootScope.userName = 'Admin'
-    $rootScope.administrator = 'Admin'
-  else
-    user = localData.split('"')
-    userName = user[1]
-    $rootScope.userName = userName
+  $scope.init = ->
+    session = localStorage.getItem('firebaseSession')
+    if ! session
+      $window.location = '#/error'
+    else
+      userName = localStorage.getItem('name')
+      user = userName.split('"')
+      $rootScope.userName = user[1].toUpperCase()
+      role = localStorage.getItem('role')
+      role = role.split('"')[1]
+      $rootScope.administrator = role == 'Admin' ? true : false
 
-#  $scope.grievances = GrievancesFactory.retrieveGrievances
+  $scope.init()
+
+  ward = localStorage.getItem('ward')
+  ward = ward.split('"')[1]
   $scope.loadDone = false
   $scope.loading = true
   $scope.noPrevious = true
@@ -45,7 +49,7 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
 
   getQuery = GrievancesFactory.grievancesRef
 #  getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
-  getQuery.startAt('MelliDara').endAt('MelliDara').on('value', (snapshot) ->
+  getQuery.startAt(ward).endAt(ward).on('value', (snapshot) ->
     $scope.grievances = _.values snapshot.val()
     $scope.loadDone = true
     $scope.loading = false

@@ -49,17 +49,19 @@ app.factory 'UsersFactory',['$firebase', 'BASEURI', '$firebaseSimpleLogin', ($fi
 
 
 app.controller 'CreateUserController', ($scope, UsersFactory, $rootScope, $window, DataFactory, $firebase, BASEURI, $firebaseSimpleLogin) ->
-  localData = localStorage.getItem('userEmail')
-  if ! localData
-    $window.location = '#/error'
-  else if localData == '"admin@technoidentity.com"'
-    $scope.UserEmail = "admin@technoidentity.com"
-    $rootScope.userName = 'Admin'
-    $rootScope.administrator = 'Admin'
-  else
-    user = localData.split('"')
-    $scope.UserEmail = user[1]
-    $rootScope.userName = $scope.UserEmail
+  $scope.init = ->
+    session = localStorage.getItem('firebaseSession')
+    if ! session
+      $window.location = '#/error'
+    else
+      userName = localStorage.getItem('name')
+      user = userName.split('"')
+      $rootScope.userName = user[1].toUpperCase()
+      role = localStorage.getItem('role')
+      role = role.split('"')[1]
+      $rootScope.administrator = role == 'Admin' ? true : false
+
+  $scope.init()
 
   $scope.userRoles = DataFactory.userRoles
   Data = DataFactory.wards

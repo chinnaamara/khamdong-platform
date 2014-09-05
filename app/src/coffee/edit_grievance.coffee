@@ -34,19 +34,21 @@ app.factory 'EditGrievanceFactory', ($firebase, BASEURI) ->
   }
 
 app.controller 'EditGrievanceController', ($scope, EditGrievanceFactory, DataFactory, $rootScope, $window) ->
-  $scope.UserEmail = ''
-  localData = localStorage.getItem('userEmail')
-  if ! localData
-    $window.location = '#/error'
-  else if localData == '"admin@technoidentity.com"'
-    $scope.UserEmail = "admin@technoidentity.com"
-    $rootScope.userName = 'Admin'
-    $rootScope.administrator = 'Admin'
-  else
-    user = localData.split('"')
-    $scope.UserEmail = user[1]
-    $rootScope.userName = $scope.UserEmail
+  $scope.init = ->
+    session = localStorage.getItem('firebaseSession')
+    if ! session
+      $window.location = '#/error'
+    else
+      userName = localStorage.getItem('name')
+      user = userName.split('"')
+      $rootScope.userName = user[1].toUpperCase()
+      role = localStorage.getItem('role')
+      role = role.split('"')[1]
+      $rootScope.administrator = role == 'Admin' ? true : false
 
+  $scope.init()
+
+  $scope.UserEmail = localStorage.getItem('email').split('"')[1]
   $scope.education = DataFactory.education
   $scope.constituencies = DataFactory.constituencies
   $scope.gpus = DataFactory.gpus
