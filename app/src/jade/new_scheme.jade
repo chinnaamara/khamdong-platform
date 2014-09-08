@@ -4,27 +4,47 @@
 section.container
     .row
         .col-lg-12
-            //h2(class='text-center') Add New Grievance
-            //br
-            .alert.alert-success(ng-show='error')
-                i.fa.fa-check-circle-o
-                | Scheme Added Successfully!
-            .panel.panel-primary
-                .panel-heading
-                    | New Scheme
-                .panel-body
-                    form(ng-submit='addScheme()')
-                        .form-group.has-warning
-                            label Choose Department
-                            select.form-control(ng-model='dept')
-                                option(value='{{obj.id}}', ng-repeat='obj in departments') {{obj.departmentName}}
-                        .form-group.has-warning
-                            label Scheme Code
-                            input.form-control(type='text', ng-model='schemeCode')
-                        .form-group.has-warning
-                            label Scheme Name
-                            input.form-control(type='text', ng-model='schemeName')
-                        div
+            .col-lg-6.pull-right
+                .panel.panel-primary
+                    .panel-heading
+                        | New Scheme
+                    .panel-body
+                        form#addScheme(name='addSchemeForm', class='form-horizonal', type='form', novalidate)
+                            .form-group.has-warning
+                                label.control-label(for='schemeCode')
+                                    | Select Department
+                                    span(class='star-label') *
+                                //select#dept.form-control(
+                                //name='dept',
+                                //ng-options='d.departmentName as d.departmentName for d in departments',
+                                //ng-model='scheme.dept',
+                                //required)
+                                //    option(value='',selected) -- Select Department --
+                                select.form-control(ng-model='scheme.dept', required)
+                                    option(value='',selected) -- Select Department --
+                                    option(value='{{obj.id}}', ng-repeat='obj in departments') {{obj.departmentName}}
+                            .form-group.has-warning
+                                label.control-label(for='schemeCode')
+                                    | Scheme Code
+                                    span(class='star-label') *
+                                div(ng-class="{ 'has-error' : addSchemeForm.schemeCode.$invalid }")
+                                    input#schemeCode.form-control(type='text',name='schemeCode',ng-model='scheme.schemeCode',placeholder='Scheme Code', required)
+                                    small.label.label-danger(ng-show="addSchemeForm.schemeCode.$invalid && addSchemeForm.schemeCode.$dirty") Required Scheme Code.!
+                            .form-group.has-warning
+                                label.control-label(for='schemeName')
+                                    | Scheme Name
+                                    span(class='star-label') *
+                                div(ng-class="{ 'has-error' : addSchemeForm.schemeName.$invalid }")
+                                    input#schemeName.form-control(type='text',name='schemeName',ng-model='scheme.schemeName',placeholder='Scheme Name', required)
+                                    small.label.label-danger(ng-show="addSchemeForm.schemeName.$invalid && addSchemeForm.schemeName.$dirty") Required Scheme Name.!
                             .pull-right
-                                input.btn.btn-primary(type='submit', value='Add')
-                                input.btn.btn-primary(type='reset', value='Cancel')
+                                button.btn.btn-primary(id='btn-addScheme', ng-click='addScheme()', ng-disabled='addSchemeForm.$invalid')
+                                    i.glyphicon.glyphicon-plus
+                                    |   Add
+
+                .alert.alert-success(ng-show='success')
+                    i.fa.fa-check-circle-o
+                    | {{ statusText }}
+                .alert.alert-success(ng-show='error')
+                    i.fa.fa-check-circle-o
+                    | {{ statusText }}

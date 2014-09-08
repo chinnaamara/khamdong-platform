@@ -9,12 +9,12 @@ app.factory 'DepartmentsFactory', ($firebase, BASEURI) ->
     return 'true'
 
   return {
-    data: data
+    departments: data
     add: addDepartment
   }
 
 
-app.controller "AddDepartmentController", ($scope, DepartmentsFactory, DataFactory, $rootScope) ->
+app.controller "AddDepartmentController", ($scope, DepartmentsFactory, DataFactory, $rootScope, $window) ->
   $scope.init = ->
     session = localStorage.getItem('firebaseSession')
     if ! session
