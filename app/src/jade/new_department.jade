@@ -4,23 +4,35 @@
 section.container
     .row
         .col-lg-12
-            //h2(class='text-center') Add New Grievance
-            //br
-            .alert.alert-success(ng-show='error')
-                i.fa.fa-check-circle-o
-                | Department Added Successfully!
-            .panel.panel-primary
-                .panel-heading
-                    | New Department
-                .panel-body
-                    form(ng-submit='addDept()')
-                        .form-group.has-warning
-                            label Department Code
-                            input.form-control(type='text', ng-model='deptCode')
-                        .form-group.has-warning
-                                label Department Name
-                                input.form-control(type='text', ng-model='deptName')
-                        div
+            .col-lg-4.pull-right
+                .panel.panel-primary
+                    .panel-heading
+                        | New Department
+                    .panel-body
+                        form(name='createDeptForm', class='form-horizonal', type='form', novalidate)
+                            .form-group.has-warning
+                                label.control-label(for='deptCode')
+                                    | Department Code
+                                    span(class='star-label') *
+                                div(ng-class="{ 'has-error' : createDeptForm.deptCode.$invalid }")
+                                    input#deptCode.form-control(type='text',name='deptCode',ng-model='dept.deptCode',placeholder='Department Code', required, autofocus)
+                                    small.label.label-danger(ng-show="createDeptForm.deptCode.$invalid && createDeptForm.deptCode.$dirty") Required Department Code.!
+
+                            .form-group.has-warning
+                                label.control-label(for='deptName')
+                                    | Department Name
+                                    span(class='star-label') *
+                                div(ng-class="{ 'has-error' : createDeptForm.deptName.$invalid }")
+                                    input.deptName.form-control(type='text', name='deptName', ng-model='dept.deptName', placeholder='Department Name', required)
+                                    small.label.label-danger(ng-show='createDeptForm.deptName.$invalid && createDeptForm.deptName.$dirty') Required Department Name.!
                             .pull-right
-                                input.btn.btn-primary(type='submit', value='Add')
-                                input.btn.btn-primary(type='reset', value='Cancel')
+                                button.btn.btn-primary(id='btn-addDept', ng-click='addDept()', ng-disabled='createDeptForm.$invalid')
+                                    i.glyphicon.glyphicon-plus
+                                    |   Add
+
+                .alert.alert-success(ng-show='success')
+                    i.fa.fa-check-circle-o
+                    | {{ messageText }}
+                .alert.alert-danger(ng-show='error')
+                    i.fa.fa-check-circle-o
+                    | {{ messageText }}
