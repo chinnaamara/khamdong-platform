@@ -7,6 +7,7 @@ app.factory 'UsersFactory',['$firebase', 'BASEURI', '$firebaseSimpleLogin', ($fi
       id: userData.id
       name: userData.name
       email: userData.email
+      mobileNumber: userData.mobileNumber
       ward: userData.ward
       role: userData.role
       createdDate: userData.createdDate
@@ -39,11 +40,21 @@ app.factory 'UsersFactory',['$firebase', 'BASEURI', '$firebaseSimpleLogin', ($fi
 #        return undefined
 #    )
 
+  sendSms = (data) ->
+    $http
+    .post('http://api.mVaayoo.com/mvaayooapi/MessageCompose?user=Dilip@cannybee.in:8686993306&senderID=TEST SMS&receipientno=' + data.mobile + '&msgtxt= ' + data.message + ' &state=4')
+    .success((data, status, headers, config) ->
+#      alert "Message sent success to your mobile number"
+    )
+    .error((status) ->
+#      alert status.responseText
+    )
 
   return {
     create: createUser
     register: registerUser
     removeUser: removeUser
+    sendSms: sendSms
   }
 ]
 
@@ -57,6 +68,7 @@ app.controller 'CreateUserController', ($scope, UsersFactory, $rootScope, $windo
       $rootScope.userName = localStorage.getItem('name').toUpperCase()
       role = localStorage.getItem('role')
       $rootScope.administrator = role == 'Admin' ? true : false
+      $rootScope.superUser = role == 'SuperUser' ? true : false
 
   $scope.init()
 
@@ -81,6 +93,7 @@ app.controller 'CreateUserController', ($scope, UsersFactory, $rootScope, $windo
       name: $scope.user.name
       password: $scope.user.password
       email: $scope.user.email
+      mobileNumber: $scope.user.mobileNumber
       ward: $scope.user.ward
       role: $scope.user.role
       createdDate: new Date().toLocaleString()
@@ -118,8 +131,16 @@ app.controller 'CreateUserController', ($scope, UsersFactory, $rootScope, $windo
 #    return
 
   $scope.signUp = (data) ->
+    smsData = {
+      mobile: $scope.user.mobileNumber
+      message: "Hi " + $scope.user.name + ", you are registered as represent at Khamdong, for " + $scope.user.ward + " ward. Login with email: " + $scope.user.email  + ", pwd: " + $scope.user.password
+    }
     auth.$createUser(data.email, data.password).then((user) ->
 #      console.log 'User: ' , user
+      $scope.$watch(UsersFactory.sendSms(smsData), (status) ->
+        if status
+          console.log "sms sent to " + smsData.mobile
+      )
       $scope.successMessage = true
       $scope.successText = "User created successfully.!"
       return

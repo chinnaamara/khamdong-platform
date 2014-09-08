@@ -94,6 +94,7 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
       $rootScope.userName = localStorage.getItem('name').toUpperCase()
       role = localStorage.getItem('role')
       $rootScope.administrator = role == 'Admin' ? true : false
+      $rootScope.superUser = role == 'SuperUser' ? true : false
 
   $scope.init()
 
@@ -211,10 +212,10 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
       if res
         $scope.reportButton = false
         $scope.successMessage = true;
-#        $scope.$watch(NewGrievanceFactory.sendSms(smsData), (status) ->
-#          if status
-#            console.log "sms sent to " + smsData.mobile
-#        )
+        $scope.$watch(NewGrievanceFactory.sendSms(smsData), (status) ->
+          if status
+            console.log "sms sent to " + smsData.mobile
+        )
     )
 
   $scope.calculateAgeOnDOB = () ->

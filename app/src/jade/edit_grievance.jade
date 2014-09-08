@@ -65,12 +65,15 @@ section.container
                                 label.control-label(for='ward')
                                     | Ward
                                     span(class='star-label') *
-                                select#ward.form-control(
-                                name='ward',
-                                ng-options='w.name as w.name for w in wards',
-                                ng-model='grievance.ward',
-                                required)
-                                    option(value='',selected) -- Select Ward --
+                                div(ng-class="{ 'has-error' : grievanceForm.ward.$invalid }")
+                                    input#ward.form-control(type='text',name='ward',ng-model='grievance.ward',placeholder='Ward',required, readonly)
+                                    small(class="label label-danger",ng-show="grievanceForm.ward.$invalid && grievanceForm.ward.$dirty") Required Ward
+                                //select#ward.form-control(
+                                //name='ward',
+                                //ng-options='w.name as w.name for w in wards',
+                                //ng-model='grievance.ward',
+                                //required)
+                                //    option(value='',selected) -- Select Ward --
                             .form-group.has-warning
                                 label.control-label(for='gpu')
                                     | GPU

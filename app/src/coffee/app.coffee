@@ -100,4 +100,11 @@ app.config(($stateProvider) ->
         'viewB@': {templateUrl: 'html/error.html'}
       }
     })
+  .state('users_list', {
+      url: '/userslist'
+      views: {
+        'viewA@': {templateUrl: 'html/nav.html', controller: 'LoginController'}
+        'viewB@': {templateUrl: 'html/users_list.html', controller: 'UsersController'}
+      }
+    })
 )

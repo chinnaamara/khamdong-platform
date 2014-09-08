@@ -34,9 +34,9 @@ div#nav-bar
                     li
                         a(ui-sref='createUser', ng-if='administrator') Create User
                     li(class='divider', ng-if='administrator')
-                    //li
-                    //    a(ui-sref='usersList', ng-if='superUser') Users List
-                    //li(class='divider', ng-if='superUser')
+                    li
+                        a(ui-sref='users_list', ng-if='superUser') Users List
+                    li(class='divider', ng-if='superUser')
                     li
                         a(ng-click='logout()', ui-sref='logout') Logout
 
