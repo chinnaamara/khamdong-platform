@@ -22,7 +22,7 @@ app.factory 'DataFactory', () ->
   userRoles = [
     {id: 1, role: 'User'}
     {id: 2, role: 'Admin'}
-    {id: 3, role: 'SuperUser'}
+    {id: 3, role: 'Super User'}
   ]
   education = [
     {id: 1, name: 'SSC'}

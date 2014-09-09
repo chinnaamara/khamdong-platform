@@ -1,10 +1,23 @@
-app.factory 'UsersFacory', ($firebase, BASEURI) ->
+app.factory 'UsersFacory', ($firebase, BASEURI, $http) ->
   getUsersRef = new Firebase BASEURI + 'users'
   usersList = $firebase getUsersRef
+
+  sendSms = (message, mobile) ->
+    $http
+    .post('http://api.mVaayoo.com/mvaayooapi/MessageCompose?user=Dilip@cannybee.in:8686993306&senderID=TEST SMS&receipientno=' + mobile + '&msgtxt= ' + message + ' &state=4')
+    .success((data, status, headers, config) ->
+#      alert "Message sent success to your mobile number"
+    )
+    .error((status) ->
+#      alert status.responseText
+#      alert "Message sent to your mobile number"
+    )
+
 
   return {
     usersRef: getUsersRef
     usersList: usersList
+    sendSms: sendSms
   }
 
 app.controller 'UsersController', ($scope, UsersFacory, $rootScope, $window, $filter, ngTableParams) ->
@@ -19,18 +32,17 @@ app.controller 'UsersController', ($scope, UsersFacory, $rootScope, $window, $fi
       $rootScope.superUser = role == 'SuperUser' ? true : false
 
   $scope.init()
-
   $scope.loadDone = false
   $scope.loading = true
 
-  userslist = undefined
+  $scope.userslist = ''
   getQuery = UsersFacory.usersRef
   getUsers = ->
     $scope.tableParams = new ngTableParams(
       page: 1
-      count: 3
+      count: 6
       sorting:
-        ward:'desc'
+        role:'asc'
     ,
       counts: []
       total: 0
@@ -53,4 +65,46 @@ app.controller 'UsersController', ($scope, UsersFacory, $rootScope, $window, $fi
   )
   $scope.$watch "filter.$", ->
     $scope.tableParams.reload()
+    return
+
+  $scope.cantSendMessage = true
+  $scope.allUsersClicked = () ->
+    newValue = ! $scope.allUsersMet()
+    _.forEach($scope.userslist, (user) ->
+      user.done = newValue
+      return
+    )
+    return
+
+  $scope.allUsersMet = ->
+    usersMet = _.reduce($scope.userslist, (count, user) ->
+      return count + user.done ? 1 : 0
+    , 0)
+    $scope.cantSendMessage = $scope.getUsers().length == 0
+    return (usersMet == $scope.userslist.length)
+
+  $scope.selectedUsers = []
+  $scope.isUser = ->
+    $scope.selectedUsers = $scope.getUsers()
+#    console.log $scope.selectedUsers
+
+  $scope.getUsers = ->
+    users = []
+    _.forEach($scope.userslist, (user) ->
+      if user.done
+        users.push Number user.mobileNumber
+    )
+    return users
+
+  $scope.sendSms = ->
+    _.forEach($scope.selectedUsers, (user) ->
+      UsersFacory.sendSms($scope.messageText, user)
+    )
+    $scope.messageText = ' '
+    $scope.successMessage = true
+    return
+
+  $scope.reset = ->
+    $scope.messageText = ''
+    $scope.successMessage = false
     return
