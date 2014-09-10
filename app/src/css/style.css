@@ -231,7 +231,7 @@ table{
     overflow-y: auto;
 }
 .search{
-    padding: 1%;
+    margin: -4% 0;
 }
 
 #loadingPic{
