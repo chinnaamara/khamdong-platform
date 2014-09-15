@@ -1,4 +1,4 @@
-app.factory 'UsersFactory',['$firebase', 'BASEURI', '$firebaseSimpleLogin', ($firebase, BASEURI, $firebaseSimpleLogin) ->
+app.factory 'CreateUserFactory',['$firebase', 'BASEURI', '$firebaseSimpleLogin', ($firebase, BASEURI, $firebaseSimpleLogin) ->
   addUserRef = new Firebase BASEURI + 'users'
   auth = $firebaseSimpleLogin addUserRef
 
@@ -59,7 +59,7 @@ app.factory 'UsersFactory',['$firebase', 'BASEURI', '$firebaseSimpleLogin', ($fi
 ]
 
 
-app.controller 'CreateUserController', ($scope, UsersFactory, $rootScope, $window, DataFactory, $firebase, BASEURI, $firebaseSimpleLogin) ->
+app.controller 'CreateUserController', ($scope, CreateUserFactory, $rootScope, $window, DataFactory, $firebase, BASEURI, $firebaseSimpleLogin) ->
   $scope.init = ->
     session = localStorage.getItem('firebaseSession')
     if ! session
@@ -67,8 +67,8 @@ app.controller 'CreateUserController', ($scope, UsersFactory, $rootScope, $windo
     else
       $rootScope.userName = localStorage.getItem('name').toUpperCase()
       role = localStorage.getItem('role')
-      $rootScope.administrator = role == 'Admin' ? true : false
-      $rootScope.superUser = role == 'SuperUser' ? true : false
+      $rootScope.administrator = role == 'Admin'
+      $rootScope.superUser = role == 'SuperUser'
 
   $scope.init()
 
@@ -100,7 +100,7 @@ app.controller 'CreateUserController', ($scope, UsersFactory, $rootScope, $windo
       updatedDate: new Date().toLocaleString()
 
 
-    $scope.$watch(UsersFactory.register(newUser), (res_first) ->
+    $scope.$watch(CreateUserFactory.register(newUser), (res_first) ->
       if res_first
         $scope.signUp(newUser)
       else
@@ -109,19 +109,19 @@ app.controller 'CreateUserController', ($scope, UsersFactory, $rootScope, $windo
 
       )
     return
-#        $scope.$watch(UsersFactory.create(newUser), (res) ->
+#        $scope.$watch(CreateUserFactory.create(newUser), (res) ->
 #          console.log "Second Response: " +  res
-#          if UsersFactory.responceMessage == 'true'
+#          if CreateUserFactory.responceMessage == 'true'
 #            console.log res
-#            console.log UsersFactory.responceMessage
+#            console.log CreateUserFactory.responceMessage
 #            $scope.successMessage = true
 #            $scope.successText = "User created successfully.!"
 #          else
 #            console.log res
-#            console.log UsersFactory.responceMessage
+#            console.log CreateUserFactory.responceMessage
 #            $scope.successMessage = true
-#            $scope.successText = UsersFactory.responceMessage
-#              $scope.$watch(UsersFactory.removeUser(newUser.id), (res) ->
+#            $scope.successText = CreateUserFactory.responceMessage
+#              $scope.$watch(CreateUserFactory.removeUser(newUser.id), (res) ->
 #                $scope.successMessage = true
 #                $scope.successText = res.code
 #              )
@@ -137,7 +137,7 @@ app.controller 'CreateUserController', ($scope, UsersFactory, $rootScope, $windo
     }
     auth.$createUser(data.email, data.password).then((user) ->
 #      console.log 'User: ' , user
-      $scope.$watch(UsersFactory.sendSms(smsData), (status) ->
+      $scope.$watch(CreateUserFactory.sendSms(smsData), (status) ->
         if status
           console.log "sms sent to " + smsData.mobile
       )

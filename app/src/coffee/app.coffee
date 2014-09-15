@@ -107,4 +107,18 @@ app.config(($stateProvider) ->
         'viewB@': {templateUrl: 'html/users_list.html', controller: 'UsersController'}
       }
     })
+  .state('adminUsers', {
+      url: '/admin/users'
+      views: {
+        'viewA@': {templateUrl: 'html/nav.html', controller: 'LoginController'}
+        'viewB@': {templateUrl: 'html/users_admin.html', controller: 'UsersController'}
+      }
+    })
+  .state('transferUsers', {
+      url: '/admin/users/manage'
+      views: {
+        'viewA@': {templateUrl: 'html/nav.html', controller: 'LoginController'}
+        'viewB@': {templateUrl: 'html/transfer_user.html', controller: 'ManageUserController'}
+      }
+    })
 )

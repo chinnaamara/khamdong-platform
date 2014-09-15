@@ -1,6 +1,16 @@
-app.factory 'UsersFacory', ($firebase, BASEURI, $http) ->
+app.factory 'UsersFactory', ($firebase, BASEURI, $http) ->
   getUsersRef = new Firebase BASEURI + 'users'
   usersList = $firebase getUsersRef
+
+  pageNext = (id, noOfRecords, cb) ->
+    getUsersRef.startAt(null, id).limit(noOfRecords).once('value', (snapshot) ->
+      cb _.values snapshot.val()
+    )
+
+  pageBack = (id, noOfRecords, cb) ->
+    getUsersRef.endAt(null, id).limit(noOfRecords).once('value', (snapshot) ->
+      cb _.values snapshot.val()
+    )
 
   sendSms = (message, mobile) ->
     $http
@@ -13,14 +23,18 @@ app.factory 'UsersFacory', ($firebase, BASEURI, $http) ->
 #      alert "Message sent to your mobile number"
     )
 
+  userById = {}
 
   return {
     usersRef: getUsersRef
     usersList: usersList
+    pageNext: pageNext
+    pageBack: pageBack
     sendSms: sendSms
+    userById: userById
   }
 
-app.controller 'UsersController', ($scope, UsersFacory, $rootScope, $window, $filter, ngTableParams) ->
+app.controller 'UsersController', ($scope, UsersFactory, $rootScope, $window, DataFactory) ->
   $scope.init = ->
     session = localStorage.getItem('firebaseSession')
     if ! session
@@ -28,44 +42,72 @@ app.controller 'UsersController', ($scope, UsersFacory, $rootScope, $window, $fi
     else
       $rootScope.userName = localStorage.getItem('name').toUpperCase()
       role = localStorage.getItem('role')
-      $rootScope.administrator = role == 'Admin' ? true : false
-      $rootScope.superUser = role == 'SuperUser' ? true : false
+      $rootScope.administrator = role == 'Admin'
+      $rootScope.superUser = role == 'SuperUser'
 
   $scope.init()
+
   $scope.loadDone = false
   $scope.loading = true
 
-  $scope.userslist = ''
-  getQuery = UsersFacory.usersRef
-  getUsers = ->
-    $scope.tableParams = new ngTableParams(
-      page: 1
-      count: 6
-      sorting:
-        role:'asc'
-    ,
-      counts: []
-      total: 0
-      getData: ($defer, params) ->
-        filteredData = $filter("filter")($scope.userslist, $scope.filter)
-        orderedData = (if params.sorting() then $filter("orderBy")(filteredData, params.orderBy()) else filteredData)
-        params.total orderedData.length
-        $defer.resolve orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count())
-        return
 
-      $scope: $scope
-    )
-    return
+  getQuery = UsersFactory.usersRef
+  $scope.pageNumber = 0
+  $scope.lastPageNumber = null
+  recordsPerPage = 5
+  bottomRecord = null
+  $scope.noPrevious = true
+  $scope.userslist = {}
 
-  getQuery.on('value', (snapshot) ->
+  getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
     $scope.userslist = _.values snapshot.val()
     $scope.loadDone = true
     $scope.loading = false
-    getUsers()
-  )
-  $scope.$watch "filter.$", ->
-    $scope.tableParams.reload()
+    bottomRecord = $scope.userslist[$scope.userslist.length - 1]
+    if bottomRecord
+      UsersFactory.pageNext(bottomRecord.id, recordsPerPage + 1, (res) ->
+        if res
+          console.log res
+          $scope.noNext = res.length <= 1 ? true : false
+      )
+    else
+      $scope.noNext = true
     return
+  )
+
+
+  $scope.pageNext = ->
+    $scope.pageNumber++
+    $scope.noPrevious = false
+    bottomRecord = $scope.userslist[$scope.userslist.length - 1]
+    UsersFactory.pageNext(bottomRecord.id, recordsPerPage + 1, (res) ->
+      if res
+        res.shift()
+        $scope.userslist = res
+        bottomRecord = $scope.userslist[$scope.userslist.length - 1]
+    )
+    UsersFactory.pageNext(bottomRecord.id, recordsPerPage + 1, (res) ->
+      if res
+        $scope.noNext = res.length <= 1 ? true : false
+    )
+
+  $scope.pageBack = ->
+    $scope.pageNumber--
+    $scope.noNext = false
+    topRecord = $scope.userslist[0]
+    UsersFactory.pageBack(topRecord.id, recordsPerPage + 1, (res) ->
+      if res
+        res.pop()
+        $scope.userslist = res
+        $scope.noPrevious = $scope.pageNumber is 0 ? true : false
+    )
+
+#  $scope.isFirstPage = ->
+#    $scope.pageNumber == 1
+#
+#  $scope.isLastPage = ->
+#    $scope.pageNumber == $scope.lastPageNumber
+
 
   $scope.cantSendMessage = true
   $scope.allUsersClicked = () ->
@@ -86,7 +128,6 @@ app.controller 'UsersController', ($scope, UsersFacory, $rootScope, $window, $fi
   $scope.selectedUsers = []
   $scope.isUser = ->
     $scope.selectedUsers = $scope.getUsers()
-#    console.log $scope.selectedUsers
 
   $scope.getUsers = ->
     users = []
@@ -98,13 +139,16 @@ app.controller 'UsersController', ($scope, UsersFacory, $rootScope, $window, $fi
 
   $scope.sendSms = ->
     _.forEach($scope.selectedUsers, (user) ->
-      UsersFacory.sendSms($scope.messageText, user)
+      UsersFactory.sendSms($scope.messageText, user)
     )
-    $scope.messageText = ' '
-    $scope.successMessage = true
+    $scope.messageText = ''
+#    $scope.successMessage = true
     return
 
-  $scope.reset = ->
-    $scope.messageText = ''
-    $scope.successMessage = false
-    return
+#  $scope.reset = ->
+#    $scope.messageText = ''
+##    $scope.successMessage = false
+#    return
+  $scope.manageUser = (user) ->
+    UsersFactory.userById = user
+    $window.location = '#/admin/users/manage'

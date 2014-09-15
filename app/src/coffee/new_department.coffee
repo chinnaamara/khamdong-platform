@@ -6,7 +6,16 @@ app.factory 'DepartmentsFactory', ($firebase, BASEURI) ->
     addRef.child("id").set departmentData.id
     addRef.child("departmentName").set departmentData.departmentName
     addRef.child("departmentCode").set departmentData.departmentCode
+    ref.setPriority(departmentData.departmentCode)
     return 'true'
+
+#  addDepartment = (departmentData) ->
+#    ref.child(departmentData.id).setPriority({
+#      id: departmentData.id
+#      departmentName: departmentData.departmentName
+#      departmentCode: departmentData.departmentCode
+#    }, departmentData.departmentCode)
+#    return 'true'
 
   return {
     departments: data
@@ -22,8 +31,8 @@ app.controller "AddDepartmentController", ($scope, DepartmentsFactory, DataFacto
     else
       $rootScope.userName = localStorage.getItem('name').toUpperCase()
       role = localStorage.getItem('role')
-      $rootScope.administrator = role == 'Admin' ? true : false
-      $rootScope.superUser = role == 'SuperUser' ? true : false
+      $rootScope.administrator = role == 'Admin'
+      $rootScope.superUser = role == 'SuperUser'
 
   $scope.init()
   $scope.success = false

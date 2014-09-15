@@ -31,8 +31,8 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
     else
       $rootScope.userName = localStorage.getItem('name').toUpperCase()
       role = localStorage.getItem('role')
-      $rootScope.administrator = role == 'Admin' ? true : false
-      $rootScope.superUser = role == 'SuperUser' ? true : false
+      $rootScope.administrator = role == 'Admin'
+      $rootScope.superUser = role == 'SuperUser'
 
   $scope.init()
 
