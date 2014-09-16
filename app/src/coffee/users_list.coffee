@@ -50,7 +50,6 @@ app.controller 'UsersController', ($scope, UsersFactory, $rootScope, $window, Da
   $scope.loadDone = false
   $scope.loading = true
 
-
   getQuery = UsersFactory.usersRef
   $scope.pageNumber = 0
   $scope.lastPageNumber = null

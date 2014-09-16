@@ -121,4 +121,11 @@ app.config(($stateProvider) ->
         'viewB@': {templateUrl: 'html/transfer_user.html', controller: 'ManageUserController'}
       }
     })
+  .state('categories', {
+      url: '/superuser/categories'
+      views: {
+        'viewA@': {templateUrl: 'html/nav.html', controller: 'LoginController'}
+        'viewB@': {templateUrl: 'html/categories.html', controller: 'CategoriesController'}
+      }
+    })
 )
