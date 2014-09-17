@@ -101,7 +101,7 @@ app.config(($stateProvider) ->
       }
     })
   .state('users_list', {
-      url: '/userslist'
+      url: '/superuser/userslist'
       views: {
         'viewA@': {templateUrl: 'html/nav.html', controller: 'LoginController'}
         'viewB@': {templateUrl: 'html/users_list.html', controller: 'UsersController'}
@@ -111,7 +111,7 @@ app.config(($stateProvider) ->
       url: '/admin/users'
       views: {
         'viewA@': {templateUrl: 'html/nav.html', controller: 'LoginController'}
-        'viewB@': {templateUrl: 'html/users_admin.html', controller: 'UsersController'}
+        'viewB@': {templateUrl: 'html/users_admin.html', controller: 'AdminUsersController'}
       }
     })
   .state('transferUsers', {

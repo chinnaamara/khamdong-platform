@@ -1,4 +1,4 @@
-app.controller 'ManageUserController', ($scope, UsersFactory, CreateUserFactory, $rootScope, $window, DataFactory) ->
+app.controller 'ManageUserController', ($scope, AdminUsersFactory, CreateUserFactory, $rootScope, $window, DataFactory) ->
   $scope.init = ->
     session = localStorage.getItem('firebaseSession')
     if ! session
@@ -13,7 +13,7 @@ app.controller 'ManageUserController', ($scope, UsersFactory, CreateUserFactory,
 
   $scope.wards = DataFactory.wards
   $scope.userRoles = DataFactory.userRoles
-  $scope.userById = UsersFactory.userById
+  $scope.userById = AdminUsersFactory.userById
   $scope.successMessage = false
   $scope.errorMessage = false
   $scope.updateUser = ->
