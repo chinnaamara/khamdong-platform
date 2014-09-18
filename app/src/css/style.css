@@ -40,6 +40,12 @@
     background: #D7DAEB !important;
 }
 /* ---------ends------------  */
+.smallBox {
+    width:4%;
+}
+.smallTd{
+    width:9%;
+}
 /*
     ---------------
   grievance print page
@@ -223,9 +229,7 @@ for model dialog print---------- */
 table{
     word-break:break-word;
 }
-.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
-    width:7%;
-}
+
 #submitedDocs{
     max-height: 420px;
     overflow-y: auto;

@@ -33,7 +33,8 @@ app.factory 'UsersFactory', ($firebase, BASEURI, $http) ->
 #    ref.child('mobileNumber').set user.mobileNumber
 #    ref.child('createdDate').set user.createdDate
 #    ref.child('updatedDate').set user.updatedDate
-    addUserRef.child(user.mobileNumber).setWithPriority({
+    addUserRef.child(user.id).setWithPriority({
+      id: user.id
       name: user.name
       email: user.email
       mobileNumber: user.mobileNumber
@@ -78,7 +79,7 @@ app.controller 'UsersController', ($scope, UsersFactory, $rootScope, $window, Ca
   getQuery = UsersFactory.usersRef
   $scope.pageNumber = 0
   $scope.lastPageNumber = null
-  recordsPerPage = 10
+  recordsPerPage = 8
   bottomRecord = null
   $scope.noPrevious = true
   $scope.userslist = {}
@@ -180,22 +181,43 @@ app.controller 'UsersController', ($scope, UsersFactory, $rootScope, $window, Ca
     $scope.categories = res
   )
 
+  userId = (category) ->
+    date = new Date()
+    refID = date.getTime()
+    str1 = category.substring(0, 2).toUpperCase()
+    refID + str1
+
   $scope.addNewUser = ->
-    newUser =
-      category: $scope.category
-      name: $scope.newUserName
-      mobileNumber: $scope.mobileNumber
-      email: $scope.email
-      createdDate: new Date().toLocaleString()
-      updatedDate: new Date().toLocaleString()
+    if $scope.buttonText == 'Add'
+      $scope.statusText = 'User Created Successfully.!'
+      newUser =
+        id: userId $scope.category
+        category: $scope.category
+        name: $scope.newUserName
+        mobileNumber: $scope.mobileNumber
+        email: $scope.email
+        createdDate: new Date().toLocaleString()
+        updatedDate: new Date().toLocaleString()
+    else
+      $scope.statusText = 'User Updated Successfully.!'
+      newUser =
+        id: $scope.userById.id
+        category: $scope.category
+        name: $scope.newUserName
+        mobileNumber: $scope.mobileNumber
+        email: $scope.email
+        createdDate: new Date().toLocaleString()
+        updatedDate: new Date().toLocaleString()
     console.log newUser
     $scope.$watch(UsersFactory.addNewUser(newUser), (res) ->
       if res
         $scope.successMessage = true
     )
 
+  $scope.userById = {}
   $scope.editUser = (user) ->
-    $scope.modelTitle = 'Edit New User'
+    $scope.userById.id = user.id
+    $scope.modelTitle = 'Edit User'
     $scope.buttonText = 'Update'
     $scope.newUserName = user.name
     $scope.mobileNumber = user.mobileNumber

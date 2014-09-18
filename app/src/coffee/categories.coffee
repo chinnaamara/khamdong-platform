@@ -1,20 +1,11 @@
 app.factory 'CategoriesFactory', ($firebase, BASEURI) ->
 
   categoriesRef = new Firebase BASEURI + 'categories/'
+  categories = $firebase categoriesRef
 
   getCategories = (count, callback) ->
     categoriesRef.startAt().limit(count).on('value', (res) ->
       callback _.values res.val()
-    )
-
-  pageNext = (id, noOfRecords, cb) ->
-    categoriesRef.startAt(null, id).limit(noOfRecords).once('value', (snapshot) ->
-      cb _.values snapshot.val()
-    )
-
-  pageBack = (id, noOfRecords, cb) ->
-    categoriesRef.endAt(null, id).limit(noOfRecords).once('value', (snapshot) ->
-      cb _.values snapshot.val()
     )
 
   createCategory = (category) ->
@@ -31,9 +22,9 @@ app.factory 'CategoriesFactory', ($firebase, BASEURI) ->
     return 'true'
 
   return {
+    categories: categories
     getCategories: getCategories
-    pageNext: pageNext
-    pageBack: pageBack
+    categoriesRef: categoriesRef
     createCategory: createCategory
     delete: deleteCategory
   }
@@ -51,61 +42,7 @@ app.controller 'CategoriesController', ($scope, $rootScope, CategoriesFactory, $
 
   $scope.init()
 
-  $scope.pageNumber = 0
-  $scope.lastPageNumber = null
-  bottomRecord = null
-  $scope.noPrevious = true
-  recordsPerPage = 10
-  $scope.categories = []
-
-  CategoriesFactory.getCategories(recordsPerPage, (res) ->
-    $scope.categories = res
-    bottomRecord = $scope.categories[$scope.categories.length - 1]
-    if bottomRecord
-      $scope.noNext = true
-      CategoriesFactory.pageNext(bottomRecord.id, recordsPerPage + 1, (res) ->
-        $scope.noNext = true
-        if res
-          $scope.noNext = res.length <= 1
-
-      )
-    else
-      $scope.noNext = true
-    return
-  )
-
-  $scope.pageNext = ->
-    $scope.pageNumber++
-    $scope.noPrevious = false
-    bottomRecord = $scope.categories[$scope.categories.length - 1]
-    CategoriesFactory.pageNext(bottomRecord.id, recordsPerPage + 1, (res) ->
-      if res
-        console.log 'replied...'
-        console.log res
-        res.shift()
-        $scope.categories = res
-        console.log $scope.categories
-        bottomRecord = $scope.categories[$scope.categories.length - 1]
-    )
-    CategoriesFactory.pageNext(bottomRecord.id, recordsPerPage + 1, (res) ->
-      if res
-        $scope.noNext = res.length <= 1
-    )
-
-  $scope.pageBack = ->
-    $scope.pageNumber--
-    console.log $scope.pageNumber
-    $scope.noNext = false
-    topRecord = $scope.categories[0]
-    console.log topRecord
-    console.log topRecord.id
-#    CategoriesFactory.pageBack(topRecord.id, recordsPerPage + 1, (res) ->
-#      if res
-#        res.pop()
-#        $scope.categories = res
-#        $scope.noPrevious = $scope.pageNumber is 0
-#    )
-    return
+  $scope.categories = CategoriesFactory.categories
 
   catId = (cat) ->
     date = new Date()
@@ -139,11 +76,9 @@ app.controller 'CategoriesController', ($scope, $rootScope, CategoriesFactory, $
         console.log 'category not added'
     )
 
-    $scope.categoryName = ''
-
+  $scope.categoryName = ''
   $scope.categoryById = {}
   $scope.editCategory = (cat) ->
-    console.log cat
     $scope.modelTitle = 'Edit Category'
     $scope.buttonText = 'Update'
     $scope.categoryById.categoryId = cat.id
