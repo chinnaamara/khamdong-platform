@@ -5,66 +5,120 @@ app.factory 'NewGrievanceFactory', ['BASEURI', '$firebase', '$http', (BASEURI, $
     data = $firebase getRef
     return data
 
-  add = (data) ->
-    getRef.child(data.referenceNum).setWithPriority({
-      id: data.id
-      referenceNum: data.referenceNum
-      name: data.name
-      fatherName: data.fatherName
-      dob: data.dob
-      phoneNumber: data.phoneNumber
-      address: data.address
-      education: data.education
-      gpu: data.gpu
-      ward: data.ward
-      constituency: data.constituency
-      department: data.department
-      scheme: data.scheme
-      requirement: data.requirement
-      grievanceType: data.grievanceType
-      note: data.note
-      recommendedDoc: data.recommendedDoc
-      coiDoc: data.coiDoc
-      voterCard: data.voterCard
-      casteCertificate: data.casteCertificate
-      otherDoc: data.otherDoc
-      applicationDate: data.applicationDate
-      respondedDate: data.respondedDate
-      status: data.status
-      message: data.message
-      email: data.email
-    }, data.ward)
-    return 'true'
-
 #  add = (data) ->
-#    addRef = new Firebase BASEURI + 'grievances/' + data.referenceNum
-#    addRef.child('id').set data.id
-#    addRef.child('referenceNum').set data.referenceNum
-#    addRef.child('name').set data.name
-#    addRef.child('fatherName').set data.fatherName
-#    addRef.child('dob').set data.dob
-#    addRef.child('phoneNumber').set data.phoneNumber
-#    addRef.child('address').set data.address
-#    addRef.child('education').set data.education
-#    addRef.child('gpu').set data.gpu
-#    addRef.child('ward').set data.ward
-#    addRef.child('constituency').set data.constituency
-#    addRef.child('department').set data.department
-#    addRef.child('scheme').set data.scheme
-#    addRef.child('requirement').set data.requirement
-#    addRef.child('grievanceType').set data.grievanceType
-#    addRef.child('note').set data.note
-#    addRef.child('recommendedDoc').set data.recommendedDoc
-#    addRef.child('coiDoc').set data.coiDoc
-#    addRef.child('voterCard').set data.voterCard
-#    addRef.child('casteCertificate').set data.casteCertificate
-#    addRef.child('otherDoc').set data.otherDoc
-#    addRef.child('applicationDate').set data.applicationDate
-#    addRef.child('respondedDate').set data.respondedDate
-#    addRef.child('status').set data.status
-#    addRef.child('message').set data.message
-#    addRef.child('email').set data.email
+#    getRef.child(data.referenceNum).setWithPriority({
+#      id: data.id
+#      referenceNum: data.referenceNum
+#      name: data.name
+#      fatherName: data.fatherName
+#      dob: data.dob
+#      phoneNumber: data.phoneNumber
+#      address: data.address
+#      education: data.education
+#      gpu: data.gpu
+#      ward: data.ward
+#      constituency: data.constituency
+#      department: data.department
+#      scheme: data.scheme
+#      requirement: data.requirement
+#      grievanceType: data.grievanceType
+#      note: data.note
+#      recommendedDoc: data.recommendedDoc
+#      coiDoc: data.coiDoc
+#      voterCard: data.voterCard
+#      casteCertificate: data.casteCertificate
+#      otherDoc: data.otherDoc
+#      applicationDate: data.applicationDate
+#      respondedDate: data.respondedDate
+#      status: data.status
+#      message: data.message
+#      email: data.email
+#    }, data.ward)
 #    return 'true'
+
+  add = (data) ->
+    addRef = new Firebase BASEURI + 'grievances/' + data.referenceNum
+    addwithUserRef = new Firebase BASEURI + 'users/' + data.submittedUserId + '/grievances/' + data.referenceNum
+    addwithWardRef = new Firebase BASEURI + 'wards/' + data.wardId + '/grievances/' + data.referenceNum
+    addRef.child('referenceNum').set data.referenceNum
+    addRef.child('name').set data.name
+    addRef.child('fatherName').set data.fatherName
+    addRef.child('dob').set data.dob
+    addRef.child('phoneNumber').set data.phoneNumber
+    addRef.child('address').set data.address
+    addRef.child('education').set data.education
+    addRef.child('gpu').set data.gpu
+    addRef.child('ward').set data.ward
+    addRef.child('constituency').set data.constituency
+    addRef.child('department').set data.department
+    addRef.child('scheme').set data.scheme
+    addRef.child('requirement').set data.requirement
+    addRef.child('grievanceType').set data.grievanceType
+    addRef.child('note').set data.note
+    addRef.child('recommendedDoc').set data.recommendedDoc
+    addRef.child('coiDoc').set data.coiDoc
+    addRef.child('voterCard').set data.voterCard
+    addRef.child('casteCertificate').set data.casteCertificate
+    addRef.child('otherDoc').set data.otherDoc
+    addRef.child('applicationDate').set data.applicationDate
+    addRef.child('respondedDate').set data.respondedDate
+    addRef.child('status').set data.status
+    addRef.child('message').set data.message
+    addRef.child('email').set data.email
+
+    addwithUserRef.child('referenceNum').set data.referenceNum
+    addwithUserRef.child('name').set data.name
+    addwithUserRef.child('fatherName').set data.fatherName
+    addwithUserRef.child('dob').set data.dob
+    addwithUserRef.child('phoneNumber').set data.phoneNumber
+    addwithUserRef.child('address').set data.address
+    addwithUserRef.child('education').set data.education
+    addwithUserRef.child('gpu').set data.gpu
+    addwithUserRef.child('ward').set data.ward
+    addwithUserRef.child('constituency').set data.constituency
+    addwithUserRef.child('department').set data.department
+    addwithUserRef.child('scheme').set data.scheme
+    addwithUserRef.child('requirement').set data.requirement
+    addwithUserRef.child('grievanceType').set data.grievanceType
+    addwithUserRef.child('note').set data.note
+    addwithUserRef.child('recommendedDoc').set data.recommendedDoc
+    addwithUserRef.child('coiDoc').set data.coiDoc
+    addwithUserRef.child('voterCard').set data.voterCard
+    addwithUserRef.child('casteCertificate').set data.casteCertificate
+    addwithUserRef.child('otherDoc').set data.otherDoc
+    addwithUserRef.child('applicationDate').set data.applicationDate
+    addwithUserRef.child('respondedDate').set data.respondedDate
+    addwithUserRef.child('status').set data.status
+    addwithUserRef.child('message').set data.message
+    addwithUserRef.child('email').set data.email
+
+    addwithWardRef.child('referenceNum').set data.referenceNum
+    addwithWardRef.child('name').set data.name
+    addwithWardRef.child('fatherName').set data.fatherName
+    addwithWardRef.child('dob').set data.dob
+    addwithWardRef.child('phoneNumber').set data.phoneNumber
+    addwithWardRef.child('address').set data.address
+    addwithWardRef.child('education').set data.education
+    addwithWardRef.child('gpu').set data.gpu
+    addwithWardRef.child('ward').set data.ward
+    addwithWardRef.child('constituency').set data.constituency
+    addwithWardRef.child('department').set data.department
+    addwithWardRef.child('scheme').set data.scheme
+    addwithWardRef.child('requirement').set data.requirement
+    addwithWardRef.child('grievanceType').set data.grievanceType
+    addwithWardRef.child('note').set data.note
+    addwithWardRef.child('recommendedDoc').set data.recommendedDoc
+    addwithWardRef.child('coiDoc').set data.coiDoc
+    addwithWardRef.child('voterCard').set data.voterCard
+    addwithWardRef.child('casteCertificate').set data.casteCertificate
+    addwithWardRef.child('otherDoc').set data.otherDoc
+    addwithWardRef.child('applicationDate').set data.applicationDate
+    addwithWardRef.child('respondedDate').set data.respondedDate
+    addwithWardRef.child('status').set data.status
+    addwithWardRef.child('message').set data.message
+    addwithWardRef.child('email').set data.email
+
+    return 'true'
 
   sendSms = (data) ->
     $http
@@ -98,6 +152,7 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
 
   $scope.init()
 
+  $scope.userId = localStorage.getItem("userId")
   $scope.ward = localStorage.getItem('ward')
   $scope.UserEmail = localStorage.getItem('email')
   $scope.education = DataFactory.education
@@ -115,7 +170,7 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
     str2 = ward.substring(6, 7).toUpperCase()
     str1 + str2 + refID
 
-  uuid = DataFactory.uuid()
+#  uuid = DataFactory.uuid()
   $scope.address = " "
   $scope.note = " "
   $scope.recommendedDoc = ""
@@ -171,11 +226,13 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
 #        alert status.responseText
 #    })
 
+  trimWard = (ward) ->
+    ward.replace(RegExp(" +", "g"), "")
   $scope.reportButton = true
   $scope.createGrievance = () ->
     refId = grievanceReferenceNo $scope.ward
     newGrievance = {
-      id: uuid
+#      id: uuid
       referenceNum: refId
       name: $scope.grievance.name
       fatherName: $scope.grievance.fatherName
@@ -185,6 +242,7 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
       education: $scope.grievance.education
       gpu: $scope.grievance.gpu
       ward: $scope.ward
+      wardId: trimWard $scope.ward.toLowerCase()
       constituency: $scope.grievance.constituency
       department: $scope.grievance.department
       grievanceType: $scope.grievance.grievanceType
@@ -201,6 +259,7 @@ app.controller 'NewGrievanceController', ($scope, $rootScope, $upload, NewGrieva
       status: "Open"
       message: "Waiting"
       email: $scope.UserEmail
+      submittedUserId: $scope.userId
     }
     $scope.new_grievance = newGrievance
     smsData = {

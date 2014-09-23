@@ -35,10 +35,13 @@ div#nav-bar
                         a(ui-sref='createUser', ng-if='administrator') Create User
                     li(class='divider', ng-if='administrator')
                     li
-                        a(ui-sref='adminUsers', ng-if='administrator') Manage User
+                        a(ui-sref='adminUsers', ng-if='administrator') Manage Users
                     li(class='divider', ng-if='administrator')
                     li
-                        a(ui-sref='categories', ng-if='superUser') Categories
+                        a(ui-sref='wards', ng-if='administrator') Manage Wards
+                    li(class='divider', ng-if='administrator')
+                    li
+                        a(ui-sref='categories', ng-if='superUser') Manage Categories
                     li(class='divider', ng-if='superUser')
                     li
                         a(ui-sref='users_list', ng-if='superUser') Users List

@@ -128,4 +128,11 @@ app.config(($stateProvider) ->
         'viewB@': {templateUrl: 'html/categories.html', controller: 'CategoriesController'}
       }
     })
+  .state('wards', {
+      url: '/admin/wards'
+      views: {
+        'viewA@': {templateUrl: 'html/nav.html', controller: 'LoginController'}
+        'viewB@': {templateUrl: 'html/wards.html', controller: 'WardsController'}
+      }
+    })
 )

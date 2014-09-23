@@ -43,12 +43,15 @@ section.container
                                     label.control-label(for='ward')
                                         | Ward
                                         span(class='star-label') *
-                                    select#ward.form-control(
-                                    name='ward',
-                                    ng-options='w.name as w.name for w in wards',
-                                    ng-model='user.ward',
-                                    required)
+                                    select#ward.form-control(name='ward',ng-model='user.ward', required)
                                         option(value='',selected) -- Select Ward --
+                                        option(value='{{w.name}}', ng-repeat='w in wards') {{w.name}}
+                                    //select#ward.form-control(
+                                    //name='ward',
+                                    //ng-options='w.name as w.name for w in wards',
+                                    //ng-model='user.ward',
+                                    //required)
+                                    //    option(value='',selected) -- Select Ward --
                                 .form-group.has-warning
                                     label.control-label(for='role')
                                         | Role

@@ -1,4 +1,9 @@
-app.factory 'DataFactory', () ->
+app.factory 'DataFactory', ($firebase, BASEURI) ->
+  wardsRef = new Firebase BASEURI + 'wards'
+  wards = $firebase wardsRef
+  departmentsRef = new Firebase BASEURI + 'departments'
+  departments = $firebase departmentsRef
+
   uuid = ->
     CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
     chars = CHARS
@@ -39,34 +44,34 @@ app.factory 'DataFactory', () ->
   gpus = [
     {id: 1, name: ' MelliDara Paiyong'}
   ]
-  wards = [
-    {id: 1, name: 'Melli Dara'}
-    {id: 2, name: 'Melli Gumpa'}
-    {id: 3, name: 'Upper Paiyong'}
-    {id: 4, name: 'Lower Paiyong'}
-    {id: 5, name: 'Kerabari'}
-    {id: 6, name: 'Melli Bazaar'}
-    {id: 7, name: 'Super User'}
-    {id: 8, name: 'Administrator'}
-  ]
+#  wards = [
+#    {id: 1, name: 'Melli Dara'}
+#    {id: 2, name: 'Melli Gumpa'}
+#    {id: 3, name: 'Upper Paiyong'}
+#    {id: 4, name: 'Lower Paiyong'}
+#    {id: 5, name: 'Kerabari'}
+#    {id: 6, name: 'Melli Bazaar'}
+#    {id: 7, name: 'Super User'}
+#    {id: 8, name: 'Administrator'}
+#  ]
   grievanceTypes = [
     {id: 1, name: 'Grievance Type 1'}
     {id: 2, name: 'Grievance Type 2'}
     {id: 3, name: 'Grievance Type 3'}
     {id: 4, name: 'Grievance Type 4'}
   ]
-  departments = [
-    {id: 1, name: 'Social Justice & Welfare'}
-    {id: 2, name: 'Horticulture & Cash Crop Development'}
-    {id: 3, name: 'Backward Region Grant Fund'}
-    {id: 4, name: 'Rural Management & Development'}
-    {id: 5, name: 'Animal Husbandry & Veterinary Services'}
-    {id: 6, name: 'Livestock & Fisheries'}
-    {id: 7, name: 'Human Resource Development'}
-    {id: 8, name: 'Health care Human Services & Family Welfare'}
-    {id: 9, name: 'Civil Supplies & Consumer Affairs'}
-    {id: 10, name: 'Agriculture & Food Security Development'}
-  ]
+#  departments = [
+#    {id: 1, name: 'Social Justice & Welfare'}
+#    {id: 2, name: 'Horticulture & Cash Crop Development'}
+#    {id: 3, name: 'Backward Region Grant Fund'}
+#    {id: 4, name: 'Rural Management & Development'}
+#    {id: 5, name: 'Animal Husbandry & Veterinary Services'}
+#    {id: 6, name: 'Livestock & Fisheries'}
+#    {id: 7, name: 'Human Resource Development'}
+#    {id: 8, name: 'Health care Human Services & Family Welfare'}
+#    {id: 9, name: 'Civil Supplies & Consumer Affairs'}
+#    {id: 10, name: 'Agriculture & Food Security Development'}
+#  ]
   schemes = [
     {id: 1, name: 'Green House'}
     {id: 2, name: 'Old Age Pension'}

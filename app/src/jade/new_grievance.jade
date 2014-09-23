@@ -119,12 +119,15 @@ div
                                     label.control-label(for='department')
                                         | Department
                                         span(class='star-label') *
-                                    select#department.form-control(
-                                    name='department',
-                                    ng-options='d.name as d.name for d in departments'
-                                    ng-model='grievance.department',
-                                    required)
+                                    select#department.form-control(ng-model='grievance.department', required)
                                         option(value='',selected) -- Select Department --
+                                        option(value='{{obj.departmentName}}', ng-repeat='obj in departments') {{obj.departmentName}}
+                                    //select#department.form-control(
+                                    //name='department',
+                                    //ng-options='d.name as d.name for d in departments'
+                                    //ng-model='grievance.department',
+                                    //required)
+                                    //    option(value='',selected) -- Select Department --
                                 .form-group.has-warning
                                     label.control-label(for='department')
                                         | Scheme
