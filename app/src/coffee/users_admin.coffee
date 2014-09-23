@@ -53,12 +53,12 @@ app.controller 'AdminUsersController', ($scope, AdminUsersFactory, $rootScope, $
   getQuery = AdminUsersFactory.usersRef
   $scope.pageNumber = 0
   $scope.lastPageNumber = null
-  recordsPerPage = 5
+  recordsPerPage = 20
   bottomRecord = null
   $scope.noPrevious = true
   $scope.userslist = {}
 
-  getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
+  getQuery.startAt(null).limit(recordsPerPage).on('value', (snapshot) ->
     $scope.userslist = _.values snapshot.val()
     $scope.loadDone = true
     $scope.loading = false
@@ -66,7 +66,6 @@ app.controller 'AdminUsersController', ($scope, AdminUsersFactory, $rootScope, $
     if bottomRecord
       AdminUsersFactory.pageNext(bottomRecord.id, recordsPerPage + 1, (res) ->
         if res
-          console.log res
           $scope.noNext = res.length <= 1 ? true : false
       )
     else

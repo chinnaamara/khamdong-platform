@@ -1,4 +1,4 @@
-app.factory 'CreateUserFactory',['$firebase', 'BASEURI', '$firebaseSimpleLogin', ($firebase, BASEURI, $firebaseSimpleLogin) ->
+app.factory 'CreateUserFactory',['$firebase', 'BASEURI', '$firebaseSimpleLogin', '$http', ($firebase, BASEURI, $firebaseSimpleLogin, $http) ->
   addUserRef = new Firebase BASEURI + 'users'
   auth = $firebaseSimpleLogin addUserRef
 

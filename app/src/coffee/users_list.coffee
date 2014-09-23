@@ -49,6 +49,11 @@ app.factory 'UsersFactory', ($firebase, BASEURI, $http) ->
       cb _.values snapshot.val()
     )
 
+  deleteUser = (id) ->
+    deleteRef = getUsersRef.child(id)
+    deleteRef.remove()
+    return 'true'
+
   return {
     usersRef: getUsersRef
     usersList: usersList
@@ -58,6 +63,7 @@ app.factory 'UsersFactory', ($firebase, BASEURI, $http) ->
 #    getCatgeries: getCatgeries
     addNewUser: addNewUser
     getUsersByCategory: getUsersByCategory
+    delete: deleteUser
   }
 
 app.controller 'UsersController', ($scope, UsersFactory, $rootScope, $window, CategoriesFactory) ->
@@ -231,4 +237,29 @@ app.controller 'UsersController', ($scope, UsersFactory, $rootScope, $window, Ca
       if res
         $scope.userslist = res
     )
+
+  $scope.deleteUser = (user) ->
+    $scope.$watch(UsersFactory.delete(user.id), (res) ->
+      if res
+        console.log 'deleted success'
+      else
+        console.log 'not deleted'
+    )
+
+app.directive('ngConfirmClick',[ () ->
+  return {
+    priority: -1
+    restrict: 'A'
+    link: (scope, element, attrs) ->
+      element.on('click', (e) ->
+        message = attrs.ngConfirmClick
+        if(message && !confirm(message))
+          e.originalEvent.stopImmediatePropagation()
+          e.preventDefault()
+        return
+      )
+      return
+  }
+])
+
 

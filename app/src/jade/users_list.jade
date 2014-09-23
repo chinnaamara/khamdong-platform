@@ -34,7 +34,7 @@ section.container
                                     tr
                                         th.checkboxes.smallBox
                                             input#allUsersCheck.checkbox-inline(type='checkbox', name='checkAll', ng-model='selectedAll', ng-click='allUsersClicked()', ng-checked='allUsersMet()')
-                                        th.smallBox Edit
+                                        th.smallTd #
                                         th User Name
                                         th Mobile Number
                                         th Category
@@ -47,6 +47,8 @@ section.container
                                             button.btn.btn-warning.btn-sm(href="", title='Edit', data-toggle="modal",id='btn-editUser', data-target="#newUserWindow",ng-click='editUser(user)')
                                                 i.glyphicon.glyphicon-edit
                                                 //|   Edit
+                                            a.btn.btn-sm.btn-danger(href="",title="Delete", id='btn-deleteUser', ng-click='deleteUser(user)', ng-confirm-click='Are You Sure?')
+                                                i.glyphicon.glyphicon-remove
                                         td
                                             span {{ user.name }}
                                         td
