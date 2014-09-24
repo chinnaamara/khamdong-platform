@@ -21,7 +21,6 @@ app.factory 'CreateUserFactory',['$firebase', 'BASEURI', '$firebaseSimpleLogin',
 
   createUser = (data) ->
     auth.$createUser(data.email, data.password).then((user) ->
-#      console.log 'User: ' , user
       return 'true'
     , (error) ->
 #      console.log 'error: ' + error.code

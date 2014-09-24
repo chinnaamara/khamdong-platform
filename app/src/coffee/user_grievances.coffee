@@ -2,14 +2,14 @@ app.factory 'GrievancesFactory', ($firebase, BASEURI) ->
   grievancesRef = new Firebase BASEURI + 'grievances'
   grievances = $firebase grievancesRef
 
-  pageNext = (wardId, name, noOfRecords, cb) ->
-    getRef = new Firebase BASEURI + 'wards/' + wardId + '/grievances'
+  pageNext = (filterKey, name, noOfRecords, cb) ->
+    getRef = new Firebase BASEURI + filterKey
     getRef.startAt(null, name).limit(noOfRecords).once('value', (snapshot) ->
       cb _.values snapshot.val()
     )
 
-  pageBack = (wardId, name, noOfRecords, cb) ->
-    getRef = new Firebase BASEURI + 'wards/' + wardId + '/grievances'
+  pageBack = (filterKey, name, noOfRecords, cb) ->
+    getRef = new Firebase BASEURI + filterKey
     getRef.endAt(null, name).limit(noOfRecords).once('value', (snapshot) ->
       cb _.values snapshot.val()
     )
@@ -39,7 +39,7 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
   $scope.loading = true
   $scope.noPrevious = true
   pageNumber = 0
-  recordsPerPage = 1
+  recordsPerPage = 5
   bottomRecord = null
   $scope.grievances = {}
 
@@ -47,34 +47,39 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
   ward = localStorage.getItem('ward')
   trimWard = (ward) ->
     ward.replace(RegExp(" +", "g"), "")
-  $scope.wardiId = trimWard(ward).toLowerCase()
+  $scope.wardId = trimWard(ward).toLowerCase()
+  filterKey = 'wards/' + $scope.wardId + '/grievances'
 
-  getQuery = new Firebase BASEURI + 'wards/' + $scope.wardiId + '/grievances'
-  getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
-    $scope.grievances = _.values snapshot.val()
-    $scope.loadDone = true
-    $scope.loading = false
-    bottomRecord = $scope.grievances[$scope.grievances.length - 1]
-    if bottomRecord
-      GrievancesFactory.pageNext($scope.wardiId, bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
-        if res
-          $scope.noNext = res.length <= 1
-      )
-    else
-      $scope.noNext = true
-  )
+  getFirstPageData = ->
+    getQuery = new Firebase BASEURI + filterKey
+    getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
+      $scope.grievances = _.values snapshot.val()
+      $scope.loadDone = true
+      $scope.loading = false
+      bottomRecord = $scope.grievances[$scope.grievances.length - 1]
+      if bottomRecord
+        GrievancesFactory.pageNext(filterKey, bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
+          if res
+            $scope.noNext = res.length <= 1
+        )
+      else
+        $scope.noNext = true
+    )
+    return
+
+  getFirstPageData()
 
   $scope.pageNext = ->
     pageNumber++
     $scope.noPrevious = false
     bottomRecord = $scope.grievances[$scope.grievances.length - 1]
-    GrievancesFactory.pageNext($scope.wardiId, bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
+    GrievancesFactory.pageNext(filterKey, bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
       if res
         res.shift()
         $scope.grievances = res
         bottomRecord = $scope.grievances[$scope.grievances.length - 1]
     )
-    GrievancesFactory.pageNext($scope.wardiId, bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
+    GrievancesFactory.pageNext(filterKey, bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
       if res
         $scope.noNext = res.length <= 1
     )
@@ -83,7 +88,7 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
     pageNumber--
     $scope.noNext = false
     topRecord = $scope.grievances[0]
-    GrievancesFactory.pageBack($scope.wardiId, topRecord.referenceNum, recordsPerPage + 1, (res) ->
+    GrievancesFactory.pageBack(filterKey, topRecord.referenceNum, recordsPerPage + 1, (res) ->
       if res
         res.pop()
         $scope.grievances = res
@@ -114,4 +119,13 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
   $scope.editDetails = (grievance) ->
     EditGrievanceFactory.retrieveGrievance = grievance
     $window.location = '#/grievance/edit'
+    return
+
+  $scope.filterGrievances = ->
+    if $scope.checked
+      filterKey = 'users/' + userId + '/grievances'
+    else
+      filterKey = 'wards/' + $scope.wardId + '/grievances'
+    console.log filterKey
+    getFirstPageData()
     return

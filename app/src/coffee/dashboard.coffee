@@ -37,7 +37,7 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
   $scope.loading = true
   $scope.noPrevious = true
   pageNumber = 0
-  recordsPerPage = 1
+  recordsPerPage = 5
   bottomRecord = null
   $scope.grievances = {}
 

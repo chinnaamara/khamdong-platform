@@ -10,9 +10,21 @@ section.container
                         h4 Loading, Please wait...
                     .main-div(ng-show="loadDone")
                         .search.col-xs-4.pull-left
-                            button.btn.btn-info(ui-sref='newGrievance')
+                            button.btn.btn-info(ui-sref='newGrievance', title="Create New Grievance")
                                 i.glyphicon.glyphicon-plus
                                 |   Create New
+                            &nbsp;
+                            span Grievances submitted by me
+                            input(type="checkbox", ng-model="checked", ng-change='filterGrievances()', title="User Grievances")
+
+                            //select(
+                            //name='selectFilter',
+                            //ng-model='filterKey',
+                            //ng-change='filterGrievances()',
+                            //required)
+                            //    option(value='',selected) -- Select Grievances --
+                            //    option(value='ward') By Ward
+                            //    option(value='user') By User
                         .search.col-xs-4.pull-right
                             input(type="search", class="form-control", ng-model="searchKey", placeholder="search here..")
 

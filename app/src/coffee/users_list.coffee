@@ -1,7 +1,7 @@
 app.factory 'UsersFactory', ($firebase, BASEURI, $http) ->
   getUsersRef = new Firebase BASEURI + 'superusers'
   categoriesRef = new Firebase BASEURI + 'categories'
-#  getCatgeries = $firebase categoriesRef
+  #  getCatgeries = $firebase categoriesRef
   usersList = $firebase getUsersRef
 
   pageNext = (id, noOfRecords, cb) ->
@@ -55,18 +55,18 @@ app.factory 'UsersFactory', ($firebase, BASEURI, $http) ->
     return 'true'
 
   return {
-    usersRef: getUsersRef
-    usersList: usersList
-    pageNext: pageNext
-    pageBack: pageBack
-    sendSms: sendSms
+  usersRef: getUsersRef
+  usersList: usersList
+  pageNext: pageNext
+  pageBack: pageBack
+  sendSms: sendSms
 #    getCatgeries: getCatgeries
-    addNewUser: addNewUser
-    getUsersByCategory: getUsersByCategory
-    delete: deleteUser
+  addNewUser: addNewUser
+  getUsersByCategory: getUsersByCategory
+  delete: deleteUser
   }
 
-app.controller 'UsersController', ($scope, UsersFactory, $rootScope, $window, CategoriesFactory) ->
+app.controller 'UsersController', ($scope, UsersFactory, $rootScope, $window, CategoriesFactory, $filter, ngTableParams) ->
   $scope.init = ->
     session = localStorage.getItem('firebaseSession')
     if ! session
@@ -166,13 +166,13 @@ app.controller 'UsersController', ($scope, UsersFactory, $rootScope, $window, Ca
       UsersFactory.sendSms($scope.messageText, user)
     )
     $scope.messageText = ''
-#    $scope.successMessage = true
+    #    $scope.successMessage = true
     return
 
-#  $scope.reset = ->
-#    $scope.messageText = ''
-##    $scope.successMessage = false
-#    return
+  #  $scope.reset = ->
+  #    $scope.messageText = ''
+  ##    $scope.successMessage = false
+  #    return
 
   $scope.isNewUser = ->
     $scope.modelTitle = 'Add New User'
@@ -248,17 +248,17 @@ app.controller 'UsersController', ($scope, UsersFactory, $rootScope, $window, Ca
 
 app.directive('ngConfirmClick',[ () ->
   return {
-    priority: -1
-    restrict: 'A'
-    link: (scope, element, attrs) ->
-      element.on('click', (e) ->
-        message = attrs.ngConfirmClick
-        if(message && !confirm(message))
-          e.originalEvent.stopImmediatePropagation()
-          e.preventDefault()
-        return
-      )
+  priority: -1
+  restrict: 'A'
+  link: (scope, element, attrs) ->
+    element.on('click', (e) ->
+      message = attrs.ngConfirmClick
+      if(message && !confirm(message))
+        e.originalEvent.stopImmediatePropagation()
+        e.preventDefault()
       return
+    )
+    return
   }
 ])
 
