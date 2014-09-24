@@ -1,18 +1,16 @@
 app.factory 'GrievancesFactory', ($firebase, BASEURI) ->
   grievancesRef = new Firebase BASEURI + 'grievances'
   grievances = $firebase grievancesRef
-#  grievances = (callback) ->
-#    grievancesRef.on('value', ((snapshot) ->
-#      callback _.values(snapshot.val())
-#    ), (error) ->
-#      error.code
-#    )
-  pageNext = (name, noOfRecords, cb) ->
-    grievancesRef.startAt(null, name).limit(noOfRecords).once('value', (snapshot) ->
+
+  pageNext = (wardId, name, noOfRecords, cb) ->
+    getRef = new Firebase BASEURI + 'wards/' + wardId + '/grievances'
+    getRef.startAt(null, name).limit(noOfRecords).once('value', (snapshot) ->
       cb _.values snapshot.val()
     )
-  pageBack = (name, noOfRecords, cb) ->
-    grievancesRef.endAt(null, name).limit(noOfRecords).once('value', (snapshot) ->
+
+  pageBack = (wardId, name, noOfRecords, cb) ->
+    getRef = new Firebase BASEURI + 'wards/' + wardId + '/grievances'
+    getRef.endAt(null, name).limit(noOfRecords).once('value', (snapshot) ->
       cb _.values snapshot.val()
     )
 
@@ -23,7 +21,7 @@ app.factory 'GrievancesFactory', ($firebase, BASEURI) ->
     pageBack: pageBack
   }
 
-app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievanceFactory, $rootScope, $window, $filter, ngTableParams) ->
+app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievanceFactory, $rootScope, $window, $firebase, BASEURI) ->
   $scope.init = ->
     session = localStorage.getItem('firebaseSession')
     if ! session
@@ -36,87 +34,61 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
 
   $scope.init()
 
-  ward = localStorage.getItem('ward')
+#  $scope.grievances = GrievancesFactory.retrieveGrievances
   $scope.loadDone = false
   $scope.loading = true
   $scope.noPrevious = true
   pageNumber = 0
-  recordsPerPage = 4
+  recordsPerPage = 1
   bottomRecord = null
+  $scope.grievances = {}
 
-  projectslist = undefined
-  getQuery = GrievancesFactory.grievancesRef
-  userWard = localStorage.getItem 'ward'
-  projectsList = ->
-    $scope.tableParams = new ngTableParams(
-      page: 1
-      count: 2
-      sorting:
-        respondedDate:'desc'
-    ,
-      counts: []
-      total: 0
-      getData: ($defer, params) ->
-        filteredData = $filter("filter")($scope.projectslist, $scope.filter)
-        orderedData = (if params.sorting() then $filter("orderBy")(filteredData, params.orderBy()) else filteredData)
-        params.total orderedData.length
-        $defer.resolve orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count())
-        return
+  userId = localStorage.getItem('userId')
+  ward = localStorage.getItem('ward')
+  trimWard = (ward) ->
+    ward.replace(RegExp(" +", "g"), "")
+  $scope.wardiId = trimWard(ward).toLowerCase()
 
-      $scope: $scope
-    )
-    return
-
-  getQuery.startAt(userWard).endAt(userWard).on('value', (snapshot) ->
-    $scope.projectslist = _.values snapshot.val()
+  getQuery = new Firebase BASEURI + 'wards/' + $scope.wardiId + '/grievances'
+  getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
+    $scope.grievances = _.values snapshot.val()
     $scope.loadDone = true
     $scope.loading = false
-    projectsList()
+    bottomRecord = $scope.grievances[$scope.grievances.length - 1]
+    if bottomRecord
+      GrievancesFactory.pageNext($scope.wardiId, bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
+        if res
+          $scope.noNext = res.length <= 1
+      )
+    else
+      $scope.noNext = true
   )
-  $scope.$watch "filter.$", ->
-    $scope.tableParams.reload()
-    return
 
-#  getQuery = GrievancesFactory.grievancesRef
-#  getQuery.startAt(ward).endAt(ward).on('value', (snapshot) ->
-#    $scope.grievances = _.values snapshot.val()
-#    $scope.loadDone = true
-#    $scope.loading = false
-#    bottomRecord = $scope.grievances[$scope.grievances.length - 1]
-#    if bottomRecord
-#      GrievancesFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
-#        if res
-#          $scope.noNext = res.length <= 1 ? true : false
-#      )
-#    else
-#      $scope.noNext = true
-#  )
-#
-#  $scope.pageNext = ->
-#    pageNumber++
-#    $scope.noPrevious = false
-#    bottomRecord = $scope.grievances[$scope.grievances.length - 1]
-#    GrievancesFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
-#      if res
-#        res.shift()
-#        $scope.grievances = res
-#        bottomRecord = $scope.grievances[$scope.grievances.length - 1]
-#    )
-#    GrievancesFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
-#      if res
-#        $scope.noNext = res.length <= 1 ? true : false
-#    )
-#
-#  $scope.pageBack = ->
-#    pageNumber--
-#    $scope.noNext = false
-#    topRecord = $scope.grievances[0]
-#    GrievancesFactory.pageBack(topRecord.referenceNum, recordsPerPage + 1, (res) ->
-#      if res
-#        res.pop()
-#        $scope.grievances = res
-#        $scope.noPrevious = pageNumber is 0 ? true : false
-#    )
+  $scope.pageNext = ->
+    pageNumber++
+    $scope.noPrevious = false
+    bottomRecord = $scope.grievances[$scope.grievances.length - 1]
+    GrievancesFactory.pageNext($scope.wardiId, bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
+      if res
+        res.shift()
+        $scope.grievances = res
+        bottomRecord = $scope.grievances[$scope.grievances.length - 1]
+    )
+    GrievancesFactory.pageNext($scope.wardiId, bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
+      if res
+        $scope.noNext = res.length <= 1
+    )
+
+  $scope.pageBack = ->
+    pageNumber--
+    $scope.noNext = false
+    topRecord = $scope.grievances[0]
+    GrievancesFactory.pageBack($scope.wardiId, topRecord.referenceNum, recordsPerPage + 1, (res) ->
+      if res
+        res.pop()
+        $scope.grievances = res
+        $scope.noPrevious = pageNumber is 0
+    )
 
   $scope.predicate = '-respondedDate'
 

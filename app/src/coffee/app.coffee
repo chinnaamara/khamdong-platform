@@ -51,6 +51,13 @@ app.config(($stateProvider) ->
         'viewB@': {templateUrl: 'html/dashboard.html', controller: 'DashboardController'}
       }
     })
+  .state('userDashboard', {
+      url: '/user/grievances'
+      views: {
+        'viewA@': {templateUrl: 'html/nav.html', controller: 'LoginController'}
+        'viewB@': {templateUrl: 'html/user_grievances.html', controller: 'GrievancesController'}
+      }
+    })
   .state('details', {
       url: '/details'
       views: {
@@ -77,13 +84,6 @@ app.config(($stateProvider) ->
       views: {
         'viewA@': {templateUrl: 'html/nav.html', controller: 'LoginController'}
         'viewB@': {templateUrl: 'html/create_user.html', controller: 'CreateUserController'}
-      }
-    })
-  .state('userDashboard', {
-      url: '/user/grievances'
-      views: {
-        'viewA@': {templateUrl: 'html/nav.html', controller: 'LoginController'}
-        'viewB@': {templateUrl: 'html/user_grievances.html', controller: 'GrievancesController'}
       }
     })
   .state('editGrievance', {

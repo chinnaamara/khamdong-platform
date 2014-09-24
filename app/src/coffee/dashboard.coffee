@@ -1,10 +1,12 @@
 app.factory 'DashboardFactory', ($firebase, BASEURI) ->
   grievancesRef = new Firebase BASEURI + 'grievances'
   grievances = $firebase grievancesRef
+
   pageNext = (name, numberOfItems, cb) ->
     grievancesRef.startAt(null, name).limit(numberOfItems).once('value', (snapshot) ->
       cb _.values snapshot.val()
     )
+
   pageBack = (name, numberOfItems, cb) ->
     grievancesRef.endAt(null, name).limit(numberOfItems).once('value', (snapshot) ->
       cb _.values snapshot.val()
@@ -17,7 +19,7 @@ app.factory 'DashboardFactory', ($firebase, BASEURI) ->
     pageBack: pageBack
   }
 
-app.controller 'DashboardController', ($scope, DashboardFactory, $window, DetailsFactory, $rootScope, $filter, ngTableParams) ->
+app.controller 'DashboardController', ($scope, DashboardFactory, $window, DetailsFactory, $rootScope) ->
   $scope.init = ->
     session = localStorage.getItem('firebaseSession')
     if ! session
@@ -35,82 +37,50 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
   $scope.loading = true
   $scope.noPrevious = true
   pageNumber = 0
-  recordsPerPage = 4
+  recordsPerPage = 1
   bottomRecord = null
+  $scope.grievances = {}
 
-  projectslist = undefined
   getQuery = DashboardFactory.grievancesRef
-  userWard = localStorage.getItem 'ward'
-  projectsList = ->
-    $scope.tableParams = new ngTableParams(
-      page: 1
-      count: 4
-      sorting:
-        applicationDate:'desc'
-    ,
-      counts: []
-      total: 0
-      getData: ($defer, params) ->
-        filteredData = $filter("filter")($scope.projectslist, $scope.filter)
-        orderedData = (if params.sorting() then $filter("orderBy")(filteredData, params.orderBy()) else filteredData)
-        params.total orderedData.length
-        $defer.resolve orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count())
-        return
-
-      $scope: $scope
-    )
-    return
-
-  getQuery.on('value', (snapshot) ->
-    $scope.projectslist = _.values snapshot.val()
+  getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
+    $scope.grievances = _.values snapshot.val()
     $scope.loadDone = true
     $scope.loading = false
-    projectsList()
+    bottomRecord = $scope.grievances[$scope.grievances.length - 1]
+    if bottomRecord
+      DashboardFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
+        if res
+          $scope.noNext = res.length <= 1
+      )
+    else
+      $scope.noNext = true
   )
-  $scope.$watch "filter.$", ->
-    $scope.tableParams.reload()
-    return
 
-#  getQuery = DashboardFactory.grievancesRef
-#  getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
-#    $scope.grievances = _.values snapshot.val()
-#    $scope.loadDone = true
-#    $scope.loading = false
-#    bottomRecord = $scope.grievances[$scope.grievances.length - 1]
-#    if bottomRecord
-#      DashboardFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
-#        if res
-#          $scope.noNext = res.length <= 1 ? true : false
-#      )
-#    else
-#      $scope.noNext = true
-#  )
-#
-#  $scope.pageNext = ->
-#    pageNumber++
-#    $scope.noPrevious = false
-#    bottomRecord = $scope.grievances[$scope.grievances.length - 1]
-#    DashboardFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
-#      if res
-#        res.shift()
-#        $scope.grievances = res
-#        bottomRecord = $scope.grievances[$scope.grievances.length - 1]
-#    )
-#    DashboardFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
-#      if res
-#        $scope.noNext = res.length <= 1 ? true : false
-#    )
-#
-#  $scope.pageBack = ->
-#    pageNumber--
-#    $scope.noNext = false
-#    topRecord = $scope.grievances[0]
-#    DashboardFactory.pageBack(topRecord.referenceNum, recordsPerPage + 1, (res) ->
-#      if res
-#        res.pop()
-#        $scope.grievances = res
-#        $scope.noPrevious = pageNumber is 0 ? true : false
-#    )
+  $scope.pageNext = ->
+    pageNumber++
+    $scope.noPrevious = false
+    bottomRecord = $scope.grievances[$scope.grievances.length - 1]
+    DashboardFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
+      if res
+        res.shift()
+        $scope.grievances = res
+        bottomRecord = $scope.grievances[$scope.grievances.length - 1]
+    )
+    DashboardFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
+      if res
+        $scope.noNext = res.length <= 1
+    )
+
+  $scope.pageBack = ->
+    pageNumber--
+    $scope.noNext = false
+    topRecord = $scope.grievances[0]
+    DashboardFactory.pageBack(topRecord.referenceNum, recordsPerPage + 1, (res) ->
+      if res
+        res.pop()
+        $scope.grievances = res
+        $scope.noPrevious = pageNumber is 0
+    )
 
   $scope.predicate = '-applicationDate'
   $scope.showDetails = (details) ->

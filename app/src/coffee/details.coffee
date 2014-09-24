@@ -1,14 +1,33 @@
 app.factory 'DetailsFactory', ($firebase, BASEURI, $http) ->
   grievanceByid = {}
   submitResponse = (data) ->
-    messageRef = new Firebase BASEURI + 'grievances/' + data.referenceNum
-    messageRef.child('grievanceType').set data.grievanceType
-    messageRef.child('department').set data.department
-    messageRef.child('scheme').set data.scheme
-    messageRef.child('requirement').set data.requirement
-    messageRef.child('respondedDate').set data.respondedDate
-    messageRef.child('status').set data.status
-    messageRef.child('message').set data.message
+    responseRef = new Firebase BASEURI + 'grievances/' + data.referenceNum
+    responseWithUserRef = new Firebase BASEURI + 'users/' + data.submittedUserId + '/grievances/' + data.referenceNum
+    responseWithWardRef = new Firebase BASEURI + 'wards/' + data.wardId + '/grievances/' + data.referenceNum
+
+    responseRef.child('grievanceType').set data.grievanceType
+    responseRef.child('department').set data.department
+    responseRef.child('scheme').set data.scheme
+    responseRef.child('requirement').set data.requirement
+    responseRef.child('respondedDate').set data.respondedDate
+    responseRef.child('status').set data.status
+    responseRef.child('message').set data.message
+
+    responseWithUserRef.child('grievanceType').set data.grievanceType
+    responseWithUserRef.child('department').set data.department
+    responseWithUserRef.child('scheme').set data.scheme
+    responseWithUserRef.child('requirement').set data.requirement
+    responseWithUserRef.child('respondedDate').set data.respondedDate
+    responseWithUserRef.child('status').set data.status
+    responseWithUserRef.child('message').set data.message
+
+    responseWithWardRef.child('grievanceType').set data.grievanceType
+    responseWithWardRef.child('department').set data.department
+    responseWithWardRef.child('scheme').set data.scheme
+    responseWithWardRef.child('requirement').set data.requirement
+    responseWithWardRef.child('respondedDate').set data.respondedDate
+    responseWithWardRef.child('status').set data.status
+    responseWithWardRef.child('message').set data.message
     return 'true'
 
   sendSms = (data) ->
@@ -78,7 +97,6 @@ app.controller 'DetailsController', ($scope, DetailsFactory, $rootScope, DataFac
       message: "Hi " + $scope.grievance.name + ", your grievance request with reference number " + $scope.grievance.referenceNum + $scope.smsText
     }
     resMessage = {
-      id: $scope.grievance.id
       referenceNum: $scope.grievance.referenceNum
       grievanceType: $scope.grievance.grievanceType
       department: $scope.grievance.department
@@ -87,6 +105,8 @@ app.controller 'DetailsController', ($scope, DetailsFactory, $rootScope, DataFac
       respondedDate: new Date().toLocaleString()
       status: statusMessage
       message: $scope.message
+      wardId: $scope.grievance.wardId
+      submittedUserId: $scope.grievance.submittedUserId
     }
     $scope.$watch(DetailsFactory.post(resMessage), (res) ->
       if res
