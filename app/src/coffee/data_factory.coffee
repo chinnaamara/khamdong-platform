@@ -1,6 +1,11 @@
 app.factory 'DataFactory', ($firebase, BASEURI) ->
   wardsRef = new Firebase BASEURI + 'wards'
   wards = $firebase wardsRef
+
+  getWards = (count, callback) ->
+    wardsRef.startAt().limit(count).on('value', (res) ->
+      callback _.values res.val()
+    )
   departmentsRef = new Firebase BASEURI + 'departments'
   departments = $firebase departmentsRef
 
@@ -102,4 +107,5 @@ app.factory 'DataFactory', ($firebase, BASEURI) ->
     grievanceTypes: grievanceTypes
     departments: departments
     schemes: schemes
+    getWards: getWards
   }

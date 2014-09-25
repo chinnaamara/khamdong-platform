@@ -2,13 +2,15 @@ app.factory 'DashboardFactory', ($firebase, BASEURI) ->
   grievancesRef = new Firebase BASEURI + 'grievances'
   grievances = $firebase grievancesRef
 
-  pageNext = (name, numberOfItems, cb) ->
-    grievancesRef.startAt(null, name).limit(numberOfItems).once('value', (snapshot) ->
+  pageNext = (filterKey, name, numberOfItems, cb) ->
+    getRef = new Firebase BASEURI + filterKey
+    getRef.startAt(null, name).limit(numberOfItems).once('value', (snapshot) ->
       cb _.values snapshot.val()
     )
 
-  pageBack = (name, numberOfItems, cb) ->
-    grievancesRef.endAt(null, name).limit(numberOfItems).once('value', (snapshot) ->
+  pageBack = (filterKey, name, numberOfItems, cb) ->
+    getRef = new Firebase BASEURI + filterKey
+    getRef.endAt(null, name).limit(numberOfItems).once('value', (snapshot) ->
       cb _.values snapshot.val()
     )
 
@@ -19,7 +21,7 @@ app.factory 'DashboardFactory', ($firebase, BASEURI) ->
     pageBack: pageBack
   }
 
-app.controller 'DashboardController', ($scope, DashboardFactory, $window, DetailsFactory, $rootScope) ->
+app.controller 'DashboardController', ($scope, DashboardFactory, $window, DetailsFactory, $rootScope, DataFactory, $firebase, BASEURI) ->
   $scope.init = ->
     session = localStorage.getItem('firebaseSession')
     if ! session
@@ -33,6 +35,9 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
   $scope.init()
 
 #  $scope.grievances = DashboardFactory.retrieveGrievances
+  DataFactory.getWards(100, (res) ->
+    $scope.wards = res
+  )
   $scope.loadDone = false
   $scope.loading = true
   $scope.noPrevious = true
@@ -40,33 +45,39 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
   recordsPerPage = 5
   bottomRecord = null
   $scope.grievances = {}
+  filterKey = 'grievances'
 
-  getQuery = DashboardFactory.grievancesRef
-  getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
-    $scope.grievances = _.values snapshot.val()
-    $scope.loadDone = true
-    $scope.loading = false
-    bottomRecord = $scope.grievances[$scope.grievances.length - 1]
-    if bottomRecord
-      DashboardFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
-        if res
-          $scope.noNext = res.length <= 1
-      )
-    else
-      $scope.noNext = true
-  )
+  getFirstPageData = () ->
+#    getQuery = DashboardFactory.grievancesRef
+    getQuery = new Firebase BASEURI + filterKey
+    getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
+      $scope.grievances = _.values snapshot.val()
+      $scope.loadDone = true
+      $scope.loading = false
+      bottomRecord = $scope.grievances[$scope.grievances.length - 1]
+      if bottomRecord
+        DashboardFactory.pageNext(filterKey, bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
+          if res
+            $scope.noNext = res.length <= 1
+        )
+      else
+        $scope.noNext = true
+    )
+    return
+
+  getFirstPageData()
 
   $scope.pageNext = ->
     pageNumber++
     $scope.noPrevious = false
     bottomRecord = $scope.grievances[$scope.grievances.length - 1]
-    DashboardFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
+    DashboardFactory.pageNext(filterKey, bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
       if res
         res.shift()
         $scope.grievances = res
         bottomRecord = $scope.grievances[$scope.grievances.length - 1]
     )
-    DashboardFactory.pageNext(bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
+    DashboardFactory.pageNext(filterKey, bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
       if res
         $scope.noNext = res.length <= 1
     )
@@ -75,7 +86,7 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
     pageNumber--
     $scope.noNext = false
     topRecord = $scope.grievances[0]
-    DashboardFactory.pageBack(topRecord.referenceNum, recordsPerPage + 1, (res) ->
+    DashboardFactory.pageBack(filterKey, topRecord.referenceNum, recordsPerPage + 1, (res) ->
       if res
         res.pop()
         $scope.grievances = res
@@ -83,9 +94,20 @@ app.controller 'DashboardController', ($scope, DashboardFactory, $window, Detail
     )
 
   $scope.predicate = '-applicationDate'
+
   $scope.showDetails = (details) ->
     DetailsFactory.retrieveGrievance = details
     $window.location = '#/details'
+
+  $scope.getWardGrievances = ->
+    if $scope.selectedWard
+      wardKey = $scope.selectedWard.replace(RegExp(" +", "g"), "").toLowerCase()
+      filterKey = 'wards/' + wardKey + '/grievances'
+      getFirstPageData()
+    else
+      filterKey = 'grievances'
+      getFirstPageData()
+    return
 
   $scope.showDocuments = (data) ->
     $scope.noDocs = false

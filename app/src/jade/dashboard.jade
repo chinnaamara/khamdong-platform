@@ -9,6 +9,15 @@ section.container
                     .loader-div(ng-show='loading')
                         h4 Loading, Please wait...
                     .main-div(ng-show="loadDone")
+                        .pull-left
+                            select(
+                            name='selectWard',
+                            ng-options='ward.name as ward.name for ward in wards',
+                            ng-model='selectedWard',
+                            ng-change='getWardGrievances()',
+                            title='Grievances By Wards',
+                            required)
+                                option(value='',selected) -- Select Ward --
                         .search.col-xs-4.pull-right
                             input(type="search", class="form-control", ng-model="searchKey", placeholder="search here..")
 

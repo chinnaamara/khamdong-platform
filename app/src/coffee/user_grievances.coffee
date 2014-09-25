@@ -21,7 +21,7 @@ app.factory 'GrievancesFactory', ($firebase, BASEURI) ->
     pageBack: pageBack
   }
 
-app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievanceFactory, $rootScope, $window, $firebase, BASEURI) ->
+app.controller 'GrievancesController', ($scope, DashboardFactory, EditGrievanceFactory, $rootScope, $window, $firebase, BASEURI) ->
   $scope.init = ->
     session = localStorage.getItem('firebaseSession')
     if ! session
@@ -34,7 +34,7 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
 
   $scope.init()
 
-#  $scope.grievances = GrievancesFactory.retrieveGrievances
+  #  $scope.grievances = DashboardFactory.retrieveGrievances
   $scope.loadDone = false
   $scope.loading = true
   $scope.noPrevious = true
@@ -42,15 +42,10 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
   recordsPerPage = 5
   bottomRecord = null
   $scope.grievances = {}
+  filterKey = 'grievances'
 
-  userId = localStorage.getItem('userId')
-  ward = localStorage.getItem('ward')
-  trimWard = (ward) ->
-    ward.replace(RegExp(" +", "g"), "")
-  $scope.wardId = trimWard(ward).toLowerCase()
-  filterKey = 'wards/' + $scope.wardId + '/grievances'
-
-  getFirstPageData = ->
+  getFirstPageData = () ->
+#    getQuery = DashboardFactory.grievancesRef
     getQuery = new Firebase BASEURI + filterKey
     getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
       $scope.grievances = _.values snapshot.val()
@@ -58,7 +53,7 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
       $scope.loading = false
       bottomRecord = $scope.grievances[$scope.grievances.length - 1]
       if bottomRecord
-        GrievancesFactory.pageNext(filterKey, bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
+        DashboardFactory.pageNext(filterKey, bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
           if res
             $scope.noNext = res.length <= 1
         )
@@ -73,13 +68,13 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
     pageNumber++
     $scope.noPrevious = false
     bottomRecord = $scope.grievances[$scope.grievances.length - 1]
-    GrievancesFactory.pageNext(filterKey, bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
+    DashboardFactory.pageNext(filterKey, bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
       if res
         res.shift()
         $scope.grievances = res
         bottomRecord = $scope.grievances[$scope.grievances.length - 1]
     )
-    GrievancesFactory.pageNext(filterKey, bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
+    DashboardFactory.pageNext(filterKey, bottomRecord.referenceNum, recordsPerPage + 1, (res) ->
       if res
         $scope.noNext = res.length <= 1
     )
@@ -88,7 +83,7 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
     pageNumber--
     $scope.noNext = false
     topRecord = $scope.grievances[0]
-    GrievancesFactory.pageBack(filterKey, topRecord.referenceNum, recordsPerPage + 1, (res) ->
+    DashboardFactory.pageBack(filterKey, topRecord.referenceNum, recordsPerPage + 1, (res) ->
       if res
         res.pop()
         $scope.grievances = res
@@ -120,6 +115,12 @@ app.controller 'GrievancesController', ($scope, GrievancesFactory, EditGrievance
     EditGrievanceFactory.retrieveGrievance = grievance
     $window.location = '#/grievance/edit'
     return
+
+  userId = localStorage.getItem('userId')
+  ward = localStorage.getItem('ward')
+  trimWard = (ward) ->
+    ward.replace(RegExp(" +", "g"), "")
+  $scope.wardId = trimWard(ward).toLowerCase()
 
   $scope.filterGrievances = ->
     if $scope.checked
