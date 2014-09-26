@@ -35,6 +35,10 @@ app.controller 'GrievancesController', ($scope, DashboardFactory, EditGrievanceF
   $scope.init()
 
   #  $scope.grievances = DashboardFactory.retrieveGrievances
+
+  ward = localStorage.getItem('ward')
+  wardId = ward.replace(RegExp(" +", "g"), "").toLowerCase()
+
   $scope.loadDone = false
   $scope.loading = true
   $scope.noPrevious = true
@@ -42,10 +46,11 @@ app.controller 'GrievancesController', ($scope, DashboardFactory, EditGrievanceF
   recordsPerPage = 5
   bottomRecord = null
   $scope.grievances = {}
-  filterKey = 'grievances'
+  filterKey = 'wards/' + wardId + '/grievances'
 
   getFirstPageData = () ->
 #    getQuery = DashboardFactory.grievancesRef
+    console.log filterKey
     getQuery = new Firebase BASEURI + filterKey
     getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
       $scope.grievances = _.values snapshot.val()
@@ -63,6 +68,8 @@ app.controller 'GrievancesController', ($scope, DashboardFactory, EditGrievanceF
     return
 
   getFirstPageData()
+  $window.location = '#/user/grievances'
+
 
   $scope.pageNext = ->
     pageNumber++
@@ -116,17 +123,12 @@ app.controller 'GrievancesController', ($scope, DashboardFactory, EditGrievanceF
     $window.location = '#/grievance/edit'
     return
 
-  userId = localStorage.getItem('userId')
-  ward = localStorage.getItem('ward')
-  trimWard = (ward) ->
-    ward.replace(RegExp(" +", "g"), "")
-  $scope.wardId = trimWard(ward).toLowerCase()
 
+  userId = localStorage.getItem('userId')
   $scope.filterGrievances = ->
     if $scope.checked
       filterKey = 'users/' + userId + '/grievances'
     else
-      filterKey = 'wards/' + $scope.wardId + '/grievances'
-    console.log filterKey
+      filterKey = 'wards/' + wardId + '/grievances'
     getFirstPageData()
     return

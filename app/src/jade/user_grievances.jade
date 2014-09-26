@@ -7,7 +7,9 @@ section.container
                 .panel-heading Grievances
                 .panel-body
                     .loader-div(ng-show='loading')
-                        h4 Loading, Please wait...
+                        h4 Loading Grievances...
+                        a(ui-sref="userDashboard")
+                            |   Click here continue
                     .main-div(ng-show="loadDone")
                         .col-xs-4.pull-left
                             button.btn.btn-info(ui-sref='newGrievance', title="Create New Grievance")

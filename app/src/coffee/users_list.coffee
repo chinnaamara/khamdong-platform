@@ -4,13 +4,15 @@ app.factory 'UsersFactory', ($firebase, BASEURI, $http) ->
   #  getCatgeries = $firebase categoriesRef
   usersList = $firebase getUsersRef
 
-  pageNext = (id, noOfRecords, cb) ->
-    getUsersRef.startAt(null, id).limit(noOfRecords).once('value', (snapshot) ->
+  pageNext = (filterKey, id, noOfRecords, cb) ->
+    getRef = new Firebase BASEURI + filterKey
+    getRef.startAt(null, id).limit(noOfRecords).once('value', (snapshot) ->
       cb _.values snapshot.val()
     )
 
-  pageBack = (id, noOfRecords, cb) ->
-    getUsersRef.endAt(null, id).limit(noOfRecords).once('value', (snapshot) ->
+  pageBack = (filterKey, id, noOfRecords, cb) ->
+    getRef = new Firebase BASEURI + filterKey
+    getRef.endAt(null, id).limit(noOfRecords).once('value', (snapshot) ->
       cb _.values snapshot.val()
     )
 
@@ -25,29 +27,37 @@ app.factory 'UsersFactory', ($firebase, BASEURI, $http) ->
 #      alert "Message sent to your mobile number"
     )
 
-  addUserRef = new Firebase BASEURI + 'superusers'
+
   addNewUser = (user) ->
-#    ref = new Firebase BASEURI + 'categories/' + user.category + '/users/' + user.mobileNumber
-#    ref.child('name').set user.name
-#    ref.child('email').set user.email
-#    ref.child('mobileNumber').set user.mobileNumber
-#    ref.child('createdDate').set user.createdDate
-#    ref.child('updatedDate').set user.updatedDate
-    addUserRef.child(user.id).setWithPriority({
-      id: user.id
-      name: user.name
-      email: user.email
-      mobileNumber: user.mobileNumber
-      category: user.category
-      createdDate: user.createdDate
-      updatedDate: user.updatedDate
-    }, user.category)
+    addRef = new Firebase BASEURI + 'superusers/' + user.id
+    addWithCategoryRef = new Firebase BASEURI + 'categories/' + user.category + '/users/' + user.id
+    addRef.child('id').set user.id
+    addRef.child('name').set user.name
+    addRef.child('email').set user.email
+    addRef.child('mobileNumber').set user.mobileNumber
+    addRef.child('category').set user.category
+    addRef.child('createdDate').set user.createdDate
+    addRef.child('updatedDate').set user.updatedDate
+
+    addWithCategoryRef.child('id').set user.id
+    addWithCategoryRef.child('name').set user.name
+    addWithCategoryRef.child('email').set user.email
+    addWithCategoryRef.child('mobileNumber').set user.mobileNumber
+    addWithCategoryRef.child('category').set user.category
+    addWithCategoryRef.child('createdDate').set user.createdDate
+    addWithCategoryRef.child('updatedDate').set user.updatedDate
+
     return 'true'
 
-  getUsersByCategory = (category, cb) ->
-    getUsersRef.startAt(category).endAt(category).on('value', (snapshot) ->
-      cb _.values snapshot.val()
-    )
+#    addRef.child(user.id).setWithPriority({
+#      id: user.id
+#      name: user.name
+#      email: user.email
+#      mobileNumber: user.mobileNumber
+#      category: user.category
+#      createdDate: user.createdDate
+#      updatedDate: user.updatedDate
+#    }, user.category)
 
   deleteUser = (id) ->
     deleteRef = getUsersRef.child(id)
@@ -55,18 +65,16 @@ app.factory 'UsersFactory', ($firebase, BASEURI, $http) ->
     return 'true'
 
   return {
-  usersRef: getUsersRef
-  usersList: usersList
-  pageNext: pageNext
-  pageBack: pageBack
-  sendSms: sendSms
-#    getCatgeries: getCatgeries
-  addNewUser: addNewUser
-  getUsersByCategory: getUsersByCategory
-  delete: deleteUser
+    usersRef: getUsersRef
+    usersList: usersList
+    pageNext: pageNext
+    pageBack: pageBack
+    sendSms: sendSms
+    addNewUser: addNewUser
+    delete: deleteUser
   }
 
-app.controller 'UsersController', ($scope, UsersFactory, $rootScope, $window, CategoriesFactory, $filter, ngTableParams) ->
+app.controller 'UsersController', ($scope, UsersFactory, $rootScope, $window, CategoriesFactory, $firebase, BASEURI) ->
   $scope.init = ->
     session = localStorage.getItem('firebaseSession')
     if ! session
@@ -82,55 +90,60 @@ app.controller 'UsersController', ($scope, UsersFactory, $rootScope, $window, Ca
   $scope.loadDone = false
   $scope.loading = true
 
-  getQuery = UsersFactory.usersRef
+#  getQuery = UsersFactory.usersRef
   $scope.pageNumber = 0
   $scope.lastPageNumber = null
-  recordsPerPage = 8
+  recordsPerPage = 5
   bottomRecord = null
   $scope.noPrevious = true
   $scope.userslist = {}
+  filterKey = 'superusers'
 
-  getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
-    $scope.userslist = _.values snapshot.val()
-    $scope.loadDone = true
-    $scope.loading = false
-    bottomRecord = $scope.userslist[$scope.userslist.length - 1]
-    if bottomRecord
-      UsersFactory.pageNext(bottomRecord.id, recordsPerPage + 1, (res) ->
-        if res
-          console.log res
-          $scope.noNext = res.length <= 1 ? true : false
-      )
-    else
-      $scope.noNext = true
+  getFirstPageData = ->
+    getQuery = new Firebase BASEURI + filterKey
+    getQuery.startAt().limit(recordsPerPage).on('value', (snapshot) ->
+      $scope.userslist = _.values snapshot.val()
+      $scope.loadDone = true
+      $scope.loading = false
+      bottomRecord = $scope.userslist[$scope.userslist.length - 1]
+      if bottomRecord
+        UsersFactory.pageNext(filterKey, bottomRecord.id, recordsPerPage + 1, (res) ->
+          if res
+            $scope.noNext = res.length <= 1
+        )
+      else
+        $scope.noNext = true
+      return
+    )
     return
-  )
+
+  getFirstPageData()
 
 
   $scope.pageNext = ->
     $scope.pageNumber++
     $scope.noPrevious = false
     bottomRecord = $scope.userslist[$scope.userslist.length - 1]
-    UsersFactory.pageNext(bottomRecord.id, recordsPerPage + 1, (res) ->
+    UsersFactory.pageNext(filterKey, bottomRecord.id, recordsPerPage + 1, (res) ->
       if res
         res.shift()
         $scope.userslist = res
         bottomRecord = $scope.userslist[$scope.userslist.length - 1]
     )
-    UsersFactory.pageNext(bottomRecord.id, recordsPerPage + 1, (res) ->
+    UsersFactory.pageNext(filterKey, bottomRecord.id, recordsPerPage + 1, (res) ->
       if res
-        $scope.noNext = res.length <= 1 ? true : false
+        $scope.noNext = res.length <= 1
     )
 
   $scope.pageBack = ->
     $scope.pageNumber--
     $scope.noNext = false
     topRecord = $scope.userslist[0]
-    UsersFactory.pageBack(topRecord.id, recordsPerPage + 1, (res) ->
+    UsersFactory.pageBack(filterKey, topRecord.id, recordsPerPage + 1, (res) ->
       if res
         res.pop()
         $scope.userslist = res
-        $scope.noPrevious = $scope.pageNumber is 0 ? true : false
+        $scope.noPrevious = $scope.pageNumber is 0
     )
 
   $scope.cantSendMessage = true
@@ -214,7 +227,6 @@ app.controller 'UsersController', ($scope, UsersFactory, $rootScope, $window, Ca
         email: $scope.email
         createdDate: new Date().toLocaleString()
         updatedDate: new Date().toLocaleString()
-    console.log newUser
     $scope.$watch(UsersFactory.addNewUser(newUser), (res) ->
       if res
         $scope.successMessage = true
@@ -232,11 +244,13 @@ app.controller 'UsersController', ($scope, UsersFactory, $rootScope, $window, Ca
     $scope.category = user.category
 
   $scope.getCategoryUsers = ->
-    console.log $scope.selectCategory
-    UsersFactory.getUsersByCategory($scope.selectCategory, (res) ->
-      if res
-        $scope.userslist = res
-    )
+    if $scope.selectCategory
+      filterKey = 'categories/' + $scope.selectCategory + '/users'
+      getFirstPageData()
+    else
+      filterKey = 'superusers'
+      getFirstPageData()
+    return
 
   $scope.deleteUser = (user) ->
     $scope.$watch(UsersFactory.delete(user.id), (res) ->

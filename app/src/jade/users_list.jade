@@ -20,7 +20,7 @@ section.container
                         &nbsp;
                         select(
                             name='selectCategory',
-                            ng-options='cat.name as cat.name for cat in categories',
+                            ng-options='cat.id as cat.name for cat in categories',
                             ng-model='selectCategory',
                             ng-change='getCategoryUsers()',
                             required)
@@ -114,15 +114,15 @@ section.container
                         label.control-label(for='category')
                             | Select Category
                             span(class='star-label') *
-                        select.form-control(
-                            name='category',
-                            ng-options='cat.name as cat.name for cat in categories',
-                            ng-model='category',
-                            required)
-                            option(value='',selected) -- Select Category --
-                        //select.form-control(ng-model='category', required)
+                        //select.form-control(
+                        //    name='category',
+                        //    ng-options='cat.name as cat.name for cat in categories',
+                        //    ng-model='category',
+                        //    required)
                         //    option(value='',selected) -- Select Category --
-                        //    option(value='{{cat.id}}', ng-repeat='cat in categories') {{ cat.name }}
+                        select.form-control(ng-model='category', required)
+                            option(value='',selected) -- Select Category --
+                            option(value='{{cat.id}}', ng-repeat='cat in categories') {{ cat.name }}
                     .form-group.has-warning
                         label.control-label(for='newUserName')
                             | User Name
