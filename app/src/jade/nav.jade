@@ -41,10 +41,10 @@ div#nav-bar
                         a(ui-sref='wards', ng-if='administrator') Manage Wards
                     li(class='divider', ng-if='administrator')
                     li
-                        a(ui-sref='categories', ng-if='superUser') Manage Categories
+                        a(ui-sref='users_list', ng-if='superUser') Users List
                     li(class='divider', ng-if='superUser')
                     li
-                        a(ui-sref='users_list', ng-if='superUser') Users List
+                        a(ui-sref='categories', ng-if='superUser') Manage Categories
                     li(class='divider', ng-if='superUser')
                     li
                         a(ng-click='logout()', ui-sref='logout') Logout

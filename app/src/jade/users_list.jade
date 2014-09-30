@@ -12,7 +12,11 @@ section.container
                     .main-div(ng-show="loadDone")
                         a.btn.btn-info.pull-left.btn-sm(href="", data-toggle="modal",id='btn-sendSms', data-target="#smsWindow", ng-click="isUser()", ng-disabled='cantSendMessage')
                             i.glyphicon.glyphicon-send
-                            |   Send Messsage
+                            |   New Messsage
+                        &nbsp;
+                        a.btn.btn-info.btn-sm(ui-sref='sentMessages')
+                            i.glyphicon.glyphicon-send
+                            |   Sent Messsages
                         &nbsp;
                         a.btn.btn-info.btn-sm(href="", data-toggle="modal",id='btn-addUser', data-target="#newUserWindow", ng-click="isNewUser()")
                             i.glyphicon.glyphicon-plus

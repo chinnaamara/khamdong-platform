@@ -46,6 +46,14 @@ app.factory 'UsersFactory', ($firebase, BASEURI, $http) ->
     addWithCategoryRef.child('category').set user.category
     addWithCategoryRef.child('createdDate').set user.createdDate
     addWithCategoryRef.child('updatedDate').set user.updatedDate
+    return 'true'
+
+  saveSentMessage = (data) ->
+    addMessageRef = new Firebase BASEURI + 'sentMessages/' + data.messageId
+    addMessageRef.child('id').set data.messageId
+    addMessageRef.child('numbers').set data.mobileNumbers
+    addMessageRef.child('messageText').set data.messageText
+    addMessageRef.child('dateTime').set data.dateTime
 
     return 'true'
 
@@ -72,6 +80,7 @@ app.factory 'UsersFactory', ($firebase, BASEURI, $http) ->
     sendSms: sendSms
     addNewUser: addNewUser
     delete: deleteUser
+    saveSentMessage: saveSentMessage
   }
 
 app.controller 'UsersController', ($scope, UsersFactory, $rootScope, $window, CategoriesFactory, $firebase, BASEURI) ->
@@ -165,6 +174,11 @@ app.controller 'UsersController', ($scope, UsersFactory, $rootScope, $window, Ca
   $scope.selectedUsers = []
   $scope.isUser = ->
     $scope.selectedUsers = $scope.getUsers()
+    $scope.str = 'to '
+    _.forEach($scope.selectedUsers, (user) ->
+      $scope.str += user + ', '
+    )
+    console.log $scope.str.substring(0, $scope.str.length - 2)
 
   $scope.getUsers = ->
     users = []
@@ -178,6 +192,17 @@ app.controller 'UsersController', ($scope, UsersFactory, $rootScope, $window, Ca
     _.forEach($scope.selectedUsers, (user) ->
       UsersFactory.sendSms($scope.messageText, user)
     )
+    newMessage =
+      messageId: new Date().getTime()
+      mobileNumbers: $scope.str.substring(0, $scope.str.length - 2)
+      messageText: $scope.messageText
+      dateTime: new Date().toLocaleString()
+
+    $scope.$watch(UsersFactory.saveSentMessage(newMessage), (res) ->
+      if res
+        console.log 'message saved in sent items..'
+    )
+
     $scope.messageText = ''
     #    $scope.successMessage = true
     return

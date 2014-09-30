@@ -135,4 +135,11 @@ app.config(($stateProvider) ->
         'viewB@': {templateUrl: 'html/wards.html', controller: 'WardsController'}
       }
     })
+  .state('sentMessages', {
+      url: '/superuser/messages'
+      views: {
+        'viewA@': {templateUrl: 'html/nav.html', controller: 'LoginController'}
+        'viewB@': {templateUrl: 'html/sent_messages.html', controller: 'MessagesController'}
+      }
+    })
 )
